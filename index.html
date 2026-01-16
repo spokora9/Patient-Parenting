@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Parent Architect</title>
+    <style>
+        :root {
+            /* BRANDING: "Modern Knowledge x Old Wisdom" */
+            --bg-color: #F9F8F6;       /* Warm Paper */
+            --card-bg: #FFFFFF;
+            --text-main: #2D3436;
+            --text-sub: #636E72;
+            --accent-earth: #C49F7D;   /* Clay (Old Wisdom) */
+            --accent-play: #74B9FF;    /* Sky (Modern/Play) */
+            --success: #55EFC4;
+            --shadow: 0 8px 30px rgba(0,0,0,0.04);
+            --radius: 20px;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 20px 24px;
+            background: transparent;
+        }
+        h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+        p.subtitle { margin: 5px 0 0; color: var(--text-sub); font-size: 14px; font-weight: 400; }
+
+        /* --- MAIN CONTENT AREA --- */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 24px 100px 24px; /* Bottom padding for nav */
+        }
+
+        /* --- COMPONENT: SPARK CARDS --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        .card:active { transform: scale(0.98); }
+
+        .tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+        .tag.modern { background: #E3F2FD; color: #0984E3; }
+        .tag.wisdom { background: #F3E5F5; color: #6C5CE7; }
+
+        .card h3 { margin: 0 0 8px 0; font-size: 18px; }
+        .card p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--text-sub); }
+
+        /* --- COMPONENT: MULTIPLAYER QUEST BOARD --- */
+        .player-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .player-avatar {
+            min-width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #dfe6e9;
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #b2bec3;
+            font-size: 14px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .player-avatar.active {
+            border-color: var(--accent-earth);
+            background: #fff;
+            color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .quest-progress-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; font-weight: 600; }
+        .progress-track { height: 12px; background: #f1f2f6; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-play), var(--success)); width: 0%; transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        .quest-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #f1f2f6;
+        }
+        .btn-check {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #dfe6e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .btn-check.checked {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #f1f2f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 24px 0;
+            z-index: 100;
+        }
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #b2bec3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav-btn.active { color: var(--text-main); font-weight: 700; }
+        .nav-icon { width: 24px; height: 24px; background: #dfe6e9; border-radius: 6px; }
+        .nav-btn.active .nav-icon { background: var(--accent-earth); }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="page-title">The Daily Spark</h1>
+        <p class="subtitle" id="page-subtitle">Wisdom & Science for today.</p>
+    </header>
+
+    <main id="app-view">
+    </main>
+
+    <nav>
+        <button class="nav-btn active" onclick="router.navigate('spark')">
+            <div class="nav-icon"></div>
+            Spark
+        </button>
+        <button class="nav-btn" onclick="router.navigate('quest')">
+            <div class="nav-icon"></div>
+            Quest
+        </button>
+        <button class="nav-btn" onclick="router.navigate('headspace')">
+            <div class="nav-icon"></div>
+            Notes
+        </button>
+    </nav>
+
+<script>
+    // --- 1. MOCK RUST AUDIO ENGINE ---
+    // This class mimics the Rust struct we will build later.
+    class AudioEngine {
+        constructor() {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        playTone(type) {
+            if (this.ctx.state === 'suspended') this.ctx.resume();
+
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            if (type === 'success') {
+                // Happy "Ding" (Major Third)
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, this.ctx.currentTime); // C5
+                osc.frequency.exponentialRampToValueAtTime(659.25, this.ctx.currentTime + 0.1); // E5
+                gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.4);
+            } else if (type === 'tap') {
+                // Gentle Click
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(200, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.05);
+            }
+        }
+    }
+
+    const audio = new AudioEngine();
+
+    // --- 2. STATE MANAGEMENT ---
+    const state = {
+        activePlayerId: 1,
+        teamXP: 20,
+        teamGoal: 100,
+        players: [
+            { id: 1, name: "Leo", initials: "LE" },
+            { id: 2, name: "Mia", initials: "MI" },
+            { id: 3, name: "Noah", initials: "NO" },
+            { id: 4, name: "Add", initials: "+" }
+        ]
+    };
+
+    // --- 3. VIEWS & COMPONENTS ---
+    const views = {
+        spark: `
+            <div class="card">
+                <span class="tag modern">Modern Knowledge • Sensory</span>
+                <h3>Heavy Work</h3>
+                <p>Regulate the nervous system. Have them push a laundry basket filled with books across the room.</p>
+            </div>
+            <div class="card">
+                <span class="tag wisdom">Old Wisdom • Nature</span>
+                <h3>Cloud Watching</h3>
+                <p>Go outside. Lie on the grass. Find animals in the sky. No agenda, just observation.</p>
+            </div>
+            <div class="card">
+                <span class="tag modern">Development • 3-5 Years</span>
+                <h3>The "Choice" Trick</h3>
+                <p>Instead of "Put on your shoes," try "Do you want to put on the left shoe or the right shoe first?"</p>
+            </div>
+        `,
+        quest: () => `
+            <div class="player-selector">
+                ${state.players.map(p => `
+                    <div class="player-avatar ${p.id === state.activePlayerId ? 'active' : ''}"
+                         onclick="actions.selectPlayer(${p.id})">
+                        ${p.initials}
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="quest-progress-container">
+                <div class="progress-label">
+                    <span>Family Goal: Movie Night</span>
+                    <span id="xp-display">${state.teamXP} / ${state.teamGoal} XP</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: ${(state.teamXP / state.teamGoal) * 100}%"></div>
+                </div>
+            </div>
+
+            <h3>Daily Quests</h3>
+            <div class="quest-item" onclick="actions.completeTask(10)">
+                <span>Clear Dinner Table</span>
+                <div class="btn-check" id="btn-1"></div>
+            </div>
+            <div class="quest-item" onclick="actions.completeTask(20)">
+                <span>20 Mins Reading</span>
+                <div class="btn-check" id="btn-2"></div>
+            </div>
+            <div class="quest-item" onclick="actions.completeTask(5)">
+                <span>Brush Teeth (No fuss)</span>
+                <div class="btn-check" id="btn-3"></div>
+            </div>
+        `,
+        headspace: `
+            <div class="card" style="border-left: 4px solid var(--accent-earth)">
+                <h3>Village List</h3>
+                <p>Things to ask others for help with.</p>
+                <br>
+                <ul style="padding-left: 20px; margin: 0; color: var(--text-sub); font-size: 14px;">
+                    <li>Ask Grandma for pickup Tues</li>
+                    <li>Text Sarah re: carpool</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Upcoming</h3>
+                <p><strong>Leo's Birthday</strong> in 2 weeks.</p>
+                <p style="font-size:12px; color: var(--accent-play); margin-top:8px;">
+                    <em>Tip: At this age, he is ready for cooperative board games.</em>
+                </p>
+            </div>
+        `
+    };
+
+    // --- 4. LOGIC & ACTIONS ---
+    const actions = {
+        selectPlayer: (id) => {
+            state.activePlayerId = id;
+            audio.playTone('tap');
+            render('quest');
+        },
+        completeTask: (xp) => {
+            // Visual Update
+            const newXP = Math.min(state.teamXP + xp, state.teamGoal);
+            state.teamXP = newXP;
+
+            // Audio Reward
+            audio.playTone('success');
+
+            // Re-render to show progress
+            render('quest');
+        }
+    };
+
+    const router = {
+        navigate: (viewName) => {
+            // Update Headers
+            const titles = {
+                'spark': ['The Daily Spark', 'Wisdom & Science.'],
+                'quest': ['Family Quest', 'Co-op Mode Active.'],
+                'headspace': ['Headspace', 'Clear your mind.']
+            };
+            document.getElementById('page-title').innerText = titles[viewName][0];
+            document.getElementById('page-subtitle').innerText = titles[viewName][1];
+
+            // Update Nav Icons
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            render(viewName);
+        }
+    };
+
+    function render(viewName) {
+        const content = typeof views[viewName] === 'function' ? views[viewName]() : views[viewName];
+        document.getElementById('app-view').innerHTML = content;
+    }
+
+    // Init
+    render('spark');
+
+</script>
+</body>
+</html>

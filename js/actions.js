@@ -132,6 +132,85 @@ const actions = {
             }
         };
         reader.readAsText(file);
+    },
+    showAddQuestModal: () => {
+        const title = prompt('Quest Title:', '');
+        if (!title) return;
+
+        const xp = prompt('XP Value:', '10');
+        if (!xp) return;
+
+        const quest = {
+            id: 'q' + Date.now(),
+            title: title.trim(),
+            xp: parseInt(xp) || 10,
+            recurring: true,
+            completed: false
+        };
+
+        state.customQuests.push(quest);
+        saveState();
+        audio.playTone('success');
+        render('quest');
+    },
+    completeQuest: (questId) => {
+        const quest = state.customQuests.find(q => q.id === questId);
+        if (!quest) return;
+
+        const oldXP = state.teamXP;
+        const newXP = Math.min(state.teamXP + quest.xp, state.teamGoal);
+        state.teamXP = newXP;
+
+        // Check if goal reached
+        const goalReached = oldXP < state.teamGoal && newXP >= state.teamGoal;
+
+        // Mark quest as completed
+        quest.completed = true;
+        state.completedQuests.push({
+            questId: quest.id,
+            timestamp: Date.now(),
+            playerId: state.activePlayerId
+        });
+
+        // Audio Reward
+        audio.playTone('success');
+
+        // Save progress
+        saveState();
+
+        // Re-render to show progress
+        render('quest');
+
+        // Celebrate if goal reached
+        if (goalReached) {
+            setTimeout(celebrateGoal, 300);
+        }
+    },
+    deleteQuest: (questId) => {
+        if (confirm('Delete this quest?')) {
+            state.customQuests = state.customQuests.filter(q => q.id !== questId);
+            saveState();
+            render('quest');
+        }
+    },
+    updatePlayer: (playerId, field, value) => {
+        const player = state.players.find(p => p.id === playerId);
+        if (player) {
+            player[field] = value;
+            // Update initials if name changed
+            if (field === 'name') {
+                player.initials = value.substring(0, 2).toUpperCase();
+            }
+            saveState();
+            audio.playTone('tap');
+            render('settings');
+        }
+    },
+    updateTeamGoal: (goal) => {
+        state.teamGoal = goal || 100;
+        saveState();
+        audio.playTone('success');
+        render('settings');
     }
 };
 
@@ -142,14 +221,17 @@ const router = {
             'spark': ['The Daily Spark', 'Wisdom & Science.'],
             'quest': ['Family Quest', 'Co-op Mode Active.'],
             'scripts': ['Script Designer', 'What do I say?'],
-            'headspace': ['Headspace', 'Clear your mind.']
+            'headspace': ['Headspace', 'Clear your mind.'],
+            'settings': ['Settings', 'Customize your experience.']
         };
         document.getElementById('page-title').innerText = titles[viewName][0];
         document.getElementById('page-subtitle').innerText = titles[viewName][1];
 
         // Update Nav Icons
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.add('active');
+        }
 
         render(viewName);
     }

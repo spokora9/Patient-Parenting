@@ -145,6 +145,23 @@ The interface follows a "design blog" aesthetic with:
 
 ## 📋 Recent Updates
 
+### v0.2.0 - Customization & Quest Management (Latest)
+**✨ NEW Features:**
+- **Custom Quest Creation:** Add your own quests with custom XP values
+- **Player Customization:** Change names, avatars (10 options), and colors (8 options)
+- **Settings Page:** Centralized configuration for players and quest goals
+- **Quest Management:** Delete quests, track completion history
+- **Expanded Library:** 20+ activities (added nutrition, outdoor play, sleep, social skills categories)
+- **Avatar System:** Fun emoji avatars for each child (🦁🦋🌟🚀🎨 and more)
+- **Color Themes:** 8 vibrant color options per player
+
+**🎨 UI Improvements:**
+- Settings gear icon in Quest view
+- "Add Quest" button with XP display
+- Colored player avatars in selector
+- Delete buttons for quests
+- Visual quest completion feedback
+
 ### v0.1.0 - Initial Feature Complete Release
 **✅ Implemented:**
 - localStorage persistence for all user data
@@ -165,12 +182,13 @@ The interface follows a "design blog" aesthetic with:
 
 ## 🚧 Roadmap
 
-### Next Priorities (v0.2.0)
-- [ ] Custom quest creation interface
-- [ ] Player profile customization (names, avatars)
-- [ ] Additional activity categories (nutrition, outdoor play)
-- [ ] Script favorites and quick-access board
-- [ ] Village Mode (multi-device collaboration)
+### Next Priorities (v0.3.0)
+- [ ] Quest templates library (morning routine, bedtime, chores)
+- [ ] Reward redemption system (trade XP for rewards)
+- [ ] Script favorites/pinning
+- [ ] Village Mode (share lists via QR code/link)
+- [ ] Weekly progress charts/analytics
+- [ ] Dark mode support
 
 ### Future Enhancements
 - [ ] Rust/WASM audio engine integration
@@ -178,6 +196,8 @@ The interface follows a "design blog" aesthetic with:
 - [ ] Backend sync (Firebase/Supabase)
 - [ ] Journal feature for reflective parenting
 - [ ] Multi-language support
+- [ ] Voice-to-text for script search
+- [ ] Push notifications for quest reminders
 
 ## 🤝 Contributing
 This project is in active development. Contributions are welcome! Check the PRD for detailed requirements.
@@ -189,4 +209,4 @@ MIT License (pending)
 
 **Built with intention. Designed for growth.**
 
-*Version 0.1.0 - January 2026*
+*Version 0.2.0 - January 2026*

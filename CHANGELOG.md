@@ -5,6 +5,65 @@ All notable changes to Parent Architect will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-01-16
+
+### Added
+- **Custom Quest Creation**
+  - "Add Quest" button in Quest view
+  - Prompt-based quest creation with title and XP value
+  - Custom quest ID generation
+  - Quest persistence in state
+
+- **Player Profile Customization**
+  - Settings page accessible via gear icon
+  - Name editing for each player
+  - 10 avatar emoji options (🦁🦋🌟🚀🎨⚽🎵🌈🦄🐢)
+  - 8 color theme options per player
+  - Auto-update player initials when name changes
+  - Visual feedback on selection
+
+- **Quest Management**
+  - Delete quest functionality with confirmation
+  - XP value display for each quest
+  - Completion tracking with timestamp
+  - Player ID tracking for quest completion
+  - Empty state message when no quests exist
+
+- **Expanded Activity Library**
+  - Grew from 10 to 20 activities
+  - New categories: Nutrition, Outdoor Play, Sleep Routine, Gratitude, Transitions, Bedtime
+  - Activities: Deconstructed Dinner, Puddle Jumping, Body Scan, Secret Handshake, 5-4-3-2-1 Countdown, Flashlight Stories, and more
+
+- **Settings System**
+  - Dedicated settings view
+  - Team goal XP customization
+  - Back to Quests navigation
+  - Centralized configuration
+
+### Changed
+- **Quest View Overhaul**
+  - Dynamic quest rendering from state.customQuests
+  - Colored player avatars with emoji display
+  - Settings gear icon replaces "Add" player slot
+  - Quest items now show XP values
+  - Delete buttons appear on hover/tap
+
+- **Player System**
+  - Added color and avatar fields to player objects
+  - Default avatars and colors for Leo, Mia, Noah
+  - Visual player selector with colored backgrounds
+
+- **State Management**
+  - Added questMode field ('co-op' or 'solo')
+  - scriptFavorites array for future feature
+  - customQuests replaces hardcoded quest items
+  - Enhanced default state with colors/avatars
+
+### Fixed
+- Router now handles settings view navigation
+- Event handling improved for programmatic navigation
+- Player avatar display properly scales emoji
+
 ## [0.1.0] - 2026-01-16
 
 ### Added

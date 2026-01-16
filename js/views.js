@@ -39,12 +39,16 @@ const views = {
     },
     quest: () => `
         <div class="player-selector">
-            ${state.players.map(p => `
+            ${state.players.filter(p => p.id !== 4).map(p => `
                 <div class="player-avatar ${p.id === state.activePlayerId ? 'active' : ''}"
-                     onclick="actions.selectPlayer(${p.id})">
-                    ${p.initials}
+                     onclick="actions.selectPlayer(${p.id})"
+                     style="background: ${p.color}; border-color: ${p.id === state.activePlayerId ? 'var(--accent-earth)' : 'transparent'};">
+                    <span style="font-size: 24px;">${p.avatar}</span>
                 </div>
             `).join('')}
+            <div class="player-avatar" onclick="router.navigate('settings')" style="background: #f1f2f6;">
+                ⚙️
+            </div>
         </div>
 
         <div class="quest-progress-container">
@@ -57,19 +61,33 @@ const views = {
             </div>
         </div>
 
-        <h3>Daily Quests</h3>
-        <div class="quest-item" onclick="actions.completeTask(10)">
-            <span>Clear Dinner Table</span>
-            <div class="btn-check" id="btn-1"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 12px;">
+            <h3 style="margin: 0;">Daily Quests</h3>
+            <button onclick="actions.showAddQuestModal()"
+                    style="padding: 8px 16px; background: var(--accent-earth); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                + Add Quest
+            </button>
         </div>
-        <div class="quest-item" onclick="actions.completeTask(20)">
-            <span>20 Mins Reading</span>
-            <div class="btn-check" id="btn-2"></div>
-        </div>
-        <div class="quest-item" onclick="actions.completeTask(5)">
-            <span>Brush Teeth (No fuss)</span>
-            <div class="btn-check" id="btn-3"></div>
-        </div>
+
+        ${state.customQuests.filter(q => !q.completed).map(quest => `
+            <div class="quest-item" style="position: relative;">
+                <div onclick="actions.completeQuest('${quest.id}')" style="flex: 1; display: flex; align-items: center; cursor: pointer;">
+                    <span>${quest.title}</span>
+                    <span style="margin-left: auto; margin-right: 12px; color: var(--accent-play); font-weight: 600; font-size: 13px;">+${quest.xp} XP</span>
+                    <div class="btn-check ${quest.completed ? 'checked' : ''}"></div>
+                </div>
+                <button onclick="actions.deleteQuest('${quest.id}')"
+                        style="position: absolute; right: -8px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px; opacity: 0.7;">
+                    ×
+                </button>
+            </div>
+        `).join('')}
+
+        ${state.customQuests.filter(q => !q.completed).length === 0 ? `
+            <div style="text-align: center; padding: 40px 20px; color: var(--text-sub);">
+                <p style="margin: 0;">No quests yet! Add your first quest above.</p>
+            </div>
+        ` : ''}
     `,
     headspace: () => `
         <div class="card" style="border-left: 4px solid var(--accent-earth)">
@@ -156,5 +174,66 @@ const views = {
                 </div>
             `).join('')}
         `;
-    }
+    },
+    settings: () => `
+        <div class="card">
+            <h3>⚙️ Player Profiles</h3>
+            <p style="color: var(--text-sub); margin-bottom: 20px;">Customize your family members</p>
+
+            ${state.players.filter(p => p.id !== 4).map(player => `
+                <div style="background: #f9f9f9; padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: ${player.color}; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                            ${player.avatar}
+                        </div>
+                        <div style="flex: 1;">
+                            <input type="text" value="${player.name}"
+                                   onchange="actions.updatePlayer(${player.id}, 'name', this.value)"
+                                   style="width: 100%; padding: 8px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 15px; font-weight: 600;"/>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 12px;">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-sub); display: block; margin-bottom: 8px;">Choose Avatar:</label>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            ${['🦁', '🦋', '🌟', '🚀', '🎨', '⚽', '🎵', '🌈', '🦄', '🐢'].map(emoji => `
+                                <button onclick="actions.updatePlayer(${player.id}, 'avatar', '${emoji}')"
+                                        style="width: 40px; height: 40px; border: 2px solid ${player.avatar === emoji ? 'var(--accent-earth)' : '#dfe6e9'}; background: white; border-radius: 8px; cursor: pointer; font-size: 20px;">
+                                    ${emoji}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 12px;">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-sub); display: block; margin-bottom: 8px;">Choose Color:</label>
+                        <div style="display: flex; gap: 8px;">
+                            ${['#FF7675', '#74B9FF', '#55EFC4', '#A29BFE', '#FFEAA7', '#FD79A8', '#6C5CE7', '#00B894'].map(color => `
+                                <button onclick="actions.updatePlayer(${player.id}, 'color', '${color}')"
+                                        style="width: 40px; height: 40px; border: 3px solid ${player.color === color ? 'var(--accent-earth)' : 'transparent'}; background: ${color}; border-radius: 50%; cursor: pointer;">
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+
+        <div class="card">
+            <h3>🎯 Quest Settings</h3>
+            <div style="margin-top: 16px;">
+                <label style="font-size: 15px; font-weight: 600; display: block; margin-bottom: 12px;">Team Goal XP:</label>
+                <input type="number" value="${state.teamGoal}"
+                       onchange="actions.updateTeamGoal(parseInt(this.value))"
+                       style="width: 100%; padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 15px;"/>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="router.navigate('quest')"
+                    style="padding: 12px 32px; background: var(--accent-earth); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 15px;">
+                ← Back to Quests
+            </button>
+        </div>
+    `
 };

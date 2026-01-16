@@ -1,0 +1,33 @@
+{
+  "name": "parent-architect",
+  "version": "0.1.0",
+  "description": "Parenting by Design: Where Modern Neuroscience meets Village Wisdom",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "dev": "python3 -m http.server 8080",
+    "serve": "python3 -m http.server 8080",
+    "test": "echo \"No tests yet\" && exit 0",
+    "lint": "echo \"No linting configured yet\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spokora9/Patient-Parenting.git"
+  },
+  "keywords": [
+    "parenting",
+    "education",
+    "gentle-parenting",
+    "child-development",
+    "pwa",
+    "gamification"
+  ],
+  "author": "Parent Architect Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spokora9/Patient-Parenting/issues"
+  },
+  "homepage": "https://github.com/spokora9/Patient-Parenting#readme",
+  "devDependencies": {},
+  "dependencies": {}
+}

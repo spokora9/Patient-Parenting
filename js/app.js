@@ -15,5 +15,12 @@ if ('serviceWorker' in navigator) {
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
+    // Auto-reset daily quests if it's a new day
+    checkAndResetDailyQuests();
+
+    // Apply dark mode if enabled
+    applyDarkMode();
+
+    // Render initial view
     render('spark');
 });

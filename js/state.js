@@ -18,7 +18,15 @@ const defaultState = {
     favorites: [],
     scriptFavorites: [],
     currentSparkIndex: 0,
-    questMode: 'co-op' // 'co-op' or 'solo'
+    questMode: 'co-op', // 'co-op' or 'solo'
+    rewards: [
+        { id: 'r1', title: 'Movie Night', cost: 100, redeemed: false, icon: '🎬' },
+        { id: 'r2', title: 'Extra 30 Mins Screen Time', cost: 50, redeemed: false, icon: '📱' },
+        { id: 'r3', title: 'Choose Dinner', cost: 75, redeemed: false, icon: '🍕' }
+    ],
+    redeemedRewards: [],
+    lastQuestReset: null, // Track last time daily quests were reset
+    darkMode: false // Dark mode preference
 };
 
 // Load state from localStorage or use default

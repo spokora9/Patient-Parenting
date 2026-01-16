@@ -211,6 +211,132 @@ const actions = {
         saveState();
         audio.playTone('success');
         render('settings');
+    },
+    showTemplatePreview: (templateId) => {
+        state.currentTemplate = templateId;
+        saveState();
+        router.navigate('templatePreview');
+    },
+    applyTemplate: (templateId) => {
+        applyTemplate(templateId);
+        alert('Quests added successfully!');
+        router.navigate('quest');
+    },
+    showAddRewardModal: () => {
+        const title = prompt('Reward Title:', '');
+        if (!title) return;
+
+        const cost = prompt('XP Cost:', '50');
+        if (!cost) return;
+
+        const iconOptions = ['🎬', '📱', '🍕', '🎮', '🍦', '🎨', '⚽', '🎵', '📚', '🚴'];
+        const icon = iconOptions[Math.floor(Math.random() * iconOptions.length)];
+
+        const reward = {
+            id: 'r' + Date.now(),
+            title: title.trim(),
+            cost: parseInt(cost) || 50,
+            redeemed: false,
+            icon: icon
+        };
+
+        state.rewards.push(reward);
+        saveState();
+        audio.playTone('success');
+        render('rewards');
+    },
+    redeemReward: (rewardId) => {
+        const reward = state.rewards.find(r => r.id === rewardId);
+        if (!reward || reward.redeemed) return;
+
+        if (state.teamXP < reward.cost) {
+            alert('Not enough XP!');
+            return;
+        }
+
+        if (confirm(`Redeem "${reward.title}" for ${reward.cost} XP?`)) {
+            state.teamXP -= reward.cost;
+            reward.redeemed = true;
+            state.redeemedRewards.push({
+                ...reward,
+                redeemedAt: Date.now()
+            });
+
+            saveState();
+            audio.playTone('success');
+
+            // Show celebration
+            createConfetti();
+
+            render('rewards');
+        }
+    },
+    deleteReward: (rewardId) => {
+        if (confirm('Delete this reward?')) {
+            state.rewards = state.rewards.filter(r => r.id !== rewardId);
+            saveState();
+            render('rewards');
+        }
+    },
+    toggleScriptFavorite: (scriptId) => {
+        if (!state.scriptFavorites) state.scriptFavorites = [];
+        const index = state.scriptFavorites.indexOf(scriptId);
+        if (index > -1) {
+            state.scriptFavorites.splice(index, 1); // Remove from favorites
+        } else {
+            state.scriptFavorites.push(scriptId); // Add to favorites
+        }
+        saveState();
+        audio.playTone('tap');
+        render('scripts');
+    },
+    resetDailyQuests: () => {
+        if (confirm('Reset all recurring quests? This will mark them as incomplete.')) {
+            // Reset all recurring quests
+            state.customQuests.forEach(quest => {
+                if (quest.recurring) {
+                    quest.completed = false;
+                }
+            });
+
+            // Update last reset time
+            state.lastQuestReset = new Date().toDateString();
+            saveState();
+            audio.playTone('success');
+            render('quest');
+        }
+    },
+    toggleDarkMode: () => {
+        state.darkMode = !state.darkMode;
+        saveState();
+        applyDarkMode();
+        audio.playTone('tap');
+        render('settings');
+    }
+};
+
+// Auto-reset daily quests if it's a new day
+function checkAndResetDailyQuests() {
+    const today = new Date().toDateString();
+
+    // If lastQuestReset is null (first time) or different from today, reset quests
+    if (!state.lastQuestReset || state.lastQuestReset !== today) {
+        state.customQuests.forEach(quest => {
+            if (quest.recurring) {
+                quest.completed = false;
+            }
+        });
+        state.lastQuestReset = today;
+        saveState();
+    }
+};
+
+// Apply dark mode class to body
+function applyDarkMode() {
+    if (state.darkMode) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
     }
 };
 
@@ -222,7 +348,10 @@ const router = {
             'quest': ['Family Quest', 'Co-op Mode Active.'],
             'scripts': ['Script Designer', 'What do I say?'],
             'headspace': ['Headspace', 'Clear your mind.'],
-            'settings': ['Settings', 'Customize your experience.']
+            'settings': ['Settings', 'Customize your experience.'],
+            'templates': ['Quest Templates', 'Quick start with presets.'],
+            'templatePreview': ['Template Preview', 'Review before adding.'],
+            'rewards': ['Rewards', 'Redeem your hard-earned XP.']
         };
         document.getElementById('page-title').innerText = titles[viewName][0];
         document.getElementById('page-subtitle').innerText = titles[viewName][1];
@@ -238,7 +367,14 @@ const router = {
 };
 
 function render(viewName) {
-    const content = typeof views[viewName] === 'function' ? views[viewName]() : views[viewName];
+    let content;
+
+    if (viewName === 'templatePreview') {
+        content = views.templatePreview(state.currentTemplate);
+    } else {
+        content = typeof views[viewName] === 'function' ? views[viewName]() : views[viewName];
+    }
+
     document.getElementById('app-view').innerHTML = content;
 
     // Initialize swipe for spark cards

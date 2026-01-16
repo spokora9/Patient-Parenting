@@ -145,7 +145,27 @@ The interface follows a "design blog" aesthetic with:
 
 ## 📋 Recent Updates
 
-### v0.2.0 - Customization & Quest Management (Latest)
+### v0.3.0 - Templates, Rewards & Enhanced UX (Latest)
+**✨ NEW Features:**
+- **Quest Templates Library:** 6 pre-built routine templates (morning, bedtime, chores, homework, kindness, weekend) with 29 total quests
+- **Reward Redemption System:** Create custom rewards, spend XP to redeem them, celebration animations on redemption
+- **Script Favorites:** Pin important conflict resolution scripts to the top of the list for quick access
+- **Daily Quest Reset:** Automatic daily reset of recurring quests + manual reset button
+- **Dark Mode:** Beautiful dark color scheme with toggle switch in settings
+
+**🎨 UI Improvements:**
+- Quest templates preview before adding
+- Reward management interface with XP balance display
+- Favorited scripts shown separately with special styling (⭐)
+- Dark mode toggle with smooth animations
+- Reset daily quests button in Quest view
+
+**🔧 Technical Updates:**
+- Service worker updated to cache v0.3.0 files
+- Enhanced state management for new features
+- Auto-reset logic runs on app initialization
+
+### v0.2.0 - Customization & Quest Management
 **✨ NEW Features:**
 - **Custom Quest Creation:** Add your own quests with custom XP values
 - **Player Customization:** Change names, avatars (10 options), and colors (8 options)
@@ -182,13 +202,17 @@ The interface follows a "design blog" aesthetic with:
 
 ## 🚧 Roadmap
 
-### Next Priorities (v0.3.0)
-- [ ] Quest templates library (morning routine, bedtime, chores)
-- [ ] Reward redemption system (trade XP for rewards)
-- [ ] Script favorites/pinning
+### Completed in v0.3.0
+- [x] Quest templates library (morning routine, bedtime, chores)
+- [x] Reward redemption system (trade XP for rewards)
+- [x] Script favorites/pinning
+- [x] Daily quest reset functionality
+- [x] Dark mode support
+
+### Next Priorities (v0.4.0)
 - [ ] Village Mode (share lists via QR code/link)
 - [ ] Weekly progress charts/analytics
-- [ ] Dark mode support
+- [ ] Quest scheduling and reminders
 
 ### Future Enhancements
 - [ ] Rust/WASM audio engine integration
@@ -209,4 +233,4 @@ MIT License (pending)
 
 **Built with intention. Designed for growth.**
 
-*Version 0.2.0 - January 2026*
+*Version 0.3.0 - January 2026*

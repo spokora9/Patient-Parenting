@@ -5,6 +5,82 @@ All notable changes to Parent Architect will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-01-16
+
+### Added
+- **Quest Templates Library**
+  - 6 pre-built routine templates (morning, bedtime, chores, homework, kindness, weekend)
+  - 29 total quests across all templates
+  - Template preview view before adding quests
+  - "Templates" button in Quest view for quick access
+  - Template categories with icons and quest counts
+
+- **Reward Redemption System**
+  - Create custom rewards with XP costs and emoji icons
+  - Redeem rewards by spending earned XP
+  - Recently redeemed rewards history display
+  - Confetti celebration animation on redemption
+  - XP balance prominently displayed
+  - Delete unwanted rewards
+  - Default starter rewards (Movie Night, Screen Time, Choose Dinner)
+
+- **Script Favorites/Pinning**
+  - Favorite/unfavorite toggle button (⭐/☆) on each script
+  - Favorited scripts shown separately at top of list
+  - Special styling for favorited scripts (yellow border, cream background)
+  - Persistent favorites saved in state
+
+- **Daily Quest Reset**
+  - Automatic reset of recurring quests at midnight
+  - Manual "Reset Daily" button in Quest view
+  - Last reset date tracking in state
+  - Confirmation dialog before manual reset
+
+- **Dark Mode**
+  - Beautiful dark color scheme for nighttime use
+  - Toggle switch in Settings with smooth animation
+  - Persistent dark mode preference
+  - Applies automatically on app load
+  - All UI components support dark mode
+
+- **New JavaScript Module**
+  - js/templates.js with quest template definitions and helpers
+
+### Changed
+- **Quest View Enhancements**
+  - Added "Templates" button next to "Add Quest"
+  - Added "Reset Daily" button alongside "View Rewards"
+  - Improved button layout with flex wrapping
+
+- **Settings View**
+  - New "Appearance" section with dark mode toggle
+  - Beautiful iOS-style toggle switch UI
+
+- **Scripts View**
+  - Scripts now separated into "Favorites" and "All Scripts" sections
+  - Toggle buttons for favoriting/unfavoriting
+
+- **Service Worker**
+  - Updated cache name to v3
+  - Added js/templates.js to cached files
+  - Added js/scripts.js to cached files
+
+- **State Management**
+  - Added `darkMode` boolean field
+  - Added `lastQuestReset` date string field
+  - Added `scriptFavorites` array
+  - Added `rewards` array with default items
+  - Added `redeemedRewards` array
+
+### Technical
+- App initialization now includes daily quest auto-reset check
+- App initialization applies dark mode on load
+- `applyDarkMode()` function toggles body class
+- `checkAndResetDailyQuests()` function runs on startup
+- Enhanced actions.js with 3 new action handlers
+- Template preview navigation via router
+- Dark mode CSS variables for complete theme support
+
 ## [0.2.0] - 2026-01-16
 
 ### Added
@@ -133,12 +209,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Planned for v0.2.0
-- Custom quest creation interface
-- Player profile customization (names, avatars, colors)
-- Additional activity categories
-- Script favorites and quick-access board
-- Village Mode for multi-device collaboration
+### Planned for v0.4.0
+- Village Mode for multi-device collaboration (QR code sharing)
+- Weekly progress charts and analytics
+- Quest scheduling and push reminders
+- Script notes and custom scripts
+- Activity history and insights
 
 ### Future Enhancements
 - Rust/WebAssembly audio engine

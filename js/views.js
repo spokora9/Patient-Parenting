@@ -178,20 +178,31 @@ const views = {
     `,
     headspace: () => `
         <div class="card" style="border-left: 4px solid var(--accent-earth)">
-            <h3>Village List</h3>
-            <p>Things to ask others for help with.</p>
-            <br>
-            <ul style="padding-left: 20px; margin: 0; color: var(--text-sub); font-size: 14px;">
-                <li>Ask Grandma for pickup Tues</li>
-                <li>Text Sarah re: carpool</li>
-            </ul>
+            <h3>🤝 Village List</h3>
+            <p style="margin-bottom: 12px; color: var(--text-sub); font-size: 14px;">Things to ask others for help with.</p>
+            <textarea
+                placeholder="Ask Grandma for pickup Tuesday&#10;Text Sarah re: carpool&#10;Schedule playdate with..."
+                onchange="actions.updateNotes('village', this.value)"
+                style="width: 100%; min-height: 120px; padding: 12px; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; background: var(--bg-color); color: var(--text-main);"
+            >${state.notes?.village || ''}</textarea>
         </div>
         <div class="card">
-            <h3>Upcoming</h3>
-            <p><strong>Leo's Birthday</strong> in 2 weeks.</p>
-            <p style="font-size:12px; color: var(--accent-play); margin-top:8px;">
-                <em>Tip: At this age, he is ready for cooperative board games.</em>
-            </p>
+            <h3>📅 Upcoming Events</h3>
+            <p style="margin-bottom: 12px; color: var(--text-sub); font-size: 14px;">Birthdays, appointments, and reminders.</p>
+            <textarea
+                placeholder="Leo's birthday in 2 weeks&#10;Parent-teacher conference&#10;Doctor appointment..."
+                onchange="actions.updateNotes('upcoming', this.value)"
+                style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; background: var(--bg-color); color: var(--text-main);"
+            >${state.notes?.upcoming || ''}</textarea>
+        </div>
+        <div class="card">
+            <h3>📝 General Notes</h3>
+            <p style="margin-bottom: 12px; color: var(--text-sub); font-size: 14px;">Thoughts, reflections, or anything on your mind.</p>
+            <textarea
+                placeholder="This week went well because...&#10;Next time I'll try...&#10;Remember to..."
+                onchange="actions.updateNotes('general', this.value)"
+                style="width: 100%; min-height: 140px; padding: 12px; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; background: var(--bg-color); color: var(--text-main);"
+            >${state.notes?.general || ''}</textarea>
         </div>
         ${state.favorites.length > 0 ? `
         <div class="card">

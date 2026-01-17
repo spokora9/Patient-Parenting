@@ -37,6 +37,8 @@
             --accent-play: #6BA8E8;    /* Softer Blue */
             --success: #4DDCB4;        /* Softer Green */
             --shadow: 0 8px 30px rgba(0,0,0,0.3);
+            --input-bg: #3a3a3a;       /* Input fields */
+            --border-color: #4a4a4a;   /* Borders */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -143,7 +145,7 @@
             height: 60px;
             border-radius: 50%;
             border: 2px solid var(--text-sub);
-            background: white;
+            background: var(--card-bg);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -167,8 +169,11 @@
             border-radius: 6px;
             margin-bottom: 12px;
         }
-        .tag.modern { background: #E3F2FD; color: #0984E3; }
-        .tag.wisdom { background: #F3E5F5; color: #6C5CE7; }
+        .tag.modern { background: rgba(116, 185, 255, 0.2); color: var(--accent-play); }
+        .tag.wisdom { background: rgba(168, 92, 231, 0.2); color: #A29BFE; }
+
+        body.dark-mode .tag.modern { background: rgba(107, 168, 232, 0.3); color: #8CC6FF; }
+        body.dark-mode .tag.wisdom { background: rgba(162, 155, 254, 0.3); color: #C5BFFF; }
 
         .card h3 { margin: 0 0 8px 0; font-size: 18px; }
         .card p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--text-sub); }
@@ -200,14 +205,14 @@
 
         .player-avatar.active {
             border-color: var(--accent-earth);
-            background: #fff;
+            background: var(--card-bg);
             color: var(--text-main);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             transform: translateY(-2px);
         }
 
         .quest-progress-container {
-            background: #fff;
+            background: var(--card-bg);
             padding: 20px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -215,18 +220,22 @@
         }
 
         .progress-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; font-weight: 600; }
-        .progress-track { height: 12px; background: #f1f2f6; border-radius: 10px; overflow: hidden; }
+        .progress-track { height: 12px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; }
+        body.dark-mode .progress-track { background: rgba(255,255,255,0.1); }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-play), var(--success)); width: 0%; transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
         .quest-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #fff;
+            background: var(--card-bg);
             padding: 16px;
             border-radius: 16px;
             margin-bottom: 10px;
-            border: 1px solid #f1f2f6;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        body.dark-mode .quest-item {
+            border-color: rgba(255,255,255,0.1);
         }
         .btn-check {
             width: 32px;
@@ -249,14 +258,24 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: rgba(255,255,255,0.95);
+            background: rgba(249, 248, 246, 0.95);
             backdrop-filter: blur(10px);
-            border-top: 1px solid #f1f2f6;
+            border-top: 1px solid rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-around;
             padding: 12px 0 24px 0;
             z-index: 100;
         }
+        body.dark-mode nav {
+            background: rgba(26, 26, 26, 0.95);
+            border-top-color: rgba(255,255,255,0.1);
+        }
+
+        /* Dark mode textarea borders */
+        body.dark-mode textarea {
+            border-color: rgba(255,255,255,0.2) !important;
+        }
+
         .nav-btn {
             background: none;
             border: none;

@@ -312,6 +312,11 @@ const actions = {
         applyDarkMode();
         audio.playTone('tap');
         render('settings');
+    },
+    updateNotes: (noteType, value) => {
+        if (!state.notes) state.notes = {};
+        state.notes[noteType] = value;
+        saveState();
     }
 };
 
@@ -356,11 +361,21 @@ const router = {
         document.getElementById('page-title').innerText = titles[viewName][0];
         document.getElementById('page-subtitle').innerText = titles[viewName][1];
 
-        // Update Nav Icons
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-        if (event && event.currentTarget) {
-            event.currentTarget.classList.add('active');
-        }
+        // Update Nav Icons - map viewName to nav button text
+        const navMapping = {
+            'spark': 'Spark',
+            'quest': 'Quest',
+            'scripts': 'Scripts',
+            'headspace': 'Notes'
+        };
+
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+            // Check if this button's text matches the viewName
+            if (navMapping[viewName] && btn.textContent.trim() === navMapping[viewName]) {
+                btn.classList.add('active');
+            }
+        });
 
         render(viewName);
     }

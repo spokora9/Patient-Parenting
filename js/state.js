@@ -26,7 +26,12 @@ const defaultState = {
     ],
     redeemedRewards: [],
     lastQuestReset: null, // Track last time daily quests were reset
-    darkMode: false // Dark mode preference
+    darkMode: false, // Dark mode preference
+    notes: {
+        village: '',
+        upcoming: '',
+        general: ''
+    }
 };
 
 // Load state from localStorage or use default

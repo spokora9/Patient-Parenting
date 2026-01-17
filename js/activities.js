@@ -139,6 +139,216 @@ const activityLibrary = [
         category: 'Bedtime',
         title: 'Flashlight Stories',
         description: 'Lights off, flashlight on. Tell a story on the ceiling. Makes bedtime magical, not a battle.'
+    },
+    {
+        id: 21,
+        type: 'modern',
+        category: 'Co-Regulation',
+        title: 'Breathing Buddies',
+        description: 'Place a stuffed animal on their belly while lying down. Watch it rise and fall. Visual feedback activates the vagus nerve.'
+    },
+    {
+        id: 22,
+        type: 'wisdom',
+        category: 'Morning',
+        title: 'The First Hello',
+        description: 'Before asking anything, just say good morning and hug. Tasks can wait 60 seconds. Connection first, demands second.'
+    },
+    {
+        id: 23,
+        type: 'modern',
+        category: 'Sibling Conflict',
+        title: 'The Team Problem',
+        description: '"Sounds like we have a problem to solve together." Frame it as team vs. problem, not kid vs. kid.'
+    },
+    {
+        id: 24,
+        type: 'wisdom',
+        category: 'Cooking',
+        title: 'Tiny Chef Station',
+        description: 'Give them a real job: washing vegetables, tearing lettuce, stirring. Competence builds confidence.'
+    },
+    {
+        id: 25,
+        type: 'modern',
+        category: 'Anxiety',
+        title: 'Worry Time Box',
+        description: 'Write worries on paper, put in box. "We\'ll look at these at 4pm." Externalizing thoughts reduces rumination.'
+    },
+    {
+        id: 26,
+        type: 'wisdom',
+        category: 'Adventure',
+        title: 'The Yes Day',
+        description: 'Once a month, they make ALL the decisions (within budget/safety). Breakfast for dinner? Why not.'
+    },
+    {
+        id: 27,
+        type: 'modern',
+        category: 'Focus • 6-8 Years',
+        title: 'Brain Breaks',
+        description: 'Every 20 mins of homework: 2-min movement break. The brain needs glucose circulation to concentrate.'
+    },
+    {
+        id: 28,
+        type: 'wisdom',
+        category: 'Car Rides',
+        title: 'High/Low Game',
+        description: 'Everyone shares their high and low of the day. No fixing, just listening. Makes the minivan a safe space.'
+    },
+    {
+        id: 29,
+        type: 'modern',
+        category: 'Frustration Tolerance',
+        title: 'The Glitter Jar',
+        description: 'Shake jar when upset. Watch glitter settle = watch big feelings settle. Visual metaphor for emotional regulation.'
+    },
+    {
+        id: 30,
+        type: 'wisdom',
+        category: 'Repair',
+        title: 'The Do-Over',
+        description: 'After you yell: "I don\'t like how I said that. Can I try again?" Models accountability and growth.'
+    },
+    {
+        id: 31,
+        type: 'modern',
+        category: 'Meltdown Prevention',
+        title: 'HALT Check',
+        description: 'Before discipline, check: Hungry? Angry? Lonely? Tired? Meet the need first, then address behavior.'
+    },
+    {
+        id: 32,
+        type: 'wisdom',
+        category: 'Independence',
+        title: 'The Choice Board',
+        description: 'Pictures of 3-4 activities they can do alone. Builds autonomy and reduces "I\'m bored" whining.'
+    },
+    {
+        id: 33,
+        type: 'modern',
+        category: 'Vestibular Input',
+        title: 'The Spin Doctor',
+        description: 'Let them spin in circles 10x. Vestibular input organizes the sensory system. Dizzy = regulated.'
+    },
+    {
+        id: 34,
+        type: 'wisdom',
+        category: 'Forgiveness',
+        title: 'Clean Slate Phrase',
+        description: 'End every hard day with: "Tomorrow is a new day." Let them start fresh. Shame doesn\'t teach.'
+    },
+    {
+        id: 35,
+        type: 'modern',
+        category: 'Impulse Control • 4-6 Years',
+        title: 'Red Light, Green Light Body',
+        description: 'Practice stopping and starting on command through play. Strengthens the brain\'s "brake pedal."'
+    },
+    {
+        id: 36,
+        type: 'wisdom',
+        category: 'Bath Time',
+        title: 'Magic Potions',
+        description: 'Food coloring + water in bottles = magic lab. Bath becomes adventure, not a chore to resist.'
+    },
+    {
+        id: 37,
+        type: 'modern',
+        category: 'Working Memory',
+        title: 'The Repeat-Back Game',
+        description: 'After giving instructions, ask them to repeat. Not testing—supporting. Working memory needs practice.'
+    },
+    {
+        id: 38,
+        type: 'wisdom',
+        category: 'Weather Days',
+        title: 'Blanket Fort Headquarters',
+        description: 'Rainy? Sick? Stuck inside? Build HQ together. Cozy spaces = safe spaces for big emotions.'
+    },
+    {
+        id: 39,
+        type: 'modern',
+        category: 'Self-Soothing',
+        title: 'The Calm Corner',
+        description: 'Not punishment—a cozy spot with books, stuffed animals, sensory toys. Safe harbor for overwhelm.'
+    },
+    {
+        id: 40,
+        type: 'wisdom',
+        category: 'Money Skills',
+        title: 'Three Jars Method',
+        description: 'Save, Spend, Share. Every allowance splits three ways. Financial literacy starts at age 4.'
+    },
+    {
+        id: 41,
+        type: 'modern',
+        category: 'Disappointment',
+        title: 'Name It to Tame It',
+        description: '"You\'re feeling disappointed." Labeling emotions activates the prefrontal cortex and calms the amygdala.'
+    },
+    {
+        id: 42,
+        type: 'wisdom',
+        category: 'Screen Time',
+        title: 'Tech Sunset Ritual',
+        description: '30 mins before bed: devices "go to sleep" in a basket. Consistency > battles. Make it a family rule.'
+    },
+    {
+        id: 43,
+        type: 'modern',
+        category: 'Interoception',
+        title: 'Body Clues Detective',
+        description: '"How does your tummy feel? Your chest?" Teach them to read their body\'s signals before meltdown.'
+    },
+    {
+        id: 44,
+        type: 'wisdom',
+        category: 'Chores',
+        title: 'Work Before Play',
+        description: 'Clear rule: bed made, teeth brushed, then screen time. Natural consequences teach responsibility.'
+    },
+    {
+        id: 45,
+        type: 'modern',
+        category: 'Overstimulation',
+        title: 'The Noise-Canceling Headphones',
+        description: 'Sensory-sensitive kids? Let them wear headphones at loud events. Accommodate, don\'t force.'
+    },
+    {
+        id: 46,
+        type: 'wisdom',
+        category: 'Grandparents',
+        title: 'The Phone Call Ritual',
+        description: 'Sunday mornings = call grandma. Builds relationships across distance. Village doesn\'t require proximity.'
+    },
+    {
+        id: 47,
+        type: 'modern',
+        category: 'Growth Mindset',
+        title: 'The Power of Yet',
+        description: '"I can\'t do it... YET." Add one word. Changes fixed mindset to growth mindset instantly.'
+    },
+    {
+        id: 48,
+        type: 'wisdom',
+        category: 'Seasons',
+        title: 'Nature Table',
+        description: 'Special shelf for found treasures: pinecones, rocks, leaves. Honors their discoveries and curiosity.'
+    },
+    {
+        id: 49,
+        type: 'modern',
+        category: 'Perfectionism',
+        title: 'Oops Book',
+        description: 'Journal of mistakes and what you learned. Normalizes failure as learning. Shame cannot survive exposure.'
+    },
+    {
+        id: 50,
+        type: 'wisdom',
+        category: 'Cleanup',
+        title: 'Beat the Timer',
+        description: '"Let\'s see if we can clean up before this song ends!" Race = game = cooperation.'
     }
 ];
 

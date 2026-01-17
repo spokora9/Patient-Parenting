@@ -5,63 +5,72 @@ const activityLibrary = [
         type: 'modern',
         category: 'Sensory',
         title: 'Heavy Work',
-        description: 'Regulate the nervous system. Have them push a laundry basket filled with books across the room.'
+        description: 'Regulate the nervous system. Have them push a laundry basket filled with books across the room.',
+        reason: 'Proprioceptive input (deep pressure from muscles and joints) activates the parasympathetic nervous system, reducing cortisol and promoting calm.'
     },
     {
         id: 2,
         type: 'wisdom',
         category: 'Nature',
         title: 'Cloud Watching',
-        description: 'Go outside. Lie on the grass. Find animals in the sky. No agenda, just observation.'
+        description: 'Go outside. Lie on the grass. Find animals in the sky. No agenda, just observation.',
+        reason: 'Nature exposure lowers stress hormones and increases serotonin. Unstructured observation builds attention span and imagination without performance pressure.'
     },
     {
         id: 3,
         type: 'modern',
         category: 'Development • 3-5 Years',
         title: 'The "Choice" Trick',
-        description: 'Instead of "Put on your shoes," try "Do you want to put on the left shoe or the right shoe first?"'
+        description: 'Instead of "Put on your shoes," try "Do you want to put on the left shoe or the right shoe first?"',
+        reason: 'Giving choices activates the prefrontal cortex (decision-making) rather than the amygdala (resistance). It satisfies their developmental need for autonomy.'
     },
     {
         id: 4,
         type: 'wisdom',
         category: 'Storytelling',
         title: 'The Magic Story Thread',
-        description: 'Start a story, let them add one sentence, you add one. No rules, just imagination.'
+        description: 'Start a story, let them add one sentence, you add one. No rules, just imagination.',
+        reason: 'Collaborative storytelling builds theory of mind, sequencing skills, and shared joy. It creates secure attachment through play.'
     },
     {
         id: 5,
         type: 'modern',
         category: 'Emotional Regulation',
         title: 'Color Your Feelings',
-        description: 'Ask: "What color is your mad/sad/happy today?" Let them draw it. No judgment, just expression.'
+        description: 'Ask: "What color is your mad/sad/happy today?" Let them draw it. No judgment, just expression.',
+        reason: 'Externalizing emotions through art engages the prefrontal cortex, which calms the amygdala. Visual expression bypasses language barriers in young children.'
     },
     {
         id: 6,
         type: 'wisdom',
         category: 'Connection',
         title: 'The 10-Minute Everything',
-        description: 'Set a timer. For 10 minutes, do EXACTLY what they want. Follow their lead completely.'
+        description: 'Set a timer. For 10 minutes, do EXACTLY what they want. Follow their lead completely.',
+        reason: 'Child-led play fills their "connection tank" more than hours of distracted parenting. It builds secure attachment and reduces attention-seeking behavior.'
     },
     {
         id: 7,
         type: 'modern',
         category: 'Proprioception',
         title: 'The Sandwich Hug',
-        description: 'Place child between couch cushions and give gentle pressure. Deep pressure calms the nervous system.'
+        description: 'Place child between couch cushions and give gentle pressure. Deep pressure calms the nervous system.',
+        reason: 'Deep touch pressure releases oxytocin and reduces cortisol. It activates the parasympathetic nervous system, shifting the body from fight-or-flight to rest-and-digest.'
     },
     {
         id: 8,
         type: 'wisdom',
         category: 'Ritual',
         title: 'The Worry Stone',
-        description: 'Find a smooth stone together. At bedtime, let them tell it one worry. Leave it outside their door.'
+        description: 'Find a smooth stone together. At bedtime, let them tell it one worry. Leave it outside their door.',
+        reason: 'Rituals provide predictability, which soothes anxiety. Externalizing worries prevents rumination and signals to the brain that worries are contained and manageable.'
     },
     {
         id: 9,
         type: 'modern',
         category: 'Executive Function',
         title: 'Backward Planning',
-        description: 'Getting ready is hard. Try: "What\'s the LAST thing before we leave? Now what comes before that?"'
+        description: 'Getting ready is hard. Try: "What\'s the LAST thing before we leave? Now what comes before that?"',
+        reason: 'Working backward strengthens planning and sequencing in the prefrontal cortex. It makes abstract time concrete for developing brains.'
     },
     {
         id: 10,

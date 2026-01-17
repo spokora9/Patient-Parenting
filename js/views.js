@@ -19,13 +19,19 @@ const views = {
         return `
             <div class="spark-container" id="spark-container">
                 ${cards.map((card, index) => `
-                    <div class="spark-card"
+                    <div class="spark-card ${index === currentIndex ? 'current' : ''}"
                          id="spark-card-${index}"
                          data-index="${index}"
-                         style="z-index: ${cards.length - index}; transform: scale(${1 - (index - currentIndex) * 0.05});">
+                         style="z-index: ${cards.length - index}; transform: scale(${1 - (index - currentIndex) * 0.05}); ${index > currentIndex ? 'pointer-events: none; opacity: 0;' : index < currentIndex ? 'display: none;' : ''}">
                         <span class="tag ${card.type}">${card.type === 'modern' ? 'Modern Knowledge' : 'Old Wisdom'} • ${card.category}</span>
                         <h3>${card.title}</h3>
-                        <p>${card.description}</p>
+                        <p style="margin-bottom: 16px;">${card.description}</p>
+                        ${card.reason ? `
+                            <div style="background: rgba(116, 185, 255, 0.1); border-left: 3px solid var(--accent-play); padding: 12px; border-radius: 8px; margin-top: 16px;">
+                                <p style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-play); margin: 0 0 6px 0;">💡 Why This Works</p>
+                                <p style="font-size: 13px; line-height: 1.5; margin: 0; color: var(--text-sub);">${card.reason}</p>
+                            </div>
+                        ` : ''}
                         <div class="swipe-indicator left">✕</div>
                         <div class="swipe-indicator right">⭐</div>
                     </div>

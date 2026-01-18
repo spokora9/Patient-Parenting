@@ -31,7 +31,9 @@ const defaultState = {
         village: '',
         upcoming: '',
         general: ''
-    }
+    },
+    reminders: [],
+    tasks: []
 };
 
 // Load state from localStorage or use default

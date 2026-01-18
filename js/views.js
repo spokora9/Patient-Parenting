@@ -183,31 +183,100 @@ const views = {
         </div>
     `,
     headspace: () => `
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="margin: 0;">⏰ Reminders</h3>
+                <button onclick="actions.showAddReminderModal()"
+                        style="padding: 8px 16px; background: var(--accent-earth); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                    + Add Reminder
+                </button>
+            </div>
+            ${(state.reminders || []).length === 0 ? `
+                <p style="color: var(--text-sub); font-size: 14px; margin: 0;">Set reminders for birthdays, appointments, or important events!</p>
+            ` : `
+                ${(state.reminders || []).sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime)).map(reminder => {
+                    const reminderDate = new Date(reminder.dateTime);
+                    const now = new Date();
+                    const isPast = reminderDate < now;
+                    return `
+                        <div style="padding: 12px; background: ${isPast ? 'rgba(255, 118, 117, 0.1)' : 'rgba(116, 185, 255, 0.1)'}; border-left: 3px solid ${isPast ? '#ff7675' : 'var(--accent-play)'}; border-radius: 8px; margin-bottom: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div style="flex: 1;">
+                                    <p style="margin: 0 0 4px 0; font-weight: 600; font-size: 15px;">${reminder.title}</p>
+                                    <p style="margin: 0; font-size: 13px; color: var(--text-sub);">
+                                        📅 ${reminderDate.toLocaleDateString()} at ${reminderDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                        ${isPast ? '<span style="color: #ff7675; margin-left: 8px;">• Past</span>' : ''}
+                                    </p>
+                                </div>
+                                <button onclick="actions.deleteReminder('${reminder.id}')"
+                                        style="width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px; flex-shrink: 0;">
+                                    ×
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            `}
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="margin: 0;">✓ Task List</h3>
+                <button onclick="actions.showAddTaskModal()"
+                        style="padding: 8px 16px; background: var(--accent-play); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                    + Add Task
+                </button>
+            </div>
+            ${(state.tasks || []).filter(t => !t.completed).length === 0 ? `
+                <p style="color: var(--text-sub); font-size: 14px; margin: 0;">Add tasks to keep track of what needs to be done!</p>
+            ` : `
+                ${(state.tasks || []).filter(t => !t.completed).map(task => `
+                    <div style="display: flex; align-items: center; padding: 10px; background: var(--card-bg); border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; margin-bottom: 8px;">
+                        <input type="checkbox" onchange="actions.toggleTask('${task.id}')" style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer;">
+                        <span style="flex: 1; font-size: 15px;">${task.title}</span>
+                        <button onclick="actions.deleteTask('${task.id}')"
+                                style="width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px;">
+                            ×
+                        </button>
+                    </div>
+                `).join('')}
+            `}
+            ${(state.tasks || []).filter(t => t.completed).length > 0 ? `
+                <details style="margin-top: 16px;">
+                    <summary style="cursor: pointer; color: var(--text-sub); font-size: 14px; font-weight: 600;">Completed (${(state.tasks || []).filter(t => t.completed).length})</summary>
+                    <div style="margin-top: 8px;">
+                        ${(state.tasks || []).filter(t => t.completed).map(task => `
+                            <div style="display: flex; align-items: center; padding: 10px; background: var(--card-bg); border: 1px solid rgba(0,0,0,0.05); border-radius: 8px; margin-bottom: 8px; opacity: 0.6;">
+                                <input type="checkbox" checked onchange="actions.toggleTask('${task.id}')" style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer;">
+                                <span style="flex: 1; font-size: 15px; text-decoration: line-through;">${task.title}</span>
+                                <button onclick="actions.deleteTask('${task.id}')"
+                                        style="width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px;">
+                                    ×
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </details>
+            ` : ''}
+        </div>
+
         <div class="card" style="border-left: 4px solid var(--accent-earth)">
             <h3>🤝 Village List</h3>
             <p style="margin-bottom: 12px; color: var(--text-sub); font-size: 14px;">Things to ask others for help with.</p>
             <textarea
                 placeholder="Ask Grandma for pickup Tuesday&#10;Text Sarah re: carpool&#10;Schedule playdate with..."
                 onchange="actions.updateNotes('village', this.value)"
-                style="width: 100%; min-height: 120px; padding: 12px; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; background: var(--bg-color); color: var(--text-main);"
+                style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; background: var(--bg-color); color: var(--text-main);"
             >${state.notes?.village || ''}</textarea>
         </div>
-        <div class="card">
-            <h3>📅 Upcoming Events</h3>
-            <p style="margin-bottom: 12px; color: var(--text-sub); font-size: 14px;">Birthdays, appointments, and reminders.</p>
-            <textarea
-                placeholder="Leo's birthday in 2 weeks&#10;Parent-teacher conference&#10;Doctor appointment..."
-                onchange="actions.updateNotes('upcoming', this.value)"
-                style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; background: var(--bg-color); color: var(--text-main);"
-            >${state.notes?.upcoming || ''}</textarea>
-        </div>
+
         <div class="card">
             <h3>📝 General Notes</h3>
             <p style="margin-bottom: 12px; color: var(--text-sub); font-size: 14px;">Thoughts, reflections, or anything on your mind.</p>
             <textarea
                 placeholder="This week went well because...&#10;Next time I'll try...&#10;Remember to..."
                 onchange="actions.updateNotes('general', this.value)"
-                style="width: 100%; min-height: 140px; padding: 12px; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; background: var(--bg-color); color: var(--text-main);"
+                style="width: 100%; min-height: 120px; padding: 12px; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; background: var(--bg-color); color: var(--text-main);"
             >${state.notes?.general || ''}</textarea>
         </div>
         ${state.favorites.length > 0 ? `

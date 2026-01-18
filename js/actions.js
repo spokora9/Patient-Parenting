@@ -317,6 +317,82 @@ const actions = {
         if (!state.notes) state.notes = {};
         state.notes[noteType] = value;
         saveState();
+    },
+    showAddReminderModal: () => {
+        const title = prompt('Reminder title (e.g., "Leo\'s Birthday"):');
+        if (!title) return;
+
+        const dateInput = prompt('Date (YYYY-MM-DD):');
+        if (!dateInput) return;
+
+        const timeInput = prompt('Time (HH:MM in 24-hour format, e.g., 14:30):');
+        if (!timeInput) return;
+
+        const dateTime = `${dateInput}T${timeInput}:00`;
+        const reminderDate = new Date(dateTime);
+
+        if (isNaN(reminderDate.getTime())) {
+            alert('Invalid date or time format. Please try again.');
+            return;
+        }
+
+        if (!state.reminders) state.reminders = [];
+        state.reminders.push({
+            id: 'rem-' + Date.now(),
+            title: title,
+            dateTime: dateTime,
+            created: new Date().toISOString()
+        });
+
+        saveState();
+        audio.playTone('success');
+        render('headspace');
+
+        // Request notification permission if not already granted
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    },
+    deleteReminder: (reminderId) => {
+        if (confirm('Delete this reminder?')) {
+            state.reminders = (state.reminders || []).filter(r => r.id !== reminderId);
+            saveState();
+            render('headspace');
+        }
+    },
+    showAddTaskModal: () => {
+        const title = prompt('Task description:');
+        if (!title || title.trim() === '') return;
+
+        if (!state.tasks) state.tasks = [];
+        state.tasks.push({
+            id: 'task-' + Date.now(),
+            title: title.trim(),
+            completed: false,
+            created: new Date().toISOString()
+        });
+
+        saveState();
+        audio.playTone('success');
+        render('headspace');
+    },
+    toggleTask: (taskId) => {
+        if (!state.tasks) state.tasks = [];
+        const task = state.tasks.find(t => t.id === taskId);
+        if (task) {
+            task.completed = !task.completed;
+            task.completedAt = task.completed ? new Date().toISOString() : null;
+            saveState();
+            audio.playTone('tap');
+            render('headspace');
+        }
+    },
+    deleteTask: (taskId) => {
+        if (confirm('Delete this task?')) {
+            state.tasks = (state.tasks || []).filter(t => t.id !== taskId);
+            saveState();
+            render('headspace');
+        }
     }
 };
 

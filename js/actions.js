@@ -328,6 +328,15 @@ const actions = {
         const timeInput = prompt('Time (HH:MM in 24-hour format, e.g., 14:30):');
         if (!timeInput) return;
 
+        const recurrenceInput = prompt('Recurrence? Enter: daily, weekly, monthly, or leave blank for one-time:');
+        const recurrence = recurrenceInput ? recurrenceInput.toLowerCase().trim() : null;
+
+        // Validate recurrence
+        if (recurrence && !['daily', 'weekly', 'monthly'].includes(recurrence)) {
+            alert('Invalid recurrence option. Please use: daily, weekly, monthly, or leave blank.');
+            return;
+        }
+
         const dateTime = `${dateInput}T${timeInput}:00`;
         const reminderDate = new Date(dateTime);
 
@@ -341,6 +350,7 @@ const actions = {
             id: 'rem-' + Date.now(),
             title: title,
             dateTime: dateTime,
+            recurrence: recurrence,
             created: new Date().toISOString()
         });
 
@@ -360,14 +370,57 @@ const actions = {
             render('headspace');
         }
     },
+    snoozeReminder: (reminderId) => {
+        const durationInput = prompt('Snooze for how long?\n\nEnter: 5 (5 min), 15 (15 min), 30 (30 min), 60 (1 hour)');
+        if (!durationInput) return;
+
+        const duration = parseInt(durationInput);
+        const validDurations = [5, 15, 30, 60];
+
+        if (!validDurations.includes(duration)) {
+            alert('Invalid duration. Please enter: 5, 15, 30, or 60');
+            return;
+        }
+
+        const reminder = (state.reminders || []).find(r => r.id === reminderId);
+        if (!reminder) return;
+
+        // Add duration in minutes to current reminder time
+        const currentTime = new Date(reminder.dateTime);
+        const newTime = new Date(currentTime.getTime() + duration * 60 * 1000);
+
+        // Update reminder dateTime
+        reminder.dateTime = newTime.toISOString().slice(0, 16) + ':00';
+
+        // Remove from notified list so it can notify again
+        const notifiedKey = 'notified_reminders';
+        const notified = JSON.parse(localStorage.getItem(notifiedKey) || '[]');
+        const notifiedIndex = notified.indexOf(reminderId);
+        if (notifiedIndex > -1) {
+            notified.splice(notifiedIndex, 1);
+            localStorage.setItem(notifiedKey, JSON.stringify(notified));
+        }
+
+        saveState();
+        audio.playTone('success');
+        render('headspace');
+    },
     showAddTaskModal: () => {
         const title = prompt('Task description:');
         if (!title || title.trim() === '') return;
+
+        const categoryInput = prompt('Category (urgent, important, routine, or leave blank):');
+        const category = categoryInput ? categoryInput.toLowerCase().trim() : 'general';
+
+        // Validate category
+        const validCategories = ['urgent', 'important', 'routine', 'general'];
+        const finalCategory = validCategories.includes(category) ? category : 'general';
 
         if (!state.tasks) state.tasks = [];
         state.tasks.push({
             id: 'task-' + Date.now(),
             title: title.trim(),
+            category: finalCategory,
             completed: false,
             created: new Date().toISOString()
         });
@@ -393,6 +446,33 @@ const actions = {
             saveState();
             render('headspace');
         }
+    },
+    setActivityFilter: (filterType, value) => {
+        if (!state.activityFilters) {
+            state.activityFilters = { category: null, ageRange: null, keyword: '' };
+        }
+
+        // Update the specific filter
+        if (filterType === 'category') {
+            state.activityFilters.category = value || null;
+        } else if (filterType === 'ageRange') {
+            state.activityFilters.ageRange = value || null;
+        } else if (filterType === 'keyword') {
+            state.activityFilters.keyword = value;
+        }
+
+        // Reset spark index when filters change
+        state.currentSparkIndex = 0;
+        saveState();
+        render('spark');
+        initSparkSwipe();
+    },
+    clearActivityFilters: () => {
+        state.activityFilters = { category: null, ageRange: null, keyword: '' };
+        state.currentSparkIndex = 0;
+        saveState();
+        render('spark');
+        initSparkSwipe();
     }
 };
 

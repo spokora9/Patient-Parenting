@@ -33,7 +33,12 @@ const defaultState = {
         general: ''
     },
     reminders: [],
-    tasks: []
+    tasks: [],
+    activityFilters: {
+        category: null,
+        ageRange: null,
+        keyword: ''
+    }
 };
 
 // Load state from localStorage or use default

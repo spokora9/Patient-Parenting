@@ -1,14 +1,54 @@
 // --- VIEWS & COMPONENTS ---
 const views = {
     spark: () => {
+        const filters = state.activityFilters || { category: null, ageRange: null, keyword: '' };
+        const categories = getUniqueCategories();
+        const ageRanges = getUniqueAgeRanges();
         const cards = getDailyCards();
         const currentIndex = state.currentSparkIndex || 0;
 
+        const filterUI = `
+            <div style="background: var(--card-bg); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <h4 style="margin: 0; font-size: 14px; color: var(--text-sub);">🔍 Filter Activities</h4>
+                    ${filters.category || filters.ageRange || filters.keyword ? `
+                        <button onclick="actions.clearActivityFilters()" style="padding: 4px 12px; background: var(--accent-earth); color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600;">
+                            Clear All
+                        </button>
+                    ` : ''}
+                </div>
+
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                    <select onchange="actions.setActivityFilter('category', this.value)"
+                            style="flex: 1; min-width: 140px; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 13px;">
+                        <option value="">All Categories</option>
+                        ${categories.map(cat => `
+                            <option value="${cat}" ${filters.category === cat ? 'selected' : ''}>${cat}</option>
+                        `).join('')}
+                    </select>
+
+                    <select onchange="actions.setActivityFilter('ageRange', this.value)"
+                            style="flex: 1; min-width: 140px; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 13px;">
+                        <option value="">All Ages</option>
+                        ${ageRanges.map(age => `
+                            <option value="${age}" ${filters.ageRange === age ? 'selected' : ''}>${age}</option>
+                        `).join('')}
+                    </select>
+                </div>
+
+                <input type="text"
+                       placeholder="Search by keyword..."
+                       value="${filters.keyword || ''}"
+                       oninput="actions.setActivityFilter('keyword', this.value)"
+                       style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 13px; box-sizing: border-box;">
+            </div>
+        `;
+
         if (currentIndex >= cards.length) {
-            return `
+            return filterUI + `
                 <div class="card" style="text-align: center; padding: 60px 24px;">
-                    <h3 style="color: var(--accent-earth); margin-bottom: 16px;">✨ All Done for Today!</h3>
-                    <p>You've explored today's sparks. Come back tomorrow for fresh inspiration.</p>
+                    <h3 style="color: var(--accent-earth); margin-bottom: 16px;">✨ ${cards.length === 0 ? 'No Activities Found' : 'All Done for Today!'}</h3>
+                    <p>${cards.length === 0 ? 'Try adjusting your filters to see more activities.' : 'You\'ve explored today\'s sparks. Come back tomorrow for fresh inspiration.'}</p>
                     <button class="spark-btn favorite" onclick="actions.resetSparkCards()" style="margin: 20px auto;">
                         🔄
                     </button>
@@ -16,7 +56,7 @@ const views = {
             `;
         }
 
-        return `
+        return filterUI + `
             <div class="spark-container" id="spark-container">
                 ${cards.map((card, index) => `
                     <div class="spark-card ${index === currentIndex ? 'current' : ''}"
@@ -198,20 +238,34 @@ const views = {
                     const reminderDate = new Date(reminder.dateTime);
                     const now = new Date();
                     const isPast = reminderDate < now;
+                    const recurrenceIcons = { daily: '🔄', weekly: '📆', monthly: '📅' };
                     return `
                         <div style="padding: 12px; background: ${isPast ? 'rgba(255, 118, 117, 0.1)' : 'rgba(116, 185, 255, 0.1)'}; border-left: 3px solid ${isPast ? '#ff7675' : 'var(--accent-play)'}; border-radius: 8px; margin-bottom: 8px;">
                             <div style="display: flex; justify-content: space-between; align-items: start;">
                                 <div style="flex: 1;">
-                                    <p style="margin: 0 0 4px 0; font-weight: 600; font-size: 15px;">${reminder.title}</p>
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                        <p style="margin: 0; font-weight: 600; font-size: 15px;">${reminder.title}</p>
+                                        ${reminder.recurrence ? `
+                                            <span style="background: var(--accent-play); color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase;">
+                                                ${recurrenceIcons[reminder.recurrence] || '🔄'} ${reminder.recurrence}
+                                            </span>
+                                        ` : ''}
+                                    </div>
                                     <p style="margin: 0; font-size: 13px; color: var(--text-sub);">
                                         📅 ${reminderDate.toLocaleDateString()} at ${reminderDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                         ${isPast ? '<span style="color: #ff7675; margin-left: 8px;">• Past</span>' : ''}
                                     </p>
                                 </div>
-                                <button onclick="actions.deleteReminder('${reminder.id}')"
-                                        style="width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px; flex-shrink: 0;">
-                                    ×
-                                </button>
+                                <div style="display: flex; gap: 8px; flex-shrink: 0;">
+                                    <button onclick="actions.snoozeReminder('${reminder.id}')"
+                                            style="padding: 6px 12px; border-radius: 6px; border: none; background: var(--accent-play); color: white; cursor: pointer; font-size: 12px; font-weight: 600;">
+                                        ⏰ Snooze
+                                    </button>
+                                    <button onclick="actions.deleteReminder('${reminder.id}')"
+                                            style="width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px;">
+                                        ×
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -229,18 +283,48 @@ const views = {
             </div>
             ${(state.tasks || []).filter(t => !t.completed).length === 0 ? `
                 <p style="color: var(--text-sub); font-size: 14px; margin: 0;">Add tasks to keep track of what needs to be done!</p>
-            ` : `
-                ${(state.tasks || []).filter(t => !t.completed).map(task => `
-                    <div style="display: flex; align-items: center; padding: 10px; background: var(--card-bg); border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; margin-bottom: 8px;">
-                        <input type="checkbox" onchange="actions.toggleTask('${task.id}')" style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer;">
-                        <span style="flex: 1; font-size: 15px;">${task.title}</span>
-                        <button onclick="actions.deleteTask('${task.id}')"
-                                style="width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px;">
-                            ×
-                        </button>
-                    </div>
-                `).join('')}
-            `}
+            ` : (() => {
+                const activeTasks = (state.tasks || []).filter(t => !t.completed);
+                const categoryOrder = ['urgent', 'important', 'routine', 'general'];
+                const categoryLabels = { urgent: '🔴 Urgent', important: '🟡 Important', routine: '🔵 Routine', general: '⚪ General' };
+                const categoryColors = { urgent: '#ff7675', important: '#fdcb6e', routine: '#74b9ff', general: '#b2bec3' };
+
+                // Group tasks by category
+                const tasksByCategory = {};
+                categoryOrder.forEach(cat => { tasksByCategory[cat] = []; });
+                activeTasks.forEach(task => {
+                    const cat = task.category || 'general';
+                    if (tasksByCategory[cat]) {
+                        tasksByCategory[cat].push(task);
+                    } else {
+                        tasksByCategory['general'].push(task);
+                    }
+                });
+
+                // Render tasks grouped by category
+                return categoryOrder.map(category => {
+                    const tasks = tasksByCategory[category];
+                    if (tasks.length === 0) return '';
+
+                    return `
+                        <div style="margin-bottom: 16px;">
+                            <h4 style="margin: 0 0 8px 0; font-size: 13px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px;">
+                                ${categoryLabels[category]}
+                            </h4>
+                            ${tasks.map(task => `
+                                <div style="display: flex; align-items: center; padding: 10px; background: var(--card-bg); border-left: 3px solid ${categoryColors[category]}; border-radius: 8px; margin-bottom: 8px;">
+                                    <input type="checkbox" onchange="actions.toggleTask('${task.id}')" style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer;">
+                                    <span style="flex: 1; font-size: 15px;">${task.title}</span>
+                                    <button onclick="actions.deleteTask('${task.id}')"
+                                            style="width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px;">
+                                        ×
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }).join('');
+            })()}
             ${(state.tasks || []).filter(t => t.completed).length > 0 ? `
                 <details style="margin-top: 16px;">
                     <summary style="cursor: pointer; color: var(--text-sub); font-size: 14px; font-weight: 600;">Completed (${(state.tasks || []).filter(t => t.completed).length})</summary>

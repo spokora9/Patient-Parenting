@@ -402,18 +402,84 @@ const activityLibrary = [
     }
 ];
 
+// Get unique categories from activities
+function getUniqueCategories() {
+    const categories = new Set();
+    activityLibrary.forEach(activity => {
+        // Remove age range if present (e.g., "Development • 3-5 Years" → "Development")
+        const category = activity.category.split(' • ')[0];
+        categories.add(category);
+    });
+    return Array.from(categories).sort();
+}
+
+// Get unique age ranges from activities
+function getUniqueAgeRanges() {
+    const ageRanges = new Set();
+    activityLibrary.forEach(activity => {
+        const parts = activity.category.split(' • ');
+        if (parts.length > 1) {
+            ageRanges.add(parts[1]);
+        }
+    });
+    return Array.from(ageRanges).sort();
+}
+
+// Apply filters to activity library
+function getFilteredActivities() {
+    const filters = state.activityFilters || { category: null, ageRange: null, keyword: '' };
+
+    return activityLibrary.filter(activity => {
+        // Category filter
+        if (filters.category) {
+            const activityCategory = activity.category.split(' • ')[0];
+            if (activityCategory !== filters.category) return false;
+        }
+
+        // Age range filter
+        if (filters.ageRange) {
+            if (!activity.category.includes(filters.ageRange)) return false;
+        }
+
+        // Keyword search (search in title, description, reason)
+        if (filters.keyword && filters.keyword.trim()) {
+            const keyword = filters.keyword.toLowerCase().trim();
+            const searchText = `${activity.title} ${activity.description} ${activity.reason || ''}`.toLowerCase();
+            if (!searchText.includes(keyword)) return false;
+        }
+
+        return true;
+    });
+}
+
 // Get daily cards (3 random cards)
 function getDailyCards() {
-    const saved = storage.load('daily_cards', null);
-    const today = new Date().toDateString();
+    // Check if filters are active
+    const filters = state.activityFilters || { category: null, ageRange: null, keyword: '' };
+    const hasActiveFilters = filters.category || filters.ageRange || (filters.keyword && filters.keyword.trim());
 
-    if (saved && saved.date === today) {
-        return saved.cards;
+    // If filters are active, don't use saved cards
+    if (!hasActiveFilters) {
+        const saved = storage.load('daily_cards', null);
+        const today = new Date().toDateString();
+
+        if (saved && saved.date === today) {
+            return saved.cards;
+        }
     }
 
+    // Get filtered activities or all activities
+    const source = hasActiveFilters ? getFilteredActivities() : activityLibrary;
+
     // Generate new daily cards
-    const shuffled = [...activityLibrary].sort(() => Math.random() - 0.5);
-    const cards = shuffled.slice(0, 3);
-    storage.save('daily_cards', { date: today, cards });
+    const shuffled = [...source].sort(() => Math.random() - 0.5);
+    const cards = shuffled.slice(0, Math.min(3, source.length));
+
+    // Only save to storage if no filters are active
+    if (!hasActiveFilters) {
+        const today = new Date().toDateString();
+        storage.save('daily_cards', { date: today, cards });
+    }
+
     return cards;
 }

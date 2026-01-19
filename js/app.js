@@ -20,8 +20,9 @@ function checkReminders() {
     const now = new Date();
     const notifiedKey = 'notified_reminders';
     const notified = JSON.parse(localStorage.getItem(notifiedKey) || '[]');
+    let needsSave = false;
 
-    state.reminders.forEach(reminder => {
+    state.reminders.forEach((reminder, index) => {
         const reminderTime = new Date(reminder.dateTime);
         const timeDiff = reminderTime - now;
 
@@ -37,7 +38,39 @@ function checkReminders() {
                 localStorage.setItem(notifiedKey, JSON.stringify(notified));
             }
         }
+
+        // Handle recurring reminders - create next instance if reminder has passed
+        if (reminder.recurrence && timeDiff < 0) {
+            const nextDate = new Date(reminderTime);
+
+            // Calculate next occurrence based on recurrence pattern
+            if (reminder.recurrence === 'daily') {
+                nextDate.setDate(nextDate.getDate() + 1);
+            } else if (reminder.recurrence === 'weekly') {
+                nextDate.setDate(nextDate.getDate() + 7);
+            } else if (reminder.recurrence === 'monthly') {
+                nextDate.setMonth(nextDate.getMonth() + 1);
+            }
+
+            // Only create next instance if it's in the future
+            if (nextDate > now) {
+                // Update the reminder with the next occurrence
+                reminder.dateTime = nextDate.toISOString().slice(0, 16) + ':00';
+                reminder.id = 'rem-' + Date.now() + '-' + index; // New ID for new instance
+                // Remove from notified list so it can notify again
+                const notifiedIndex = notified.indexOf(reminder.id);
+                if (notifiedIndex > -1) {
+                    notified.splice(notifiedIndex, 1);
+                    localStorage.setItem(notifiedKey, JSON.stringify(notified));
+                }
+                needsSave = true;
+            }
+        }
     });
+
+    if (needsSave) {
+        saveState();
+    }
 }
 
 // Initialize the app

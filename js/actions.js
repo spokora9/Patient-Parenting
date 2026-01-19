@@ -122,7 +122,7 @@ const actions = {
 
                     audio.playTone('success');
                     alert('Data imported successfully!');
-                    render('headspace');
+                    render('tools');
                 } else {
                     throw new Error('Invalid data format');
                 }
@@ -356,7 +356,7 @@ const actions = {
 
         saveState();
         audio.playTone('success');
-        render('headspace');
+        render('tools');
 
         // Request notification permission if not already granted
         if ('Notification' in window && Notification.permission === 'default') {
@@ -367,7 +367,7 @@ const actions = {
         if (confirm('Delete this reminder?')) {
             state.reminders = (state.reminders || []).filter(r => r.id !== reminderId);
             saveState();
-            render('headspace');
+            render('tools');
         }
     },
     snoozeReminder: (reminderId) => {
@@ -403,7 +403,7 @@ const actions = {
 
         saveState();
         audio.playTone('success');
-        render('headspace');
+        render('tools');
     },
     showAddTaskModal: () => {
         const title = prompt('Task description:');
@@ -427,7 +427,7 @@ const actions = {
 
         saveState();
         audio.playTone('success');
-        render('headspace');
+        render('tools');
     },
     toggleTask: (taskId) => {
         if (!state.tasks) state.tasks = [];
@@ -437,14 +437,14 @@ const actions = {
             task.completedAt = task.completed ? new Date().toISOString() : null;
             saveState();
             audio.playTone('tap');
-            render('headspace');
+            render('tools');
         }
     },
     deleteTask: (taskId) => {
         if (confirm('Delete this task?')) {
             state.tasks = (state.tasks || []).filter(t => t.id !== taskId);
             saveState();
-            render('headspace');
+            render('tools');
         }
     },
     setActivityFilter: (filterType, value) => {
@@ -473,6 +473,50 @@ const actions = {
         saveState();
         render('spark');
         initSparkSwipe();
+    },
+    setSlowWakeDuration: (duration) => {
+        if (!state.slowWake) state.slowWake = {};
+        state.slowWake.duration = duration;
+        saveState();
+        render('tools');
+    },
+    setSlowWakeSound: (sound) => {
+        if (!state.slowWake) state.slowWake = {};
+        state.slowWake.sound = sound;
+        saveState();
+        render('tools');
+    },
+    startSlowWake: () => {
+        if (!state.slowWake) {
+            state.slowWake = { duration: 10, sound: 'birds' };
+        }
+
+        state.slowWake.isActive = true;
+        state.slowWake.startTime = Date.now();
+        saveState();
+
+        // Request wake lock to keep screen on
+        if ('wakeLock' in navigator) {
+            navigator.wakeLock.request('screen').catch(err => {
+                console.log('Wake Lock error:', err);
+            });
+        }
+
+        // Start the slow wake experience
+        startSlowWakeExperience();
+
+        render('tools');
+    },
+    stopSlowWake: () => {
+        if (state.slowWake) {
+            state.slowWake.isActive = false;
+        }
+        saveState();
+
+        // Stop the slow wake experience
+        stopSlowWakeExperience();
+
+        render('tools');
     }
 };
 
@@ -508,7 +552,7 @@ const router = {
             'spark': ['The Daily Spark', 'Wisdom & Science.'],
             'quest': ['Family Quest', 'Co-op Mode Active.'],
             'scripts': ['Script Designer', 'What do I say?'],
-            'headspace': ['Headspace', 'Clear your mind.'],
+            'tools': ['Tools', 'Organize and plan.'],
             'settings': ['Settings', 'Customize your experience.'],
             'templates': ['Quest Templates', 'Quick start with presets.'],
             'templatePreview': ['Template Preview', 'Review before adding.'],
@@ -522,7 +566,7 @@ const router = {
             'spark': 'Spark',
             'quest': 'Quest',
             'scripts': 'Scripts',
-            'headspace': 'Notes'
+            'tools': 'Tools'
         };
 
         document.querySelectorAll('.nav-btn').forEach(btn => {

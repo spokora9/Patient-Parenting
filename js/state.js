@@ -38,6 +38,11 @@ const defaultState = {
         category: null,
         ageRange: null,
         keyword: ''
+    },
+    slowWake: {
+        duration: 10,
+        sound: 'birds',
+        isActive: false
     }
 };
 

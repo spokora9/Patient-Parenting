@@ -222,7 +222,59 @@ const views = {
             </button>
         </div>
     `,
-    headspace: () => `
+    tools: () => `
+        <div class="card" style="border-left: 4px solid #ffa502;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="margin: 0;">🌅 Slow Wake Timer</h3>
+            </div>
+            <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 16px;">Gentle wake-up with natural sounds and light that gradually brightens the room.</p>
+
+            ${state.slowWake && state.slowWake.isActive ? `
+                <div id="slow-wake-active" style="text-align: center; padding: 20px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🌄</div>
+                    <div style="font-size: 24px; font-weight: 600; margin-bottom: 8px;" id="wake-time-display">7:00 AM</div>
+                    <div style="font-size: 14px; color: var(--text-sub); margin-bottom: 20px;" id="wake-progress">Starting in 5 minutes...</div>
+                    <button onclick="actions.stopSlowWake()"
+                            style="padding: 12px 24px; background: #ff7675; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px;">
+                        Stop Timer
+                    </button>
+                </div>
+            ` : `
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-main);">Wake Duration</label>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            ${[5, 10, 15].map(duration => `
+                                <button onclick="actions.setSlowWakeDuration(${duration})"
+                                        style="flex: 1; min-width: 80px; padding: 12px; border: 2px solid ${(state.slowWake?.duration || 10) === duration ? 'var(--accent-earth)' : 'rgba(0,0,0,0.1)'}; background: ${(state.slowWake?.duration || 10) === duration ? 'rgba(212, 165, 116, 0.1)' : 'var(--card-bg)'}; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--text-main);">
+                                    ${duration} min
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-main);">Sound</label>
+                        <select onchange="actions.setSlowWakeSound(this.value)"
+                                style="width: 100%; padding: 12px; border-radius: 8px; border: 2px solid rgba(0,0,0,0.1); background: var(--input-bg); color: var(--text-main); font-size: 14px;">
+                            <option value="birds" ${(state.slowWake?.sound || 'birds') === 'birds' ? 'selected' : ''}>🐦 Morning Birds</option>
+                            <option value="silent" ${(state.slowWake?.sound || 'birds') === 'silent' ? 'selected' : ''}>🔇 Silent (Light Only)</option>
+                        </select>
+                    </div>
+
+                    <button onclick="actions.startSlowWake()"
+                            style="padding: 16px; background: var(--accent-earth); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; box-shadow: var(--shadow);">
+                        🌅 Start Slow Wake
+                    </button>
+
+                    <p style="font-size: 12px; color: var(--text-sub); text-align: center; margin: 0;">
+                        💡 Tip: Keep device plugged in and place in child's room
+                    </p>
+                </div>
+            `}
+        </div>
+
+
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <h3 style="margin: 0;">⏰ Reminders</h3>

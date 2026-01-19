@@ -1,5 +1,5 @@
 // Service Worker for Parent Architect PWA
-const CACHE_NAME = 'parent-architect-v5.0';
+const CACHE_NAME = 'parent-architect-v6.0';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -10,6 +10,7 @@ const urlsToCache = [
     '/js/activities.js',
     '/js/scripts.js',
     '/js/templates.js',
+    '/js/slowwake.js',
     '/js/views.js',
     '/js/effects.js',
     '/js/gestures.js',

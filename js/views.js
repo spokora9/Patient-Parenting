@@ -262,6 +262,31 @@ const views = {
                         </select>
                     </div>
 
+                    ${(state.slowWake?.sound || 'birds') === 'birds' ? `
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-main);">
+                                🎵 Gentle Melody Start
+                                <span style="font-weight: 400; color: var(--text-sub); font-size: 12px;">(when melody begins)</span>
+                            </label>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                ${[
+                                    { value: 0.80, label: 'Last 20%' },
+                                    { value: 0.85, label: 'Last 15%' },
+                                    { value: 0.90, label: 'Last 10%' },
+                                    { value: 1.00, label: 'Off' }
+                                ].map(option => `
+                                    <button onclick="actions.setSlowWakeMelodyStart(${option.value})"
+                                            style="flex: 1; min-width: 75px; padding: 10px 8px; border: 2px solid ${(state.slowWake?.melodyStart || 0.85) === option.value ? 'var(--accent-play)' : 'rgba(0,0,0,0.1)'}; background: ${(state.slowWake?.melodyStart || 0.85) === option.value ? 'rgba(116, 185, 255, 0.1)' : 'var(--card-bg)'}; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text-main);">
+                                        ${option.label}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <p style="font-size: 11px; color: var(--text-sub); margin: 8px 0 0 0;">
+                                💡 Gentle piano melody fades in during final phase to ensure child is fully awake
+                            </p>
+                        </div>
+                    ` : ''}
+
                     <button onclick="actions.startSlowWake()"
                             style="padding: 16px; background: var(--accent-earth); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; box-shadow: var(--shadow);">
                         🌅 Start Slow Wake

@@ -3,80 +3,229 @@
 let slowWakeInterval = null;
 let slowWakeAudioContext = null;
 let slowWakeGainNode = null;
+let slowWakeMelodyGain = null;
 let slowWakeBirdNodes = [];
 
-// Natural bird chirping sound generator
+// Create pink noise for background forest ambience
+function createPinkNoise(audioContext, duration, delay = 0) {
+    const bufferSize = audioContext.sampleRate * duration;
+    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+    const output = buffer.getChannelData(0);
+
+    // Pink noise generation using Paul Kellet's algorithm
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
+        b6 = white * 0.115926;
+    }
+
+    const noise = audioContext.createBufferSource();
+    noise.buffer = buffer;
+
+    const noiseGain = audioContext.createGain();
+    noiseGain.gain.value = 0.02; // Very subtle background
+
+    const filter = audioContext.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 800;
+    filter.Q.value = 0.5;
+
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(slowWakeGainNode);
+
+    const now = audioContext.currentTime + delay;
+    noise.start(now);
+    noise.stop(now + duration);
+
+    return noise;
+}
+
+// Natural bird chirping sound generator with realistic harmonics
 class BirdChirp {
     constructor(audioContext) {
         this.audioContext = audioContext;
     }
 
-    // Generate a single bird chirp
-    chirp(frequency, duration, delay = 0) {
+    // Generate a single realistic bird chirp with harmonics
+    chirp(frequency, duration, delay = 0, species = 'robin') {
         const now = this.audioContext.currentTime + delay;
 
-        // Create oscillator for the chirp
-        const osc = this.audioContext.createOscillator();
-        const gainNode = this.audioContext.createGain();
+        // Create multiple oscillators for harmonics (makes it sound more natural)
+        const oscillators = [];
+        const harmonics = [1, 2, 3]; // Fundamental + 2 harmonics
+        const harmonicVolumes = [1, 0.3, 0.15]; // Decreasing volume for harmonics
 
-        // Connect nodes
-        osc.connect(gainNode);
-        gainNode.connect(slowWakeGainNode);
+        const masterGain = this.audioContext.createGain();
+        masterGain.connect(slowWakeGainNode);
 
-        // Bird chirp characteristics
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(frequency, now);
+        harmonics.forEach((harmonic, index) => {
+            const osc = this.audioContext.createOscillator();
+            const oscGain = this.audioContext.createGain();
 
-        // Natural vibrato/warble
-        osc.frequency.exponentialRampToValueAtTime(frequency * 1.3, now + duration * 0.3);
-        osc.frequency.exponentialRampToValueAtTime(frequency * 0.9, now + duration * 0.7);
-        osc.frequency.exponentialRampToValueAtTime(frequency, now + duration);
+            // Mix of sine and triangle for more natural sound
+            osc.type = index === 0 ? 'sine' : 'triangle';
 
-        // Natural envelope (attack-decay-sustain-release)
-        gainNode.gain.setValueAtTime(0, now);
-        gainNode.gain.exponentialRampToValueAtTime(0.3, now + 0.01);
-        gainNode.gain.exponentialRampToValueAtTime(0.15, now + duration * 0.5);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+            // Add slight detuning for realism
+            const detune = (Math.random() - 0.5) * 10;
+            osc.detune.value = detune;
 
-        // Start and stop
-        osc.start(now);
-        osc.stop(now + duration);
+            osc.connect(oscGain);
+            oscGain.connect(masterGain);
 
-        return osc;
+            // Different chirp patterns for different species
+            if (species === 'robin') {
+                // Quick upward sweep then down
+                osc.frequency.setValueAtTime(frequency * harmonic, now);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.4, now + duration * 0.2);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 0.95, now + duration);
+            } else if (species === 'sparrow') {
+                // Rapid chattering
+                osc.frequency.setValueAtTime(frequency * harmonic, now);
+                for (let i = 0; i < 3; i++) {
+                    const t = now + (duration / 3) * i;
+                    osc.frequency.setValueAtTime(frequency * harmonic * (1 + Math.random() * 0.2), t);
+                }
+            } else if (species === 'cardinal') {
+                // Clear whistle
+                osc.frequency.setValueAtTime(frequency * harmonic, now);
+                osc.frequency.linearRampToValueAtTime(frequency * harmonic * 1.1, now + duration * 0.5);
+                osc.frequency.linearRampToValueAtTime(frequency * harmonic, now + duration);
+            } else if (species === 'chickadee') {
+                // Two-note call
+                osc.frequency.setValueAtTime(frequency * harmonic, now);
+                osc.frequency.setValueAtTime(frequency * harmonic * 0.8, now + duration * 0.5);
+            } else {
+                // Warbler - complex pattern
+                osc.frequency.setValueAtTime(frequency * harmonic, now);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.3, now + duration * 0.3);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 0.9, now + duration * 0.7);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.1, now + duration);
+            }
+
+            // Natural envelope with attack, decay, sustain, release
+            oscGain.gain.setValueAtTime(0, now);
+            oscGain.gain.linearRampToValueAtTime(0.2 * harmonicVolumes[index], now + 0.005);
+            oscGain.gain.exponentialRampToValueAtTime(0.1 * harmonicVolumes[index], now + duration * 0.6);
+            oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+            osc.start(now);
+            osc.stop(now + duration);
+            oscillators.push(osc);
+        });
+
+        // Master envelope for the entire chirp
+        masterGain.gain.setValueAtTime(0, now);
+        masterGain.gain.linearRampToValueAtTime(0.4, now + 0.01);
+        masterGain.gain.exponentialRampToValueAtTime(0.2, now + duration * 0.5);
+        masterGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        return oscillators;
     }
 
-    // Generate a sequence of chirps (like a bird call)
-    birdCall(baseFrequency, complexity = 3, delay = 0) {
+    // Generate a natural bird call sequence
+    birdCall(baseFrequency, complexity, delay, species) {
         const chirps = [];
         for (let i = 0; i < complexity; i++) {
-            const freq = baseFrequency + (Math.random() * 200 - 100);
-            const duration = 0.08 + Math.random() * 0.12;
-            const chirpDelay = delay + (i * 0.15);
-            chirps.push(this.chirp(freq, duration, chirpDelay));
+            // Natural variation in frequency
+            const freq = baseFrequency + (Math.random() * 150 - 75);
+            // Varied chirp duration
+            const duration = 0.05 + Math.random() * 0.15;
+            // More natural timing between chirps
+            const chirpDelay = delay + (i * (0.12 + Math.random() * 0.08));
+            chirps.push(this.chirp(freq, duration, chirpDelay, species));
         }
         return chirps;
     }
 }
 
-// Morning bird chorus - multiple species
+// Morning bird chorus - multiple realistic species
 function generateMorningBirds(audioContext, intensity) {
     const bird = new BirdChirp(audioContext);
 
-    // Different bird species with different frequency ranges
+    // Realistic morning bird species with appropriate frequency ranges
     const species = [
-        { freq: 2000, complexity: 2 }, // High chirper (robin-like)
-        { freq: 1200, complexity: 3 }, // Mid chirper (sparrow-like)
-        { freq: 800, complexity: 2 },  // Low chirper (dove-like)
-        { freq: 1800, complexity: 4 }  // Warbler
+        { name: 'robin', freq: 2200, complexity: 3, chance: 0.3 },     // American Robin - cheerful
+        { name: 'cardinal', freq: 3500, complexity: 2, chance: 0.25 }, // Cardinal - clear whistle
+        { name: 'sparrow', freq: 4000, complexity: 4, chance: 0.2 },   // Song Sparrow - chatty
+        { name: 'chickadee', freq: 3200, complexity: 2, chance: 0.15 }, // Chickadee - two-note
+        { name: 'warbler', freq: 2800, complexity: 3, chance: 0.1 }    // Yellow Warbler - melodic
     ];
 
     // Number of birds singing increases with intensity
-    const numBirds = Math.floor(1 + intensity * 8);
+    const numBirds = Math.floor(1 + intensity * 10);
 
     for (let i = 0; i < numBirds; i++) {
-        const selectedSpecies = species[Math.floor(Math.random() * species.length)];
-        const delay = Math.random() * 4; // Stagger the calls
-        bird.birdCall(selectedSpecies.freq, selectedSpecies.complexity, delay);
+        // Weighted random selection (some species more common)
+        const random = Math.random();
+        let cumulative = 0;
+        let selectedSpecies = species[0];
+
+        for (const sp of species) {
+            cumulative += sp.chance;
+            if (random <= cumulative) {
+                selectedSpecies = sp;
+                break;
+            }
+        }
+
+        // Stagger bird calls naturally (some overlap, some gaps)
+        const delay = Math.random() * 5;
+        bird.birdCall(selectedSpecies.freq, selectedSpecies.complexity, delay, selectedSpecies.name);
+    }
+
+    // Add subtle background forest ambience
+    if (intensity > 0.3) {
+        createPinkNoise(audioContext, 5, 0);
+    }
+}
+
+// Gentle wake melody - plays during final portion of timer
+function playWakeMelody(audioContext, progress, melodyStart = 0.85) {
+    if (progress < melodyStart || !slowWakeMelodyGain) return;
+
+    // Calculate melody progress (0 to 1 over the final 15%)
+    const melodyProgress = (progress - melodyStart) / (1 - melodyStart);
+
+    // Volume fades in exponentially during melody phase
+    const melodyVolume = Math.pow(melodyProgress, 1.5) * 0.4;
+    slowWakeMelodyGain.gain.value = melodyVolume;
+
+    // Play a gentle note occasionally (pentatonic scale for pleasantness)
+    const shouldPlayNote = Math.random() < 0.15; // 15% chance per check
+
+    if (shouldPlayNote) {
+        // Pentatonic scale (C major pentatonic): C, D, E, G, A
+        const pentatonic = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25]; // C4 to C5
+        const note = pentatonic[Math.floor(Math.random() * pentatonic.length)];
+
+        const osc = audioContext.createOscillator();
+        const oscGain = audioContext.createGain();
+
+        // Soft piano-like sound
+        osc.type = 'sine';
+        osc.frequency.value = note;
+
+        osc.connect(oscGain);
+        oscGain.connect(slowWakeMelodyGain);
+
+        const now = audioContext.currentTime;
+        const duration = 0.8 + Math.random() * 0.4;
+
+        // Gentle envelope
+        oscGain.gain.setValueAtTime(0, now);
+        oscGain.gain.linearRampToValueAtTime(0.3, now + 0.02);
+        oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc.start(now);
+        osc.stop(now + duration);
     }
 }
 
@@ -88,9 +237,16 @@ function startSlowWakeExperience() {
     // Initialize audio context
     if (sound !== 'silent') {
         slowWakeAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Create gain nodes for birds and melody separately
         slowWakeGainNode = slowWakeAudioContext.createGain();
         slowWakeGainNode.connect(slowWakeAudioContext.destination);
         slowWakeGainNode.gain.value = 0; // Start at 0 volume
+
+        // Separate gain for melody (final phase)
+        slowWakeMelodyGain = slowWakeAudioContext.createGain();
+        slowWakeMelodyGain.connect(slowWakeAudioContext.destination);
+        slowWakeMelodyGain.gain.value = 0; // Start at 0 volume
     }
 
     // Create fullscreen overlay
@@ -165,6 +321,10 @@ function startSlowWakeExperience() {
                 generateMorningBirds(slowWakeAudioContext, progress);
                 lastBirdTime = elapsed;
             }
+
+            // Play gentle melody during final phase (default: last 15%)
+            const melodyStart = state.slowWake?.melodyStart || 0.85;
+            playWakeMelody(slowWakeAudioContext, progress, melodyStart);
         }
 
         // Update visual brightness - exponential curve
@@ -208,10 +368,7 @@ function startSlowWakeExperience() {
 
         // Finished
         if (progress >= 1) {
-            // Play completion sound
-            audio.playTone('success');
-
-            // Auto-stop after 30 more seconds
+            // Auto-stop after 30 more seconds (gentle melody continues until dismissed)
             setTimeout(() => {
                 if (state.slowWake?.isActive) {
                     actions.stopSlowWake();
@@ -238,6 +395,7 @@ function stopSlowWakeExperience() {
         slowWakeAudioContext.close();
         slowWakeAudioContext = null;
         slowWakeGainNode = null;
+        slowWakeMelodyGain = null;
     }
 
     // Remove overlay

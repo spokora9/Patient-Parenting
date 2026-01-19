@@ -486,6 +486,12 @@ const actions = {
         saveState();
         render('tools');
     },
+    setSlowWakeMelodyStart: (melodyStart) => {
+        if (!state.slowWake) state.slowWake = {};
+        state.slowWake.melodyStart = melodyStart;
+        saveState();
+        render('tools');
+    },
     startSlowWake: () => {
         if (!state.slowWake) {
             state.slowWake = { duration: 10, sound: 'birds' };

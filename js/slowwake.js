@@ -6,46 +6,41 @@ let slowWakeGainNode = null;
 let slowWakeMelodyGain = null;
 let slowWakeBirdNodes = [];
 
-// Create pink noise for background forest ambience
-function createPinkNoise(audioContext, duration, delay = 0) {
+// Create gentle breeze sound for pleasant morning ambience
+function createGentleBreeze(audioContext, duration, delay = 0) {
     const bufferSize = audioContext.sampleRate * duration;
     const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
     const output = buffer.getChannelData(0);
 
-    // Pink noise generation using Paul Kellet's algorithm
-    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    // Generate very soft, filtered white noise for breeze effect
     for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.96900 * b2 + white * 0.1538520;
-        b3 = 0.86650 * b3 + white * 0.3104856;
-        b4 = 0.55000 * b4 + white * 0.5329522;
-        b5 = -0.7616 * b5 - white * 0.0168980;
-        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
-        b6 = white * 0.115926;
+        // Soft, slow-changing noise
+        const time = i / audioContext.sampleRate;
+        const envelope = Math.sin(time * 0.3) * 0.5 + 0.5; // Slow wave
+        output[i] = (Math.random() * 2 - 1) * 0.03 * envelope;
     }
 
-    const noise = audioContext.createBufferSource();
-    noise.buffer = buffer;
+    const breeze = audioContext.createBufferSource();
+    breeze.buffer = buffer;
 
-    const noiseGain = audioContext.createGain();
-    noiseGain.gain.value = 0.02; // Very subtle background
+    const breezeGain = audioContext.createGain();
+    breezeGain.gain.value = 0.008; // Very subtle
 
+    // Low-pass filter for soft, wind-like quality
     const filter = audioContext.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 800;
-    filter.Q.value = 0.5;
+    filter.type = 'lowpass';
+    filter.frequency.value = 300;
+    filter.Q.value = 0.3;
 
-    noise.connect(filter);
-    filter.connect(noiseGain);
-    noiseGain.connect(slowWakeGainNode);
+    breeze.connect(filter);
+    filter.connect(breezeGain);
+    breezeGain.connect(slowWakeGainNode);
 
     const now = audioContext.currentTime + delay;
-    noise.start(now);
-    noise.stop(now + duration);
+    breeze.start(now);
+    breeze.stop(now + duration);
 
-    return noise;
+    return breeze;
 }
 
 // Natural bird chirping sound generator with realistic harmonics
@@ -60,8 +55,9 @@ class BirdChirp {
 
         // Create multiple oscillators for harmonics (makes it sound more natural)
         const oscillators = [];
-        const harmonics = [1, 2, 3]; // Fundamental + 2 harmonics
-        const harmonicVolumes = [1, 0.3, 0.15]; // Decreasing volume for harmonics
+        // Reduced harmonics for more natural, less digital sound
+        const harmonics = [1, 1.5]; // Fundamental + one gentle harmonic
+        const harmonicVolumes = [1, 0.12]; // Much lower harmonic volume
 
         const masterGain = this.audioContext.createGain();
         masterGain.connect(slowWakeGainNode);
@@ -70,50 +66,43 @@ class BirdChirp {
             const osc = this.audioContext.createOscillator();
             const oscGain = this.audioContext.createGain();
 
-            // Mix of sine and triangle for more natural sound
-            osc.type = index === 0 ? 'sine' : 'triangle';
+            // Pure sine waves for cleaner, more organic sound
+            osc.type = 'sine';
 
-            // Add slight detuning for realism
-            const detune = (Math.random() - 0.5) * 10;
+            // More natural detuning variation
+            const detune = (Math.random() - 0.5) * 15;
             osc.detune.value = detune;
 
             osc.connect(oscGain);
             oscGain.connect(masterGain);
 
-            // Different chirp patterns for different species
+            // Different chirp patterns for different species (simplified for natural sound)
             if (species === 'robin') {
-                // Quick upward sweep then down
+                // Gentle upward sweep
                 osc.frequency.setValueAtTime(frequency * harmonic, now);
-                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.4, now + duration * 0.2);
-                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 0.95, now + duration);
-            } else if (species === 'sparrow') {
-                // Rapid chattering
-                osc.frequency.setValueAtTime(frequency * harmonic, now);
-                for (let i = 0; i < 3; i++) {
-                    const t = now + (duration / 3) * i;
-                    osc.frequency.setValueAtTime(frequency * harmonic * (1 + Math.random() * 0.2), t);
-                }
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.25, now + duration * 0.4);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.05, now + duration);
             } else if (species === 'cardinal') {
-                // Clear whistle
+                // Clear, smooth whistle
                 osc.frequency.setValueAtTime(frequency * harmonic, now);
-                osc.frequency.linearRampToValueAtTime(frequency * harmonic * 1.1, now + duration * 0.5);
-                osc.frequency.linearRampToValueAtTime(frequency * harmonic, now + duration);
-            } else if (species === 'chickadee') {
-                // Two-note call
-                osc.frequency.setValueAtTime(frequency * harmonic, now);
-                osc.frequency.setValueAtTime(frequency * harmonic * 0.8, now + duration * 0.5);
-            } else {
-                // Warbler - complex pattern
-                osc.frequency.setValueAtTime(frequency * harmonic, now);
-                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.3, now + duration * 0.3);
-                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 0.9, now + duration * 0.7);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.15, now + duration * 0.6);
                 osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.1, now + duration);
+            } else if (species === 'chickadee') {
+                // Simple two-note
+                osc.frequency.setValueAtTime(frequency * harmonic, now);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 0.85, now + duration * 0.5);
+                osc.frequency.setValueAtTime(frequency * harmonic * 0.85, now + duration * 0.5);
+            } else {
+                // Warbler - smooth flowing pattern
+                osc.frequency.setValueAtTime(frequency * harmonic, now);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.2, now + duration * 0.5);
+                osc.frequency.exponentialRampToValueAtTime(frequency * harmonic * 1.05, now + duration);
             }
 
-            // Natural envelope with attack, decay, sustain, release
+            // Softer, more organic envelope
             oscGain.gain.setValueAtTime(0, now);
-            oscGain.gain.linearRampToValueAtTime(0.2 * harmonicVolumes[index], now + 0.005);
-            oscGain.gain.exponentialRampToValueAtTime(0.1 * harmonicVolumes[index], now + duration * 0.6);
+            oscGain.gain.exponentialRampToValueAtTime(0.15 * harmonicVolumes[index], now + 0.01);
+            oscGain.gain.exponentialRampToValueAtTime(0.08 * harmonicVolumes[index], now + duration * 0.7);
             oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
             osc.start(now);
@@ -121,10 +110,10 @@ class BirdChirp {
             oscillators.push(osc);
         });
 
-        // Master envelope for the entire chirp
+        // Softer master envelope for organic feel
         masterGain.gain.setValueAtTime(0, now);
-        masterGain.gain.linearRampToValueAtTime(0.4, now + 0.01);
-        masterGain.gain.exponentialRampToValueAtTime(0.2, now + duration * 0.5);
+        masterGain.gain.exponentialRampToValueAtTime(0.25, now + 0.015);
+        masterGain.gain.exponentialRampToValueAtTime(0.12, now + duration * 0.6);
         masterGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
         return oscillators;
@@ -150,13 +139,12 @@ class BirdChirp {
 function generateMorningBirds(audioContext, intensity) {
     const bird = new BirdChirp(audioContext);
 
-    // Realistic morning bird species with appropriate frequency ranges
+    // Realistic morning bird species with natural frequency ranges
     const species = [
-        { name: 'robin', freq: 2200, complexity: 3, chance: 0.3 },     // American Robin - cheerful
-        { name: 'cardinal', freq: 3500, complexity: 2, chance: 0.25 }, // Cardinal - clear whistle
-        { name: 'sparrow', freq: 4000, complexity: 4, chance: 0.2 },   // Song Sparrow - chatty
-        { name: 'chickadee', freq: 3200, complexity: 2, chance: 0.15 }, // Chickadee - two-note
-        { name: 'warbler', freq: 2800, complexity: 3, chance: 0.1 }    // Yellow Warbler - melodic
+        { name: 'robin', freq: 2200, complexity: 2, chance: 0.4 },     // American Robin - cheerful and common
+        { name: 'cardinal', freq: 3200, complexity: 2, chance: 0.35 }, // Cardinal - clear whistle
+        { name: 'chickadee', freq: 3000, complexity: 2, chance: 0.15 }, // Chickadee - two-note
+        { name: 'warbler', freq: 2600, complexity: 2, chance: 0.1 }    // Warbler - melodic
     ];
 
     // Number of birds singing increases with intensity
@@ -181,51 +169,99 @@ function generateMorningBirds(audioContext, intensity) {
         bird.birdCall(selectedSpecies.freq, selectedSpecies.complexity, delay, selectedSpecies.name);
     }
 
-    // Add subtle background forest ambience
-    if (intensity > 0.3) {
-        createPinkNoise(audioContext, 5, 0);
+    // Add gentle morning breeze sound
+    if (intensity > 0.4) {
+        createGentleBreeze(audioContext, 6, 0);
     }
 }
 
-// Gentle wake melody - plays during final portion of timer
+// Mozart-inspired gentle wake melody with calming frequencies
+// Based on "Twinkle Twinkle Little Star" pattern using 432 Hz tuning
+let melodyNoteIndex = 0;
+let lastMelodyNote = 0;
+
 function playWakeMelody(audioContext, progress, melodyStart = 0.85) {
     if (progress < melodyStart || !slowWakeMelodyGain) return;
 
-    // Calculate melody progress (0 to 1 over the final 15%)
+    // Calculate melody progress (0 to 1 over the final phase)
     const melodyProgress = (progress - melodyStart) / (1 - melodyStart);
 
     // Volume fades in exponentially during melody phase
-    const melodyVolume = Math.pow(melodyProgress, 1.5) * 0.4;
+    const melodyVolume = Math.pow(melodyProgress, 1.5) * 0.35;
     slowWakeMelodyGain.gain.value = melodyVolume;
 
-    // Play a gentle note occasionally (pentatonic scale for pleasantness)
-    const shouldPlayNote = Math.random() < 0.15; // 15% chance per check
+    // 432 Hz tuning - more harmonious with nature (calming effect)
+    // C major scale tuned to A4 = 432 Hz instead of 440 Hz
+    const scale432 = {
+        C4: 256.87,  // Grounding, stability
+        D4: 288.33,  // Balance
+        E4: 323.63,  // Joy, brightness
+        F4: 342.88,  // Harmony
+        G4: 384.87,  // Openness
+        A4: 432.00,  // Natural resonance (tuning reference)
+        C5: 513.74   // Uplifting
+    };
 
-    if (shouldPlayNote) {
-        // Pentatonic scale (C major pentatonic): C, D, E, G, A
-        const pentatonic = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25]; // C4 to C5
-        const note = pentatonic[Math.floor(Math.random() * pentatonic.length)];
+    // Mozart's "Twinkle Twinkle" pattern (simplified and gentle)
+    const melodyPattern = [
+        { note: scale432.C4, duration: 0.5 },  // Twin-
+        { note: scale432.C4, duration: 0.5 },  // kle
+        { note: scale432.G4, duration: 0.5 },  // twin-
+        { note: scale432.G4, duration: 0.5 },  // kle
+        { note: scale432.A4, duration: 0.5 },  // lit-
+        { note: scale432.A4, duration: 0.5 },  // tle
+        { note: scale432.G4, duration: 1.0 },  // star
 
+        { note: scale432.F4, duration: 0.5 },  // How
+        { note: scale432.F4, duration: 0.5 },  // I
+        { note: scale432.E4, duration: 0.5 },  // won-
+        { note: scale432.E4, duration: 0.5 },  // der
+        { note: scale432.D4, duration: 0.5 },  // what
+        { note: scale432.D4, duration: 0.5 },  // you
+        { note: scale432.C4, duration: 1.0 },  // are
+    ];
+
+    const now = audioContext.currentTime;
+    const timeSinceLastNote = (now - lastMelodyNote) * 1000;
+
+    // Play next note in pattern at appropriate timing
+    if (timeSinceLastNote > 600 || lastMelodyNote === 0) {
+        const currentNote = melodyPattern[melodyNoteIndex % melodyPattern.length];
+
+        // Create gentle bell-like tone
         const osc = audioContext.createOscillator();
         const oscGain = audioContext.createGain();
 
-        // Soft piano-like sound
+        // Pure sine wave for soft, calming tone
         osc.type = 'sine';
-        osc.frequency.value = note;
+        osc.frequency.value = currentNote.note;
+
+        // Add subtle vibrato for warmth
+        const vibrato = audioContext.createOscillator();
+        const vibratoGain = audioContext.createGain();
+        vibrato.frequency.value = 5; // 5 Hz vibrato
+        vibratoGain.gain.value = 2;  // Very subtle
+        vibrato.connect(vibratoGain);
+        vibratoGain.connect(osc.frequency);
 
         osc.connect(oscGain);
         oscGain.connect(slowWakeMelodyGain);
 
-        const now = audioContext.currentTime;
-        const duration = 0.8 + Math.random() * 0.4;
+        const duration = currentNote.duration;
 
-        // Gentle envelope
+        // Gentle bell-like envelope
         oscGain.gain.setValueAtTime(0, now);
-        oscGain.gain.linearRampToValueAtTime(0.3, now + 0.02);
+        oscGain.gain.exponentialRampToValueAtTime(0.25, now + 0.03);
+        oscGain.gain.exponentialRampToValueAtTime(0.15, now + duration * 0.4);
         oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
+        vibrato.start(now);
         osc.start(now);
+        vibrato.stop(now + duration);
         osc.stop(now + duration);
+
+        lastMelodyNote = now;
+        melodyNoteIndex++;
     }
 }
 
@@ -233,6 +269,10 @@ function playWakeMelody(audioContext, progress, melodyStart = 0.85) {
 function startSlowWakeExperience() {
     const duration = (state.slowWake?.duration || 10) * 60 * 1000; // Convert to milliseconds
     const sound = state.slowWake?.sound || 'birds';
+
+    // Reset melody state
+    melodyNoteIndex = 0;
+    lastMelodyNote = 0;
 
     // Initialize audio context
     if (sound !== 'silent') {
@@ -300,8 +340,24 @@ function startSlowWakeExperience() {
             now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         // Update message
-        const minutesLeft = Math.ceil((duration - elapsed) / 60000);
-        if (minutesLeft > 0) {
+        const melodyStart = state.slowWake?.melodyStart || 0.85;
+
+        if (progress >= melodyStart && progress < 1) {
+            // Show melody countdown in seconds or minutes
+            const melodyElapsed = (progress - melodyStart) / (1 - melodyStart);
+            const melodyDuration = duration * (1 - melodyStart);
+            const melodyTimeLeft = Math.ceil((melodyDuration - (melodyElapsed * melodyDuration)) / 1000);
+
+            if (melodyTimeLeft >= 60) {
+                const mins = Math.ceil(melodyTimeLeft / 60);
+                document.getElementById('wake-message').textContent =
+                    `🎵 Gentle melody: ${mins} minute${mins !== 1 ? 's' : ''} remaining`;
+            } else {
+                document.getElementById('wake-message').textContent =
+                    `🎵 Gentle melody: ${melodyTimeLeft} second${melodyTimeLeft !== 1 ? 's' : ''} remaining`;
+            }
+        } else if (progress < 1) {
+            const minutesLeft = Math.ceil((duration - elapsed) / 60000);
             document.getElementById('wake-message').textContent =
                 `${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''} until wake time`;
         } else {
@@ -385,6 +441,10 @@ function stopSlowWakeExperience() {
         clearInterval(slowWakeInterval);
         slowWakeInterval = null;
     }
+
+    // Reset melody state
+    melodyNoteIndex = 0;
+    lastMelodyNote = 0;
 
     // Stop all audio
     if (slowWakeAudioContext) {

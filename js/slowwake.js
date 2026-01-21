@@ -135,9 +135,17 @@ class BirdChirp {
     }
 }
 
-// Morning bird chorus - uses real samples if available, falls back to synthesis
+// Morning bird chorus - tries WASM, then samples, then synthesis
 function generateMorningBirds(audioContext, intensity) {
-    // Try to use real bird samples first
+    // Try WASM physical modeling first (most realistic and efficient)
+    if (typeof isWasmAudioAvailable === 'function' && isWasmAudioAvailable()) {
+        const wasmSource = generateWasmBirds(audioContext, intensity);
+        if (wasmSource) {
+            return wasmSource;
+        }
+    }
+
+    // Try real bird samples second
     if (birdSamplePlayer && birdSamplePlayer.loaded) {
         return generateMorningBirdsSamples(audioContext, intensity);
     }

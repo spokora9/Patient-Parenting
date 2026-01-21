@@ -1,0 +1,20 @@
+{
+  "name": "parent-architect-audio",
+  "type": "module",
+  "collaborators": [
+    "Parent Architect Team"
+  ],
+  "description": "Professional audio synthesis engine for Parent Architect slow wake timer",
+  "version": "0.1.0",
+  "license": "MIT",
+  "files": [
+    "parent_architect_audio_bg.wasm",
+    "parent_architect_audio.js",
+    "parent_architect_audio.d.ts"
+  ],
+  "main": "parent_architect_audio.js",
+  "types": "parent_architect_audio.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

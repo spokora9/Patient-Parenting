@@ -263,26 +263,44 @@ function playWakeMelody(audioContext, progress, melodyStart = 0.85) {
         F4: 342.88,  // Harmony
         G4: 384.87,  // Openness
         A4: 432.00,  // Natural resonance (tuning reference)
-        C5: 513.74   // Uplifting
+        B4: 485.29,  // Resolution
+        C5: 513.74,  // Uplifting
+        D5: 576.65,  // Bright
+        E5: 647.27   // Very bright
     };
 
-    // Mozart's "Twinkle Twinkle" pattern (simplified and gentle)
+    // Beautiful original wake melody: "Morning Glory"
+    // A gentle, ascending composition that gradually lifts the spirit
     const melodyPattern = [
-        { note: scale432.C4, duration: 0.5 },  // Twin-
-        { note: scale432.C4, duration: 0.5 },  // kle
-        { note: scale432.G4, duration: 0.5 },  // twin-
-        { note: scale432.G4, duration: 0.5 },  // kle
-        { note: scale432.A4, duration: 0.5 },  // lit-
-        { note: scale432.A4, duration: 0.5 },  // tle
-        { note: scale432.G4, duration: 1.0 },  // star
+        // Phrase 1: Gentle awakening (ascending)
+        { note: scale432.C4, duration: 0.8 },   // Good
+        { note: scale432.E4, duration: 0.6 },   // morn-
+        { note: scale432.G4, duration: 0.6 },   // ing
+        { note: scale432.C5, duration: 1.2 },   // sun...
 
-        { note: scale432.F4, duration: 0.5 },  // How
-        { note: scale432.F4, duration: 0.5 },  // I
-        { note: scale432.E4, duration: 0.5 },  // won-
-        { note: scale432.E4, duration: 0.5 },  // der
-        { note: scale432.D4, duration: 0.5 },  // what
-        { note: scale432.D4, duration: 0.5 },  // you
-        { note: scale432.C4, duration: 1.0 },  // are
+        // Phrase 2: Morning question (floating)
+        { note: scale432.B4, duration: 0.6 },   // Rise
+        { note: scale432.A4, duration: 0.6 },   // and
+        { note: scale432.G4, duration: 0.6 },   // shine
+        { note: scale432.A4, duration: 1.0 },   // bright
+
+        // Phrase 3: Hopeful response (upward)
+        { note: scale432.G4, duration: 0.6 },   // New
+        { note: scale432.A4, duration: 0.6 },   // day
+        { note: scale432.B4, duration: 0.6 },   // is
+        { note: scale432.C5, duration: 1.2 },   // here
+
+        // Phrase 4: Gentle resolution (descending warmth)
+        { note: scale432.D5, duration: 0.8 },   // Wake
+        { note: scale432.C5, duration: 0.6 },   // with
+        { note: scale432.A4, duration: 0.6 },   // gen-
+        { note: scale432.G4, duration: 1.4 },   // tle...
+
+        // Phrase 5: Final uplift (complete awakening)
+        { note: scale432.E4, duration: 0.6 },   // Heart
+        { note: scale432.G4, duration: 0.6 },   // beats
+        { note: scale432.C5, duration: 0.8 },   // strong
+        { note: scale432.E5, duration: 1.6 },   // now...
     ];
 
     const now = audioContext.currentTime;
@@ -292,37 +310,53 @@ function playWakeMelody(audioContext, progress, melodyStart = 0.85) {
     if (timeSinceLastNote > 600 || lastMelodyNote === 0) {
         const currentNote = melodyPattern[melodyNoteIndex % melodyPattern.length];
 
-        // Create gentle bell-like tone
-        const osc = audioContext.createOscillator();
-        const oscGain = audioContext.createGain();
+        // Create gentle bell-like tone with harmonic richness
+        const osc1 = audioContext.createOscillator();
+        const osc2 = audioContext.createOscillator();
+        const oscGain1 = audioContext.createGain();
+        const oscGain2 = audioContext.createGain();
 
-        // Pure sine wave for soft, calming tone
-        osc.type = 'sine';
-        osc.frequency.value = currentNote.note;
+        // Fundamental tone (pure sine)
+        osc1.type = 'sine';
+        osc1.frequency.value = currentNote.note;
 
-        // Add subtle vibrato for warmth
+        // Second harmonic for warmth (octave higher, very quiet)
+        osc2.type = 'sine';
+        osc2.frequency.value = currentNote.note * 2;
+        oscGain2.gain.value = 0.08; // Very subtle second harmonic
+
+        // Add subtle vibrato for organic warmth
         const vibrato = audioContext.createOscillator();
         const vibratoGain = audioContext.createGain();
         vibrato.frequency.value = 5; // 5 Hz vibrato
         vibratoGain.gain.value = 2;  // Very subtle
         vibrato.connect(vibratoGain);
-        vibratoGain.connect(osc.frequency);
+        vibratoGain.connect(osc1.frequency);
 
-        osc.connect(oscGain);
-        oscGain.connect(slowWakeMelodyGain);
+        osc1.connect(oscGain1);
+        osc2.connect(oscGain2);
+        oscGain1.connect(slowWakeMelodyGain);
+        oscGain2.connect(slowWakeMelodyGain);
 
         const duration = currentNote.duration;
 
-        // Gentle bell-like envelope
-        oscGain.gain.setValueAtTime(0, now);
-        oscGain.gain.exponentialRampToValueAtTime(0.25, now + 0.03);
-        oscGain.gain.exponentialRampToValueAtTime(0.15, now + duration * 0.4);
-        oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        // Gentle bell-like envelope for fundamental
+        oscGain1.gain.setValueAtTime(0, now);
+        oscGain1.gain.exponentialRampToValueAtTime(0.25, now + 0.03);
+        oscGain1.gain.exponentialRampToValueAtTime(0.15, now + duration * 0.4);
+        oscGain1.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        // Slightly faster decay for harmonic (bell-like characteristic)
+        oscGain2.gain.setValueAtTime(oscGain2.gain.value, now);
+        oscGain2.gain.exponentialRampToValueAtTime(oscGain2.gain.value * 0.6, now + duration * 0.3);
+        oscGain2.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
         vibrato.start(now);
-        osc.start(now);
+        osc1.start(now);
+        osc2.start(now);
         vibrato.stop(now + duration);
-        osc.stop(now + duration);
+        osc1.stop(now + duration);
+        osc2.stop(now + duration);
 
         lastMelodyNote = now;
         melodyNoteIndex++;

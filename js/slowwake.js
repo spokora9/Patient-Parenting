@@ -156,42 +156,74 @@ function generateMorningBirds(audioContext, intensity) {
 }
 
 // Sample-based bird playback (most realistic)
+// State for robin/gull sequencing
+let robinLoopCount = 0;
+let gullStarted = false;
+let robinSourceNode = null;
+let gullSourceNode = null;
+
 function generateMorningBirdsSamples(audioContext, intensity) {
     const species = birdSamplePlayer.getLoadedSpecies();
     if (species.length === 0) {
         return generateMorningBirdsSynthesized(audioContext, intensity);
     }
 
-    // Number of birds singing increases with intensity
-    const numBirds = Math.floor(1 + intensity * 8);
+    // Special handling for robin + gull sequence
+    const hasRobin = species.includes('robin');
+    const hasGull = species.includes('gull');
 
-    // Species preference weights
-    const weights = {
-        robin: 0.4,
-        cardinal: 0.35,
-        chickadee: 0.15,
-        warbler: 0.1
-    };
+    if (hasRobin && hasGull) {
+        // Play robin continuously (loops automatically)
+        if (!robinSourceNode) {
+            robinSourceNode = birdSamplePlayer.playLooped('robin', 0, 0.3 + intensity * 0.3, slowWakeGainNode);
 
-    for (let i = 0; i < numBirds; i++) {
-        // Weighted random selection
-        const random = Math.random();
-        let cumulative = 0;
-        let selectedBird = species[0];
+            if (robinSourceNode && robinSourceNode.buffer) {
+                const robinDuration = robinSourceNode.buffer.duration;
+                console.log(`[Birds] Robin started (${robinDuration.toFixed(1)}s), gull will join after first loop`);
 
-        for (const bird of species) {
-            cumulative += weights[bird] || (1 / species.length);
-            if (random <= cumulative) {
-                selectedBird = bird;
-                break;
+                // Start gull after first robin loop completes
+                setTimeout(() => {
+                    if (!gullStarted && slowWakeGainNode) {
+                        gullSourceNode = birdSamplePlayer.playLooped('gull', 0, 0.25 + intensity * 0.25, slowWakeGainNode);
+                        gullStarted = true;
+                        console.log('[Birds] Gull joined - both now looping');
+                    }
+                }, robinDuration * 1000);
             }
         }
+    } else {
+        // Fallback to original multi-bird behavior if robin/gull not available
+        const numBirds = Math.floor(1 + intensity * 8);
 
-        // Stagger bird calls naturally
-        const delay = Math.random() * 5;
-        const volume = 0.15 + (intensity * 0.4); // Volume increases with intensity
+        // Species preference weights
+        const weights = {
+            robin: 0.4,
+            cardinal: 0.35,
+            chickadee: 0.15,
+            warbler: 0.1,
+            gull: 0.05
+        };
 
-        birdSamplePlayer.play(selectedBird, delay, volume, slowWakeGainNode);
+        for (let i = 0; i < numBirds; i++) {
+            // Weighted random selection
+            const random = Math.random();
+            let cumulative = 0;
+            let selectedBird = species[0];
+
+            for (const bird of species) {
+                cumulative += weights[bird] || (1 / species.length);
+                if (random <= cumulative) {
+                    selectedBird = bird;
+                    break;
+                }
+            }
+
+            // Stagger bird calls naturally
+            const delay = Math.random() * 5;
+            const volume = 0.15 + (intensity * 0.4);
+
+            birdSamplePlayer.play(selectedBird, delay, volume, slowWakeGainNode);
+        }
     }
 
     // Add gentle morning breeze sound
@@ -377,12 +409,25 @@ function startSlowWakeExperience() {
         overlay.requestFullscreen().catch(err => console.log('[Wake] Fullscreen not available:', err));
     }
 
-    // Request Wake Lock to keep screen on and at full brightness
+    // Set brightness to maximum (native on iOS/Android, web fallback)
+    if (typeof setMaxBrightness === 'function') {
+        setMaxBrightness().then(success => {
+            if (success) {
+                console.log('[Wake] Native brightness control activated');
+            } else {
+                console.log('[Wake] Using web brightness fallback');
+            }
+        }).catch(err => {
+            console.log('[Wake] Brightness control error:', err);
+        });
+    }
+
+    // Request Wake Lock to keep screen on (web and native)
     if ('wakeLock' in navigator) {
         navigator.wakeLock.request('screen')
             .then(wakeLock => {
                 slowWakeWakeLock = wakeLock;
-                console.log('[Wake] Screen Wake Lock active - screen will stay on at full brightness');
+                console.log('[Wake] Screen Wake Lock active - screen will stay on');
 
                 // Handle wake lock release (e.g., if tab loses focus)
                 wakeLock.addEventListener('release', () => {
@@ -518,6 +563,18 @@ function stopSlowWakeExperience() {
     orchestraStarted = false;
     orchestraSources = [];
 
+    // Reset robin/gull state
+    robinLoopCount = 0;
+    gullStarted = false;
+    if (robinSourceNode) {
+        try { robinSourceNode.stop(); } catch (e) {}
+        robinSourceNode = null;
+    }
+    if (gullSourceNode) {
+        try { gullSourceNode.stop(); } catch (e) {}
+        gullSourceNode = null;
+    }
+
     // Stop all audio
     if (slowWakeAudioContext) {
         slowWakeBirdNodes.forEach(node => {
@@ -528,6 +585,13 @@ function stopSlowWakeExperience() {
         slowWakeAudioContext = null;
         slowWakeGainNode = null;
         slowWakeMelodyGain = null;
+    }
+
+    // Restore original brightness (native control)
+    if (typeof restoreBrightness === 'function') {
+        restoreBrightness().catch(err => {
+            console.log('[Wake] Brightness restore error:', err);
+        });
     }
 
     // Release Wake Lock to allow screen to sleep again

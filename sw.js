@@ -1,5 +1,5 @@
 // Service Worker for Parent Architect PWA
-const CACHE_NAME = 'parent-architect-v6.3';
+const CACHE_NAME = 'parent-architect-v7.0';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -12,6 +12,7 @@ const urlsToCache = [
     '/js/templates.js',
     '/js/birdsamples.js',
     '/js/orchestra.js',
+    '/js/brightness.js',
     '/js/wasmbridge.js',
     '/js/slowwake.js',
     '/js/views.js',
@@ -24,7 +25,7 @@ const urlsToCache = [
     '/wasm/parent_architect_audio_bg.wasm',
     // Bird audio samples (cached for offline use - optional)
     '/audio/birds/robin-1.mp3',
-    '/audio/birds/robin-2.mp3',
+    '/audio/birds/gull-1.mp3',
     '/audio/birds/cardinal-1.mp3',
     '/audio/birds/cardinal-2.mp3',
     '/audio/birds/chickadee-1.mp3',

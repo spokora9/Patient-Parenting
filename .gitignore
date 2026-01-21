@@ -6,9 +6,21 @@ yarn.lock
 # Build outputs
 dist/
 build/
+www/
 *.wasm
 !wasm/*.wasm
 pkg/
+
+# Capacitor
+.capacitor/
+ios/App/Pods/
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/App.xcodeproj/xcuserdata/
+android/.gradle/
+android/build/
+android/app/build/
+android/.idea/
+android/local.properties
 
 # Environment variables
 .env

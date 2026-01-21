@@ -7,6 +7,14 @@
     "start": "python3 -m http.server 8080",
     "dev": "python3 -m http.server 8080",
     "serve": "python3 -m http.server 8080",
+    "build": "cp -r *.html *.json sw.js js/ assets/ audio/ wasm/ www/",
+    "sync": "npm run build && npx cap sync",
+    "sync:ios": "npm run build && npx cap sync ios",
+    "sync:android": "npm run build && npx cap sync android",
+    "open:ios": "npx cap open ios",
+    "open:android": "npx cap open android",
+    "run:ios": "npm run sync:ios && npx cap run ios",
+    "run:android": "npm run sync:android && npx cap run android",
     "test": "echo \"No tests yet\" && exit 0",
     "lint": "echo \"No linting configured yet\" && exit 0"
   },
@@ -28,6 +36,11 @@
     "url": "https://github.com/spokora9/Patient-Parenting/issues"
   },
   "homepage": "https://github.com/spokora9/Patient-Parenting#readme",
-  "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "@capacitor-community/screen-brightness": "^8.0.0",
+    "@capacitor/android": "^8.0.1",
+    "@capacitor/cli": "^8.0.1",
+    "@capacitor/core": "^8.0.1",
+    "@capacitor/ios": "^8.0.1"
+  }
 }

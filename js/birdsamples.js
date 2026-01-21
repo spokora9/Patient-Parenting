@@ -17,8 +17,9 @@ class BirdSamplePlayer {
         try {
             // Bird species to load (with multiple variations)
             const birds = [
-                { name: 'robin', variations: 2 },
-                { name: 'cardinal', variations: 2 },
+                { name: 'robin', variations: 1 },    // XC892933 - loops continuously
+                { name: 'gull', variations: 1 },     // XC916971 - 30s trimmed, starts after robin
+                { name: 'cardinal', variations: 2 }, // Optional fallback
                 { name: 'chickadee', variations: 1 },
                 { name: 'warbler', variations: 1 }
             ];
@@ -87,6 +88,40 @@ class BirdSamplePlayer {
 
         const now = this.audioContext.currentTime + delay;
         source.start(now);
+
+        return source;
+    }
+
+    // Play a bird sample with looping
+    playLooped(birdName, delay = 0, volume = 1.0, gainNode = null) {
+        if (!this.loaded || !this.samples[birdName] || this.samples[birdName].length === 0) {
+            console.warn(`Bird sample not available for looping: ${birdName}`);
+            return null;
+        }
+
+        // Pick first variation (or random if multiple)
+        const variations = this.samples[birdName];
+        const buffer = variations[0]; // Use first variation for consistent looping
+
+        const source = this.audioContext.createBufferSource();
+        const sourceGain = this.audioContext.createGain();
+
+        source.buffer = buffer;
+        source.loop = true; // Enable looping
+        source.connect(sourceGain);
+
+        if (gainNode) {
+            sourceGain.connect(gainNode);
+        } else {
+            sourceGain.connect(this.audioContext.destination);
+        }
+
+        sourceGain.gain.value = volume;
+
+        const now = this.audioContext.currentTime + delay;
+        source.start(now);
+
+        console.log(`[Birds] Started looping ${birdName} (${buffer.duration.toFixed(1)}s loop)`);
 
         return source;
     }

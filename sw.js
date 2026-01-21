@@ -1,5 +1,5 @@
 // Service Worker for Parent Architect PWA
-const CACHE_NAME = 'parent-architect-v6.0';
+const CACHE_NAME = 'parent-architect-v6.1';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -10,12 +10,20 @@ const urlsToCache = [
     '/js/activities.js',
     '/js/scripts.js',
     '/js/templates.js',
+    '/js/birdsamples.js',
     '/js/slowwake.js',
     '/js/views.js',
     '/js/effects.js',
     '/js/gestures.js',
     '/js/actions.js',
-    '/js/app.js'
+    '/js/app.js',
+    // Bird audio samples (cached for offline use)
+    '/audio/birds/robin-1.mp3',
+    '/audio/birds/robin-2.mp3',
+    '/audio/birds/cardinal-1.mp3',
+    '/audio/birds/cardinal-2.mp3',
+    '/audio/birds/chickadee-1.mp3',
+    '/audio/birds/warbler-1.mp3'
 ];
 
 // Install event - cache resources

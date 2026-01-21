@@ -135,8 +135,64 @@ class BirdChirp {
     }
 }
 
-// Morning bird chorus - multiple realistic species
+// Morning bird chorus - uses real samples if available, falls back to synthesis
 function generateMorningBirds(audioContext, intensity) {
+    // Try to use real bird samples first
+    if (birdSamplePlayer && birdSamplePlayer.loaded) {
+        return generateMorningBirdsSamples(audioContext, intensity);
+    }
+
+    // Fallback to synthesized birds
+    return generateMorningBirdsSynthesized(audioContext, intensity);
+}
+
+// Sample-based bird playback (most realistic)
+function generateMorningBirdsSamples(audioContext, intensity) {
+    const species = birdSamplePlayer.getLoadedSpecies();
+    if (species.length === 0) {
+        return generateMorningBirdsSynthesized(audioContext, intensity);
+    }
+
+    // Number of birds singing increases with intensity
+    const numBirds = Math.floor(1 + intensity * 8);
+
+    // Species preference weights
+    const weights = {
+        robin: 0.4,
+        cardinal: 0.35,
+        chickadee: 0.15,
+        warbler: 0.1
+    };
+
+    for (let i = 0; i < numBirds; i++) {
+        // Weighted random selection
+        const random = Math.random();
+        let cumulative = 0;
+        let selectedBird = species[0];
+
+        for (const bird of species) {
+            cumulative += weights[bird] || (1 / species.length);
+            if (random <= cumulative) {
+                selectedBird = bird;
+                break;
+            }
+        }
+
+        // Stagger bird calls naturally
+        const delay = Math.random() * 5;
+        const volume = 0.15 + (intensity * 0.4); // Volume increases with intensity
+
+        birdSamplePlayer.play(selectedBird, delay, volume, slowWakeGainNode);
+    }
+
+    // Add gentle morning breeze sound
+    if (intensity > 0.4) {
+        createGentleBreeze(audioContext, 6, 0);
+    }
+}
+
+// Synthesized birds (fallback if samples don't load)
+function generateMorningBirdsSynthesized(audioContext, intensity) {
     const bird = new BirdChirp(audioContext);
 
     // Realistic morning bird species with natural frequency ranges
@@ -287,6 +343,15 @@ function startSlowWakeExperience() {
         slowWakeMelodyGain = slowWakeAudioContext.createGain();
         slowWakeMelodyGain.connect(slowWakeAudioContext.destination);
         slowWakeMelodyGain.gain.value = 0; // Start at 0 volume
+
+        // Initialize bird sample player if not already done
+        if (!birdSamplePlayer) {
+            birdSamplePlayer = new BirdSamplePlayer(slowWakeAudioContext);
+            // Load samples asynchronously (doesn't block timer start)
+            birdSamplePlayer.loadSamples().catch(err => {
+                console.warn('Bird samples failed to load, using synthesis:', err);
+            });
+        }
     }
 
     // Create fullscreen overlay

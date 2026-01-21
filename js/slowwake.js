@@ -5,6 +5,7 @@ let slowWakeAudioContext = null;
 let slowWakeGainNode = null;
 let slowWakeMelodyGain = null;
 let slowWakeBirdNodes = [];
+let slowWakeWakeLock = null;
 
 // Create gentle breeze sound for pleasant morning ambience
 function createGentleBreeze(audioContext, duration, delay = 0) {
@@ -239,10 +240,10 @@ function generateMorningBirdsSynthesized(audioContext, intensity) {
     }
 }
 
-// Mozart-inspired gentle wake melody with calming frequencies
-// Based on "Twinkle Twinkle Little Star" pattern using 432 Hz tuning
-let melodyNoteIndex = 0;
-let lastMelodyNote = 0;
+// Orchestra melody for gentle wake
+// Uses multi-instrument classical compositions
+let orchestraStarted = false;
+let orchestraSources = [];
 
 function playWakeMelody(audioContext, progress, melodyStart = 0.85) {
     if (progress < melodyStart || !slowWakeMelodyGain) return;
@@ -251,116 +252,59 @@ function playWakeMelody(audioContext, progress, melodyStart = 0.85) {
     const melodyProgress = (progress - melodyStart) / (1 - melodyStart);
 
     // Volume fades in exponentially during melody phase
-    const melodyVolume = Math.pow(melodyProgress, 1.5) * 0.35;
+    const melodyVolume = Math.pow(melodyProgress, 1.5) * 0.4;
     slowWakeMelodyGain.gain.value = melodyVolume;
 
-    // 432 Hz tuning - more harmonious with nature (calming effect)
-    // C major scale tuned to A4 = 432 Hz instead of 440 Hz
-    const scale432 = {
-        C4: 256.87,  // Grounding, stability
-        D4: 288.33,  // Balance
-        E4: 323.63,  // Joy, brightness
-        F4: 342.88,  // Harmony
-        G4: 384.87,  // Openness
-        A4: 432.00,  // Natural resonance (tuning reference)
-        B4: 485.29,  // Resolution
-        C5: 513.74,  // Uplifting
-        D5: 576.65,  // Bright
-        E5: 647.27   // Very bright
-    };
+    // Start orchestra composition when melody phase begins
+    if (!orchestraStarted && typeof playComposition === 'function') {
+        const compositionId = typeof getWakeComposition === 'function'
+            ? getWakeComposition()
+            : 'pastoralDawn';
 
-    // Beautiful original wake melody: "Morning Glory"
-    // A gentle, ascending composition that gradually lifts the spirit
-    const melodyPattern = [
-        // Phrase 1: Gentle awakening (ascending)
-        { note: scale432.C4, duration: 0.8 },   // Good
-        { note: scale432.E4, duration: 0.6 },   // morn-
-        { note: scale432.G4, duration: 0.6 },   // ing
-        { note: scale432.C5, duration: 1.2 },   // sun...
+        console.log('[Wake] Starting orchestra composition:', compositionId);
+        orchestraSources = playComposition(audioContext, compositionId, 0);
+        orchestraStarted = true;
 
-        // Phrase 2: Morning question (floating)
-        { note: scale432.B4, duration: 0.6 },   // Rise
-        { note: scale432.A4, duration: 0.6 },   // and
-        { note: scale432.G4, duration: 0.6 },   // shine
-        { note: scale432.A4, duration: 1.0 },   // bright
-
-        // Phrase 3: Hopeful response (upward)
-        { note: scale432.G4, duration: 0.6 },   // New
-        { note: scale432.A4, duration: 0.6 },   // day
-        { note: scale432.B4, duration: 0.6 },   // is
-        { note: scale432.C5, duration: 1.2 },   // here
-
-        // Phrase 4: Gentle resolution (descending warmth)
-        { note: scale432.D5, duration: 0.8 },   // Wake
-        { note: scale432.C5, duration: 0.6 },   // with
-        { note: scale432.A4, duration: 0.6 },   // gen-
-        { note: scale432.G4, duration: 1.4 },   // tle...
-
-        // Phrase 5: Final uplift (complete awakening)
-        { note: scale432.E4, duration: 0.6 },   // Heart
-        { note: scale432.G4, duration: 0.6 },   // beats
-        { note: scale432.C5, duration: 0.8 },   // strong
-        { note: scale432.E5, duration: 1.6 },   // now...
-    ];
-
-    const now = audioContext.currentTime;
-    const timeSinceLastNote = (now - lastMelodyNote) * 1000;
-
-    // Play next note in pattern at appropriate timing
-    if (timeSinceLastNote > 600 || lastMelodyNote === 0) {
-        const currentNote = melodyPattern[melodyNoteIndex % melodyPattern.length];
-
-        // Create gentle bell-like tone with harmonic richness
-        const osc1 = audioContext.createOscillator();
-        const osc2 = audioContext.createOscillator();
-        const oscGain1 = audioContext.createGain();
-        const oscGain2 = audioContext.createGain();
-
-        // Fundamental tone (pure sine)
-        osc1.type = 'sine';
-        osc1.frequency.value = currentNote.note;
-
-        // Second harmonic for warmth (octave higher, very quiet)
-        osc2.type = 'sine';
-        osc2.frequency.value = currentNote.note * 2;
-        oscGain2.gain.value = 0.08; // Very subtle second harmonic
-
-        // Add subtle vibrato for organic warmth
-        const vibrato = audioContext.createOscillator();
-        const vibratoGain = audioContext.createGain();
-        vibrato.frequency.value = 5; // 5 Hz vibrato
-        vibratoGain.gain.value = 2;  // Very subtle
-        vibrato.connect(vibratoGain);
-        vibratoGain.connect(osc1.frequency);
-
-        osc1.connect(oscGain1);
-        osc2.connect(oscGain2);
-        oscGain1.connect(slowWakeMelodyGain);
-        oscGain2.connect(slowWakeMelodyGain);
-
-        const duration = currentNote.duration;
-
-        // Gentle bell-like envelope for fundamental
-        oscGain1.gain.setValueAtTime(0, now);
-        oscGain1.gain.exponentialRampToValueAtTime(0.25, now + 0.03);
-        oscGain1.gain.exponentialRampToValueAtTime(0.15, now + duration * 0.4);
-        oscGain1.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-        // Slightly faster decay for harmonic (bell-like characteristic)
-        oscGain2.gain.setValueAtTime(oscGain2.gain.value, now);
-        oscGain2.gain.exponentialRampToValueAtTime(oscGain2.gain.value * 0.6, now + duration * 0.3);
-        oscGain2.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-        vibrato.start(now);
-        osc1.start(now);
-        osc2.start(now);
-        vibrato.stop(now + duration);
-        osc1.stop(now + duration);
-        osc2.stop(now + duration);
-
-        lastMelodyNote = now;
-        melodyNoteIndex++;
+        // Keep composition looping throughout wake phase
+        const composition = typeof getComposition === 'function' ? getComposition(compositionId) : null;
+        if (composition) {
+            const compositionDuration = getCompositionDuration(composition);
+            // Schedule next loop
+            scheduleNextOrchestra(audioContext, compositionId, compositionDuration);
+        }
     }
+}
+
+// Helper to calculate composition duration
+function getCompositionDuration(composition) {
+    const beatsPerSecond = composition.tempo / 60;
+    let maxTime = 0;
+
+    composition.tracks.forEach(track => {
+        track.notes.forEach(note => {
+            const endTime = (note.start + note.duration) / beatsPerSecond;
+            if (endTime > maxTime) maxTime = endTime;
+        });
+    });
+
+    return maxTime;
+}
+
+// Schedule next orchestra loop
+function scheduleNextOrchestra(audioContext, compositionId, delay) {
+    setTimeout(() => {
+        if (orchestraStarted && slowWakeMelodyGain) {
+            const newSources = playComposition(audioContext, compositionId, 0);
+            orchestraSources.push(...newSources);
+
+            // Continue looping
+            const composition = typeof getComposition === 'function' ? getComposition(compositionId) : null;
+            if (composition) {
+                const duration = getCompositionDuration(composition);
+                scheduleNextOrchestra(audioContext, compositionId, duration);
+            }
+        }
+    }, delay * 1000);
 }
 
 // Start the slow wake experience
@@ -368,9 +312,9 @@ function startSlowWakeExperience() {
     const duration = (state.slowWake?.duration || 10) * 60 * 1000; // Convert to milliseconds
     const sound = state.slowWake?.sound || 'birds';
 
-    // Reset melody state
-    melodyNoteIndex = 0;
-    lastMelodyNote = 0;
+    // Reset orchestra state
+    orchestraStarted = false;
+    orchestraSources = [];
 
     // Initialize audio context
     if (sound !== 'silent') {
@@ -428,9 +372,29 @@ function startSlowWakeExperience() {
 
     document.body.appendChild(overlay);
 
-    // Try to enter fullscreen
+    // Try to enter fullscreen for maximum screen brightness
     if (overlay.requestFullscreen) {
-        overlay.requestFullscreen().catch(err => console.log('Fullscreen error:', err));
+        overlay.requestFullscreen().catch(err => console.log('[Wake] Fullscreen not available:', err));
+    }
+
+    // Request Wake Lock to keep screen on and at full brightness
+    if ('wakeLock' in navigator) {
+        navigator.wakeLock.request('screen')
+            .then(wakeLock => {
+                slowWakeWakeLock = wakeLock;
+                console.log('[Wake] Screen Wake Lock active - screen will stay on at full brightness');
+
+                // Handle wake lock release (e.g., if tab loses focus)
+                wakeLock.addEventListener('release', () => {
+                    console.log('[Wake] Wake Lock released');
+                    slowWakeWakeLock = null;
+                });
+            })
+            .catch(err => {
+                console.log('[Wake] Wake Lock not available:', err);
+            });
+    } else {
+        console.log('[Wake] Wake Lock API not supported on this device');
     }
 
     const startTime = Date.now();
@@ -493,7 +457,7 @@ function startSlowWakeExperience() {
         // Update visual brightness - exponential curve
         const brightness = Math.pow(progress, 1.5); // Exponential feel
 
-        // Sunrise color gradient
+        // Sunrise color gradient - ends with pure white for max screen brightness
         const colors = [
             { r: 10, g: 10, b: 10 },     // Near black (0%)
             { r: 25, g: 15, b: 35 },     // Deep purple (15%)
@@ -501,7 +465,8 @@ function startSlowWakeExperience() {
             { r: 120, g: 60, b: 80 },    // Pink-purple (45%)
             { r: 200, g: 100, b: 60 },   // Orange (60%)
             { r: 255, g: 180, b: 100 },  // Light orange (75%)
-            { r: 255, g: 240, b: 200 }   // Warm white (100%)
+            { r: 255, g: 240, b: 200 },  // Warm white (90%)
+            { r: 255, g: 255, b: 255 }   // Pure white (100%) - MAXIMUM BRIGHTNESS
         ];
 
         const colorIndex = Math.min(Math.floor(brightness * (colors.length - 1)), colors.length - 2);
@@ -549,9 +514,9 @@ function stopSlowWakeExperience() {
         slowWakeInterval = null;
     }
 
-    // Reset melody state
-    melodyNoteIndex = 0;
-    lastMelodyNote = 0;
+    // Reset orchestra state
+    orchestraStarted = false;
+    orchestraSources = [];
 
     // Stop all audio
     if (slowWakeAudioContext) {
@@ -565,12 +530,24 @@ function stopSlowWakeExperience() {
         slowWakeMelodyGain = null;
     }
 
+    // Release Wake Lock to allow screen to sleep again
+    if (slowWakeWakeLock) {
+        slowWakeWakeLock.release()
+            .then(() => {
+                console.log('[Wake] Wake Lock released successfully');
+                slowWakeWakeLock = null;
+            })
+            .catch(err => {
+                console.log('[Wake] Wake Lock release error:', err);
+            });
+    }
+
     // Remove overlay
     const overlay = document.getElementById('slow-wake-overlay');
     if (overlay) {
         // Exit fullscreen
         if (document.fullscreenElement) {
-            document.exitFullscreen().catch(err => console.log('Exit fullscreen error:', err));
+            document.exitFullscreen().catch(err => console.log('[Wake] Exit fullscreen error:', err));
         }
         overlay.remove();
     }

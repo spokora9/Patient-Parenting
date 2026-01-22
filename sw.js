@@ -1,4 +1,5 @@
 // Service Worker for Parent Architect PWA
+// Updated: 2026-01-22 - Vercel deployment with Capacitor fixes
 const CACHE_NAME = 'parent-architect-v8.0';
 const urlsToCache = [
     '/',

@@ -1,5 +1,5 @@
 // Service Worker for Parent Architect PWA
-const CACHE_NAME = 'parent-architect-v7.0';
+const CACHE_NAME = 'parent-architect-v8.0';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -30,6 +30,11 @@ const urlsToCache = [
     '/audio/birds/cardinal-2.mp3',
     '/audio/birds/chickadee-1.mp3',
     '/audio/birds/warbler-1.mp3'
+    // Classical music recordings (will be cached dynamically when available)
+    // '/audio/classical/mozart-peaceful-1.mp3',
+    // '/audio/classical/debussy-clair-1.mp3',
+    // '/audio/classical/mozart-dreamy-1.mp3',
+    // '/audio/classical/satie-gentle-1.mp3'
 ];
 
 // Install event - cache resources

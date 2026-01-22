@@ -15,17 +15,13 @@ The app balances two distinct sources of knowledge:
 2.  **Old Wisdom:** Intuition, storytelling, nature, patience, and the "village" mentality.
 
 ## 🛠 Tech Stack
-This project follows a phased development approach.
 
-### Phase 1: Rapid Prototyping (Current)
-* **Frontend:** HTML5, CSS3 (CSS Variables for theming), Vanilla JavaScript (ES6+).
-* **Audio Engine:** Mock JavaScript engine (mimicking Rust architecture).
-* **Platform:** Mobile Web / PWA.
-
-### Phase 2: Production
-* **Core:** React Native or Flutter (for 60fps animations and native gestures).
-* **Audio:** **Rust** compiled to **WebAssembly (Wasm)** for low-latency sound synthesis.
-* **Backend:** Firebase or Supabase (Real-time sync for multiplayer Quest Board).
+* **Frontend:** HTML5, CSS3 (CSS Variables for theming), Vanilla JavaScript (ES6+)
+* **Audio Engine:** **Rust** compiled to **WebAssembly (WASM)** for professional sound synthesis
+* **Native Apps:** Capacitor (iOS & Android) with native brightness control
+* **Platform:** Mobile Web PWA + Native iOS/Android Apps
+* **Audio Assets:** Real recordings from Xeno-canto (birds) and Musopen (classical music)
+* **Future Backend:** Firebase or Supabase (Real-time sync for multiplayer Quest Board)
 
 ## 🚀 Quick Start
 
@@ -48,40 +44,94 @@ Once the app is running, you can install it as a Progressive Web App:
 2. Look for the "Install" icon in the address bar
 3. Click to install as a standalone app
 
-### The Rust Audio Engine (Future)
-To build the Wasm audio module (requires Rust toolchain):
+### Native App (iOS/Android)
+For native features like hardware brightness control:
+
+```bash
+# Build and sync web assets
+npm run build
+npm run sync
+
+# Open in native IDE
+npm run open:ios      # Opens in Xcode
+npm run open:android  # Opens in Android Studio
+
+# Or build and run directly
+npm run run:ios
+npm run run:android
+```
+
+See [NATIVE_SETUP.md](NATIVE_SETUP.md) for detailed instructions.
+
+### The Rust Audio Engine
+The WASM audio module is already built and included. To rebuild (requires Rust toolchain):
 
 ```bash
 # Install wasm-pack
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
-# Build the project
+# Build the audio engine
+cd audio-engine
 wasm-pack build --target web
+
+# Copy to project
+cp pkg/parent_architect_audio.js ../wasm/
+cp pkg/parent_architect_audio_bg.wasm ../wasm/
 ```
 
 ## 📂 Project Structure
 
 ```
 Parent-Architect/
-├── index.html          # Main application interface
-├── manifest.json       # PWA manifest
-├── sw.js              # Service worker for offline support
-├── package.json        # Project configuration
-├── README.md          # This file
-├── PRD.md            # Product Requirements Document
-├── js/               # Modular JavaScript
-│   ├── app.js         # Main initialization
-│   ├── audio.js       # Audio engine
-│   ├── storage.js     # localStorage manager
-│   ├── state.js       # State management
-│   ├── activities.js  # Activity library (10+ activities)
-│   ├── scripts.js     # Script Designer library (10+ scripts)
-│   ├── views.js       # UI components
-│   ├── actions.js     # User actions & routing
-│   ├── effects.js     # Visual effects (confetti)
-│   └── gestures.js    # Touch gesture handling
-├── docs/             # Additional documentation
-└── assets/           # Future: images, icons, fonts
+├── index.html              # Main application interface
+├── manifest.json           # PWA manifest
+├── sw.js                   # Service worker for offline support
+├── package.json            # Project configuration
+├── capacitor.config.json   # Capacitor native app config
+├── README.md               # This file
+├── PRD.md                  # Product Requirements Document
+├── CLASSICAL_MUSIC_GUIDE.md # Guide for downloading classical music
+├── NATIVE_SETUP.md         # Native app build instructions
+├── js/                     # Modular JavaScript
+│   ├── app.js              # Main initialization
+│   ├── audio.js            # Audio engine
+│   ├── slowwake.js         # Slow wake timer logic
+│   ├── orchestra.js        # Classical music compositions
+│   ├── birdsamples.js      # Real bird sound player
+│   ├── brightness.js       # Native brightness control
+│   ├── wasmbridge.js       # WASM audio engine bridge
+│   ├── storage.js          # localStorage manager
+│   ├── state.js            # State management
+│   ├── activities.js       # Activity library (20+ activities)
+│   ├── scripts.js          # Script Designer library (10+ scripts)
+│   ├── templates.js        # Quest templates
+│   ├── views.js            # UI components
+│   ├── actions.js          # User actions & routing
+│   ├── effects.js          # Visual effects (confetti)
+│   └── gestures.js         # Touch gesture handling
+├── audio/                  # Audio assets
+│   ├── birds/              # Real bird recordings (Xeno-canto)
+│   │   ├── robin-1.mp3     # American Robin (28s, looping)
+│   │   ├── gull-1.mp3      # Western Gull (30s, looping)
+│   │   └── README.md       # Bird sound documentation
+│   └── classical/          # Classical music recordings
+│       └── README.md       # Setup instructions
+├── wasm/                   # Rust audio engine (WASM)
+│   ├── parent_architect_audio.js
+│   └── parent_architect_audio_bg.wasm
+├── audio-engine/           # Rust source code
+│   ├── Cargo.toml
+│   └── src/
+│       ├── lib.rs          # Main WASM entry point
+│       ├── bird.rs         # Physical bird modeling
+│       ├── synthesis.rs    # Multi-instrument synthesis
+│       ├── dsp.rs          # Signal processing (filters, reverb)
+│       └── utils.rs        # Utilities
+├── www/                    # Built web assets for native apps
+├── ios/                    # iOS native project (Xcode)
+├── android/                # Android native project (Android Studio)
+├── docs/                   # Additional documentation
+└── assets/                 # Images, icons, fonts
 ```
 
 ## 🎯 Core Features
@@ -114,6 +164,23 @@ Gamified task manager supporting up to 4 child profiles with:
 - **Saved Activities:** Quick access to favorites
 - **Data Management:** Export/Import your progress as JSON
 
+### 5. Slow Wake Timer 🌅
+**PROFESSIONAL FEATURE!** A gentle, science-based wake timer for parents:
+- **Real Bird Sounds:** Authentic recordings from Xeno-canto (robin + gull sequence)
+- **Classical Music:** Real recordings from Musopen (Mozart, Debussy, Satie)
+- **Rust/WASM Audio:** Low-latency synthesis engine for smooth soundscapes
+- **Natural Light Simulation:** Gradual color transition (dark → sunrise → daylight)
+- **Native Brightness Control:** Maximizes screen brightness on iOS/Android
+- **Customizable Duration:** 15-60 minute wake cycles
+- **Gentle Progression:**
+  1. Soft breeze sounds (0-40%)
+  2. Birds begin chirping (40-70%)
+  3. Gull joins robin after first loop (70-85%)
+  4. Classical music fades in (85-100%)
+  5. Screen brightness maximizes
+- **Graceful Fallbacks:** Real recordings → WASM synthesis → Simple synthesis
+- **Wake Lock API:** Prevents screen from sleeping during wake cycle
+
 ## ✨ Enhanced Features
 
 ### Progressive Web App (PWA)
@@ -145,7 +212,52 @@ The interface follows a "design blog" aesthetic with:
 
 ## 📋 Recent Updates
 
-### v0.3.0 - Templates, Rewards & Enhanced UX (Latest)
+### v0.6.0 - Slow Wake Timer with Rust Audio & Native Apps (Latest)
+**✨ PROFESSIONAL FEATURES:**
+- **Slow Wake Timer:** Gentle 15-60 minute wake cycle with natural light simulation
+- **Rust/WASM Audio Engine:** Professional sound synthesis compiled to WebAssembly
+  - Physical bird modeling with formant filters
+  - Multi-instrument orchestra (piano, strings, harp, flute)
+  - DSP filters, reverb, and breeze generation
+- **Real Bird Sounds:** Authentic recordings from Xeno-canto
+  - American Robin (28s, continuous loop)
+  - Western Gull (30s, joins after first robin loop)
+  - Sequential playback for realistic dawn ambience
+- **Classical Music Orchestra:** Real recordings support
+  - Integration with Musopen public domain recordings
+  - Mozart Piano Concertos (K. 488, K. 467)
+  - Debussy Clair de Lune
+  - Satie Gymnopédie No. 1
+  - Graceful fallback to synthesis if recordings unavailable
+- **Capacitor Native Apps:** iOS and Android builds
+  - Native brightness control (@capacitor-community/screen-brightness)
+  - Maximizes screen brightness during wake cycle
+  - Restores original brightness on stop
+  - Graceful fallback to web APIs (Wake Lock, fullscreen)
+- **Progressive Enhancement:** Advanced features degrade gracefully
+  - Real recordings → WASM synthesis → Simple synthesis
+  - Native brightness → Web brightness (Wake Lock + white screen)
+
+**🎨 UX Improvements:**
+- Fullscreen wake overlay with gradient color transitions
+- Real-time progress display with elapsed/remaining time
+- Smooth fade-in/fade-out for all audio elements
+- Console logging for debugging and verification
+- Stop button to cancel wake cycle
+
+**🔧 Technical Updates:**
+- Service worker updated to v8.0 for classical music caching
+- Built Rust audio engine (audio-engine/ directory)
+- Compiled WASM modules (wasm/ directory)
+- Created comprehensive documentation:
+  - CLASSICAL_MUSIC_GUIDE.md
+  - NATIVE_SETUP.md
+  - audio/birds/README.md
+  - audio/classical/README.md
+- NPM scripts for native app builds (build, sync, open, run)
+- FFmpeg audio processing pipeline for mobile optimization
+
+### v0.3.0 - Templates, Rewards & Enhanced UX
 **✨ NEW Features:**
 - **Quest Templates Library:** 6 pre-built routine templates (morning, bedtime, chores, homework, kindness, weekend) with 29 total quests
 - **Reward Redemption System:** Create custom rewards, spend XP to redeem them, celebration animations on redemption
@@ -202,6 +314,15 @@ The interface follows a "design blog" aesthetic with:
 
 ## 🚧 Roadmap
 
+### Completed in v0.6.0
+- [x] Slow Wake Timer with natural light simulation
+- [x] Rust/WASM audio engine integration ✅
+- [x] Real bird sounds from Xeno-canto
+- [x] Classical music orchestra system
+- [x] Capacitor native iOS/Android apps ✅
+- [x] Native brightness control
+- [x] Progressive audio enhancement (recordings → WASM → synthesis)
+
 ### Completed in v0.3.0
 - [x] Quest templates library (morning routine, bedtime, chores)
 - [x] Reward redemption system (trade XP for rewards)
@@ -209,14 +330,16 @@ The interface follows a "design blog" aesthetic with:
 - [x] Daily quest reset functionality
 - [x] Dark mode support
 
-### Next Priorities (v0.4.0)
+### Next Priorities (v0.7.0)
+- [ ] Download classical music recordings (Mozart, Debussy, Satie)
+- [ ] Test native brightness on physical devices
 - [ ] Village Mode (share lists via QR code/link)
 - [ ] Weekly progress charts/analytics
 - [ ] Quest scheduling and reminders
 
 ### Future Enhancements
-- [ ] Rust/WASM audio engine integration
-- [ ] React Native mobile app
+- [ ] Additional wake timer sounds (ocean waves, rain, forest)
+- [ ] Customizable wake composition selection
 - [ ] Backend sync (Firebase/Supabase)
 - [ ] Journal feature for reflective parenting
 - [ ] Multi-language support
@@ -233,4 +356,4 @@ MIT License (pending)
 
 **Built with intention. Designed for growth.**
 
-*Version 0.3.0 - January 2026*
+*Version 0.6.0 - January 2026*

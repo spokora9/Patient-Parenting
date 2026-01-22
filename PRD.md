@@ -1,6 +1,6 @@
 # Product Requirements Document (PRD)
 **Project:** Parent Architect
-**Version:** 1.0
+**Version:** 0.6.0
 **Status:** In Development
 
 ---
@@ -60,29 +60,85 @@ Most parenting apps are clinical trackers (diapers/sleep) or chaotic forums. Par
     * When adding an event (e.g., "Birthday"), the app automatically suggests age-appropriate party tips or gift ideas based on the child's developmental stage.
     * "Village List": A specific list designed to be shared with grandparents/sitters.
 
+### 3.5 Feature: Slow Wake Timer 🌅
+* **Description:** A professional-grade gentle wake system for parents, combining authentic nature sounds with gradual light simulation.
+* **User Workflow:**
+    1. User selects wake duration (15, 30, 45, or 60 minutes)
+    2. User chooses sound mode (nature, silent, or future: custom)
+    3. Timer starts with fullscreen overlay showing current time and progress
+    4. App gradually transitions through wake phases
+    5. User can stop early or let it complete naturally
+* **Wake Phases (Customizable Duration):**
+    * **Phase 1 (0-40%):** Soft breeze sounds, dark colors (RGB: #0a0a0a → #1a0f0a)
+    * **Phase 2 (40-70%):** Birds begin chirping (robin loops), sunrise colors emerge
+    * **Phase 3 (70-85%):** Gull joins robin after first loop, colors brighten
+    * **Phase 4 (85-100%):** Classical music fades in, full daylight colors, screen brightness maximizes
+* **Audio Architecture (Progressive Enhancement):**
+    1. **Preferred:** Real recordings from Xeno-canto (birds) and Musopen (classical)
+    2. **Fallback 1:** Rust/WASM synthesis engine (physical bird modeling, multi-instrument orchestra)
+    3. **Fallback 2:** Simple Web Audio API synthesis
+* **Visual Elements:**
+    * Real-time progress bar
+    * Elapsed/remaining time display
+    * Smooth gradient color transitions (dark → orange → yellow → white)
+    * Fullscreen mode for immersive experience
+* **Native Features (iOS/Android):**
+    * Hardware brightness control (maximizes during wake, restores on stop)
+    * Wake Lock API (prevents screen sleep)
+    * Fullscreen mode
+* **Technical Requirements:**
+    * No audio interruptions or clicks during transitions
+    * Smooth fade-in/fade-out for all audio sources
+    * Birds must loop continuously without gaps
+    * Classical music must fade in over 5+ seconds
+    * Progress must update every second
+    * Stop button must cleanly terminate all audio and restore state
+
 ---
 
 ## 4. Technical Architecture
 
 ### 4.1 Frontend (Web/Mobile)
-* **Language:** HTML5 / CSS3 / JavaScript (ES6+).
-* **State Management:** Simple reactive state (Store pattern) for the prototype; Redux/Context API for Production.
-* **Audio:**
-    * **Logic:** Rust (compiled to Wasm).
-    * **Sounds:** Synthesized tones (Sine/Triangle waves) to keep app size small and avoid audio file assets.
+* **Language:** HTML5 / CSS3 / JavaScript (ES6+)
+* **State Management:** Simple reactive state (Store pattern) with localStorage persistence
+* **Platform:** Progressive Web App (PWA) + Capacitor native apps (iOS/Android)
+* **Audio Engine:**
+    * **Core:** Rust compiled to WebAssembly (WASM) for professional synthesis
+    * **Features:**
+        - Physical bird modeling with formant filters (source-filter model)
+        - Multi-instrument orchestra (piano, strings, harp, flute)
+        - DSP filters (low-pass, band-pass, reverb)
+        - 432 Hz tuning for natural resonance
+    * **Real Recordings:**
+        - Birds: Xeno-canto (robin, gull, cardinal, chickadee, warbler)
+        - Classical: Musopen public domain (Mozart, Debussy, Satie)
+    * **Processing:** FFmpeg for mobile optimization (mono/stereo, 22-44kHz, 64-128kbps)
+* **Native Capabilities (via Capacitor):**
+    * Screen brightness control (@capacitor-community/screen-brightness)
+    * Wake Lock API for screen persistence
+    * Fullscreen mode
+    * File system access for audio caching
 
 ### 4.2 Data Model (JSON Schema)
 ```json
 {
   "family_settings": {
     "mode": "co_op",
-    "theme": "warm_neutral"
+    "theme": "warm_neutral",
+    "dark_mode": false
+  },
+  "wake_timer": {
+    "default_duration": 30,
+    "default_sound": "nature",
+    "default_composition": "mozartAdagio",
+    "brightness_control": true
   },
   "players": [
     {
       "id": "p1",
       "name": "Leo",
       "age": 5,
+      "avatar": "🦁",
       "avatar_color": "#FF7675",
       "xp": 1500
     }
@@ -93,9 +149,23 @@ Most parenting apps are clinical trackers (diapers/sleep) or chaotic forums. Par
       "title": "Clear Table",
       "xp_value": 50,
       "category": "household",
+      "type": "daily",
+      "completed": false,
       "sound_effect": "success_major"
     }
-  ]
+  ],
+  "rewards": [
+    {
+      "id": "r1",
+      "title": "Extra Screen Time",
+      "cost": 500,
+      "redeemed": false
+    }
+  ],
+  "templates": {
+    "morning_routine": [...],
+    "bedtime_routine": [...]
+  }
 }
 ```
 
@@ -122,14 +192,45 @@ Most parenting apps are clinical trackers (diapers/sleep) or chaotic forums. Par
 
 ## 6. Future Roadmap
 
-### v1.1
-* Save specific "Scripts" to a quick-access Favorites board.
+### Completed (v0.1.0 - v0.6.0)
+* ✅ Script Designer with favorites/pinning
+* ✅ Quest templates library (morning, bedtime, chores, homework, kindness, weekend)
+* ✅ Reward redemption system
+* ✅ Daily quest reset functionality
+* ✅ Dark mode support
+* ✅ Custom quest creation
+* ✅ Player customization (avatars, colors)
+* ✅ PWA with offline support
+* ✅ Rust/WASM audio engine (physical bird modeling, multi-instrument orchestra)
+* ✅ Slow Wake Timer with real bird sounds
+* ✅ Classical music integration (Musopen recordings)
+* ✅ Capacitor native apps (iOS/Android)
+* ✅ Native brightness control
 
-### v1.2
-* "Village Mode" - Allow inviting another adult (partner) to view and edit the board.
+### v0.7.0 - Wake Timer Enhancements
+* Download classical music recordings (Mozart K.488, K.467, Debussy, Satie)
+* Test native brightness on physical devices
+* Additional wake compositions (ocean, rain, forest)
+* Customizable wake phase timing
+* Wake timer history and statistics
 
-### v2.0
-* Rust Audio Engine full integration for procedural soundscapes (e.g., "White Noise" generator for sleep).
+### v0.8.0 - Social Features
+* "Village Mode" - Share lists via QR code/link
+* Multi-device sync (Firebase/Supabase backend)
+* Partner collaboration features
+
+### v0.9.0 - Analytics & Insights
+* Weekly progress charts
+* Quest completion analytics
+* Parenting insights based on activity patterns
+* Export data visualizations
+
+### v1.0.0 - Production Release
+* Quest scheduling and reminders
+* Push notifications
+* Multi-language support
+* Voice-to-text for script search
+* Journal feature for reflective parenting
 
 ---
 
@@ -142,11 +243,15 @@ Most parenting apps are clinical trackers (diapers/sleep) or chaotic forums. Par
 ---
 
 ## 8. Open Questions
-1. Should we include a "Journal" feature for reflective parenting?
-2. How do we handle multiple languages for global reach?
+1. ~~Should we include a "Journal" feature for reflective parenting?~~ → Deferred to v1.0.0
+2. How do we handle multiple languages for global reach? → v1.0.0
 3. What is the monetization strategy? (Freemium, one-time purchase, subscription?)
+4. Should we add more wake timer soundscapes (ocean, rain, thunderstorm)?
+5. How do we handle copyright for classical music recordings in app stores?
+6. Should wake timer support custom playlist uploads?
+7. Do we need user accounts for cloud sync, or keep it local-first?
 
 ---
 
 **Document Owner:** Parent Architect Team
-**Last Updated:** 2026-01-16
+**Last Updated:** 2026-01-22 (v0.6.0 - Slow Wake Timer & Native Apps)

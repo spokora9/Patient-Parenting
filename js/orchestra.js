@@ -2,8 +2,17 @@
  * Orchestra Composition System
  *
  * Multi-instrument arrangements for gentle wake melodies
- * Uses WASM audio engine instruments when available
+ * Prioritizes real classical recordings, falls back to synthesis
+ *
+ * Loading priority:
+ * 1. Real classical recordings (when available)
+ * 2. WASM synthesis (if loaded)
+ * 3. Simple oscillator synthesis (always available)
  */
+
+// Audio buffer cache for loaded recordings
+const audioBuffers = {};
+let audioBuffersLoaded = false;
 
 // 432 Hz tuning - natural resonance scale
 const SCALE_432 = {
@@ -31,9 +40,63 @@ const SCALE_432 = {
 
 /**
  * Classical-style compositions for gentle awakening
+ * Each composition can have a 'recording' property for real audio files
  */
 const COMPOSITIONS = {
+    // Mozart Piano Concerto No. 23 in A major, K. 488 - 2nd movement "Adagio"
+    "mozartAdagio": {
+        name: "Mozart Piano Concerto 23 - Adagio",
+        composer: "W.A. Mozart",
+        recording: {
+            file: "/audio/classical/mozart-peaceful-1.mp3",
+            duration: 120, // 2 minutes
+            fadeIn: 5,     // Fade in over 5 seconds
+            fadeOut: 8,    // Fade out over 8 seconds
+            volume: 0.4
+        }
+    },
+
+    // Debussy - Clair de Lune
+    "clairDeLune": {
+        name: "Clair de Lune",
+        composer: "Claude Debussy",
+        recording: {
+            file: "/audio/classical/debussy-clair-1.mp3",
+            duration: 120,
+            fadeIn: 6,
+            fadeOut: 10,
+            volume: 0.35
+        }
+    },
+
+    // Mozart Piano Concerto No. 21 in C major, K. 467 - 2nd movement "Andante"
+    "mozartAndante": {
+        name: "Mozart Piano Concerto 21 - Andante",
+        composer: "W.A. Mozart",
+        recording: {
+            file: "/audio/classical/mozart-dreamy-1.mp3",
+            duration: 120,
+            fadeIn: 5,
+            fadeOut: 8,
+            volume: 0.38
+        }
+    },
+
+    // Satie - Gymnopédie No. 1
+    "gymnopedie": {
+        name: "Gymnopédie No. 1",
+        composer: "Erik Satie",
+        recording: {
+            file: "/audio/classical/satie-gentle-1.mp3",
+            duration: 120,
+            fadeIn: 4,
+            fadeOut: 10,
+            volume: 0.35
+        }
+    },
+
     // Original composition inspired by Pachelbel's Canon
+    // (Synthesis fallback for all compositions)
     "pastoralDawn": {
         name: "Pastoral Dawn",
         composer: "Original (Classical Style)",
@@ -201,12 +264,26 @@ function getComposition(id) {
 
 /**
  * Play a composition using Web Audio API
- * Falls back to simple synthesis if WASM not available
+ * Priority: 1) Real recording, 2) Synthesis fallback
  */
 function playComposition(audioContext, compositionId, startTime = 0) {
     const composition = COMPOSITIONS[compositionId];
     if (!composition) {
-        console.error(`Composition ${compositionId} not found`);
+        console.error(`[Orchestra] Composition ${compositionId} not found`);
+        return [];
+    }
+
+    // Try to play real recording first
+    if (composition.recording && audioBuffers[compositionId]) {
+        const recordingSource = playRecording(audioContext, compositionId, startTime);
+        if (recordingSource) {
+            return [recordingSource];
+        }
+    }
+
+    // Fall back to synthesis if no recording available
+    if (!composition.tracks) {
+        console.warn(`[Orchestra] No recording or synthesis tracks for: ${compositionId}`);
         return [];
     }
 
@@ -289,4 +366,116 @@ function setWakeComposition(compositionId) {
  */
 function getWakeComposition() {
     return currentComposition;
+}
+
+/**
+ * Load all classical music recordings
+ * Call this during app initialization
+ */
+async function loadClassicalRecordings(audioContext) {
+    if (audioBuffersLoaded) {
+        console.log('[Orchestra] Recordings already loaded');
+        return true;
+    }
+
+    const recordingsToLoad = [];
+
+    // Collect all compositions with recordings
+    for (const [id, composition] of Object.entries(COMPOSITIONS)) {
+        if (composition.recording && composition.recording.file) {
+            recordingsToLoad.push({
+                id: id,
+                file: composition.recording.file,
+                name: composition.name
+            });
+        }
+    }
+
+    if (recordingsToLoad.length === 0) {
+        console.log('[Orchestra] No recordings configured');
+        return false;
+    }
+
+    console.log(`[Orchestra] Loading ${recordingsToLoad.length} classical recordings...`);
+
+    // Load each recording
+    const loadPromises = recordingsToLoad.map(async (recording) => {
+        try {
+            const response = await fetch(recording.file);
+            if (!response.ok) {
+                console.warn(`[Orchestra] Recording not found: ${recording.file}`);
+                return false;
+            }
+
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+            audioBuffers[recording.id] = audioBuffer;
+            console.log(`[Orchestra] ✓ Loaded: ${recording.name} (${audioBuffer.duration.toFixed(1)}s)`);
+            return true;
+        } catch (error) {
+            console.warn(`[Orchestra] Failed to load ${recording.name}:`, error.message);
+            return false;
+        }
+    });
+
+    const results = await Promise.all(loadPromises);
+    const successCount = results.filter(r => r).length;
+
+    audioBuffersLoaded = successCount > 0;
+
+    if (successCount > 0) {
+        console.log(`[Orchestra] Successfully loaded ${successCount}/${recordingsToLoad.length} recordings`);
+    } else {
+        console.log('[Orchestra] No recordings loaded - will use synthesis fallback');
+    }
+
+    return audioBuffersLoaded;
+}
+
+/**
+ * Play a classical music recording with fade in/out
+ */
+function playRecording(audioContext, compositionId, startTime = 0) {
+    const composition = COMPOSITIONS[compositionId];
+    if (!composition || !composition.recording) {
+        return null;
+    }
+
+    const buffer = audioBuffers[compositionId];
+    if (!buffer) {
+        console.warn(`[Orchestra] Recording buffer not loaded for: ${compositionId}`);
+        return null;
+    }
+
+    const recording = composition.recording;
+    const source = audioContext.createBufferSource();
+    const gainNode = audioContext.createGain();
+
+    source.buffer = buffer;
+    source.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    const now = audioContext.currentTime + startTime;
+    const fadeIn = recording.fadeIn || 3;
+    const fadeOut = recording.fadeOut || 5;
+    const volume = recording.volume || 0.4;
+    const duration = Math.min(recording.duration || buffer.duration, buffer.duration);
+
+    // Fade in
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(volume, now + fadeIn);
+
+    // Sustain
+    gainNode.gain.setValueAtTime(volume, now + duration - fadeOut);
+
+    // Fade out
+    gainNode.gain.linearRampToValueAtTime(0.001, now + duration);
+
+    source.start(now);
+    source.stop(now + duration);
+
+    console.log(`[Orchestra] Playing recording: ${composition.name} (${duration}s with ${fadeIn}s fade-in)`);
+
+    return { source, gainNode };
 }

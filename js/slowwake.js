@@ -370,6 +370,13 @@ function startSlowWakeExperience() {
                 console.warn('Bird samples failed to load, using synthesis:', err);
             });
         }
+
+        // Load classical music recordings asynchronously
+        if (typeof loadClassicalRecordings === 'function') {
+            loadClassicalRecordings(slowWakeAudioContext).catch(err => {
+                console.warn('Classical recordings failed to load, using synthesis:', err);
+            });
+        }
     }
 
     // Create fullscreen overlay

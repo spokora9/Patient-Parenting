@@ -48,9 +48,9 @@ Once the app is running, you can install it as a Progressive Web App:
 For native features like hardware brightness control:
 
 ```bash
-# Build and sync web assets
-npm run build
-npm run sync
+# Build and sync web assets for native apps
+npm run build:native  # Creates www/ directory
+npm run sync          # Syncs to iOS and Android
 
 # Open in native IDE
 npm run open:ios      # Opens in Xcode
@@ -62,6 +62,19 @@ npm run run:android
 ```
 
 See [NATIVE_SETUP.md](NATIVE_SETUP.md) for detailed instructions.
+
+### Deploy to Vercel/Web
+The web version deploys automatically to Vercel:
+
+```bash
+# Just push to GitHub - Vercel handles the rest
+git push origin main
+
+# Or deploy manually
+vercel deploy
+```
+
+See [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) for deployment guide and troubleshooting.
 
 ### The Rust Audio Engine
 The WASM audio module is already built and included. To rebuild (requires Rust toolchain):

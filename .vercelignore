@@ -1,0 +1,26 @@
+# Native app directories (not needed for web deployment)
+ios/
+android/
+www/
+
+# Capacitor
+.capacitor/
+capacitor.config.json
+
+# Rust source (WASM already compiled)
+audio-engine/
+Cargo.toml
+Cargo.lock
+
+# Development files
+node_modules/
+*.log
+.DS_Store
+
+# Documentation (optional - include if you want docs on web)
+# NATIVE_SETUP.md
+# ANDROID_BUILD_FIX.md
+# CLASSICAL_MUSIC_GUIDE.md
+# BIRD_SAMPLES_PLAN.md
+# RUST_AUDIO_ARCHITECTURE.md
+# SLOW_WAKE_PLAN.md

@@ -7,8 +7,6 @@
     "start": "python3 -m http.server 8080",
     "dev": "python3 -m http.server 8080",
     "serve": "python3 -m http.server 8080",
-    "build": "echo 'Web build complete - files ready for deployment'",
-    "vercel-build": "echo 'Vercel build complete - serving static files'",
     "build:native": "mkdir -p www && cp -r *.html *.json sw.js js/ assets/ audio/ wasm/ www/",
     "sync": "npm run build:native && npx cap sync",
     "sync:ios": "npm run build:native && npx cap sync ios",

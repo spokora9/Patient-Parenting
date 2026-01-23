@@ -1,4 +1,31 @@
 // --- VIEWS & COMPONENTS ---
+
+// Helper function to generate melody start buttons with time labels
+function getMelodyStartButtons(state) {
+    const duration = state.slowWake?.duration || 10;
+    const formatTime = (seconds) => {
+        if (seconds < 60) return `${seconds} sec`;
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        if (remainingSeconds === 0) return `${minutes} min`;
+        return `${minutes} min ${remainingSeconds} sec`;
+    };
+
+    const options = [
+        { value: 0.80, label: `Last ${formatTime(Math.round(duration * 60 * 0.20))}` },
+        { value: 0.85, label: `Last ${formatTime(Math.round(duration * 60 * 0.15))}` },
+        { value: 0.90, label: `Last ${formatTime(Math.round(duration * 60 * 0.10))}` },
+        { value: 1.00, label: 'Off' }
+    ];
+
+    return options.map(option => `
+        <button onclick="actions.setSlowWakeMelodyStart(${option.value})"
+                style="flex: 1; min-width: 75px; padding: 10px 8px; border: 2px solid ${(state.slowWake?.melodyStart || 0.85) === option.value ? 'var(--accent-play)' : 'rgba(0,0,0,0.1)'}; background: ${(state.slowWake?.melodyStart || 0.85) === option.value ? 'rgba(116, 185, 255, 0.1)' : 'var(--card-bg)'}; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text-main);">
+            ${option.label}
+        </button>
+    `).join('');
+}
+
 const views = {
     spark: () => {
         const filters = state.activityFilters || { category: null, ageRange: null, keyword: '' };
@@ -286,27 +313,7 @@ const views = {
                                 <span style="font-weight: 400; color: var(--text-sub); font-size: 12px;">(when melody begins)</span>
                             </label>
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                ${(() => {
-                                    const duration = state.slowWake?.duration || 10;
-                                    const formatTime = (seconds) => {
-                                        if (seconds < 60) return \`\${seconds} sec\`;
-                                        const minutes = Math.floor(seconds / 60);
-                                        const remainingSeconds = seconds % 60;
-                                        if (remainingSeconds === 0) return \`\${minutes} min\`;
-                                        return \`\${minutes} min \${remainingSeconds} sec\`;
-                                    };
-                                    return [
-                                        { value: 0.80, label: \`Last \${formatTime(Math.round(duration * 60 * 0.20))}\` },
-                                        { value: 0.85, label: \`Last \${formatTime(Math.round(duration * 60 * 0.15))}\` },
-                                        { value: 0.90, label: \`Last \${formatTime(Math.round(duration * 60 * 0.10))}\` },
-                                        { value: 1.00, label: 'Off' }
-                                    ].map(option => \`
-                                        <button onclick="actions.setSlowWakeMelodyStart(\${option.value})"
-                                                style="flex: 1; min-width: 75px; padding: 10px 8px; border: 2px solid \${(state.slowWake?.melodyStart || 0.85) === option.value ? 'var(--accent-play)' : 'rgba(0,0,0,0.1)'}; background: \${(state.slowWake?.melodyStart || 0.85) === option.value ? 'rgba(116, 185, 255, 0.1)' : 'var(--card-bg)'}; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text-main);">
-                                            \${option.label}
-                                        </button>
-                                    \`).join('');
-                                })()}
+                                ${getMelodyStartButtons(state)}
                             </div>
                             <p style="font-size: 11px; color: var(--text-sub); margin: 8px 0 0 0;">
                                 💡 Gentle classical melody fades in during final phase to ensure child is fully awake

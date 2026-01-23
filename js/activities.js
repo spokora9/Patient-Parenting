@@ -779,6 +779,420 @@ const activityLibrary = [
         source: 'Aha! Parenting',
         description: 'All devices (including parent phones) stay in a basket during meals. Make it a family rule, not a kid-specific rule.',
         reason: 'Family meals with face-to-face conversation are linked to better grades, lower substance abuse, and stronger family bonds. But only when everyone is present, not just physically there.'
+    },
+
+    // === More Developing Brain Strategies ===
+    {
+        id: 82,
+        type: 'modern',
+        category: 'The Developing Brain',
+        ageRange: '4-12',
+        title: 'Engage, Don\'t Enrage',
+        source: 'The Whole-Brain Child',
+        description: 'When correcting behavior, get curious instead of furious. Ask "What happened?" before "Why did you do that?" Investigation before interrogation.',
+        reason: 'Defensive "why" questions activate the fear response. Open-ended "what" questions engage the upstairs brain in reflection and problem-solving without triggering shame.'
+    },
+    {
+        id: 83,
+        type: 'modern',
+        category: 'The Developing Brain',
+        ageRange: '6-16',
+        title: 'Use It or Lose It',
+        source: 'The Whole-Brain Child',
+        description: 'Exercise the upstairs brain by asking questions that require thinking: "What else could you have done?" "How do you think they felt?" Build those neural pathways.',
+        reason: 'The prefrontal cortex develops through use. Reflective questions strengthen executive function, empathy, and moral reasoning circuits. Unused neural pathways get pruned.'
+    },
+    {
+        id: 84,
+        type: 'modern',
+        category: 'The Developing Brain',
+        ageRange: '3-10',
+        title: 'Move It or Lose It',
+        source: 'The Whole-Brain Child',
+        description: 'Before asking them to regulate emotions or focus, let them move their body. Dance, jump, run - physical movement integrates the brain.',
+        reason: 'Physical movement activates the cerebellum and releases neurotransmitters that prepare the brain for learning and emotional regulation. Body precedes mind.'
+    },
+
+    // === More Playful Connection ===
+    {
+        id: 85,
+        type: 'wisdom',
+        category: 'Playful Connection',
+        ageRange: '2-10',
+        title: 'The Tickle Tax',
+        source: 'Playful Parenting',
+        description: 'When they ask for something, playfully demand "payment" in the form of hugs or tickles. Make cooperation fun, not forced.',
+        reason: 'Transforming mundane requests into playful exchanges activates the social engagement system. Laughter and physical connection fill the connection cup before compliance.'
+    },
+    {
+        id: 86,
+        type: 'wisdom',
+        category: 'Playful Connection',
+        ageRange: '4-12',
+        title: 'Special Time',
+        source: 'Hand in Hand Parenting',
+        description: 'Set a timer for 10-30 minutes. During this time, the child is in charge. You follow their lead with warm, enthusiastic attention. No corrections, no teaching.',
+        reason: 'Child-directed Special Time reverses the power dynamic temporarily, allowing children to process feelings of powerlessness through play. Fills the connection cup faster than hours of distracted time together.'
+    },
+    {
+        id: 87,
+        type: 'wisdom',
+        category: 'Playful Connection',
+        ageRange: '5-14',
+        title: 'Playlistening',
+        source: 'Hand in Hand Parenting',
+        description: 'Notice what makes them laugh and do it again. Be the "bumbling parent" who can\'t find things right in front of you, or pretend you\'re weaker than them.',
+        reason: 'Children use laughter to release stress and anxiety. Following their lead in what\'s funny gives them control and helps them process everyday powerlessness through giggles.'
+    },
+
+    // === More Respectful Communication ===
+    {
+        id: 88,
+        type: 'modern',
+        category: 'Respectful Communication',
+        ageRange: '3-16',
+        title: 'Give Information, Not Accusation',
+        source: 'How to Talk So Kids Will Listen',
+        description: 'Instead of "You left your wet towel on the floor again!" try "Wet towels belong on the hook." State the problem, not the blame.',
+        reason: 'Information invites problem-solving. Accusations trigger defensiveness and shut down the prefrontal cortex. Facts without criticism preserve dignity and encourage cooperation.'
+    },
+    {
+        id: 89,
+        type: 'modern',
+        category: 'Respectful Communication',
+        ageRange: '4-16',
+        title: 'Say It with a Word',
+        source: 'How to Talk So Kids Will Listen',
+        description: 'Instead of a lecture, use one word. "Dishes." "Homework." "Dog." Kids tune out paragraphs but hear single words.',
+        reason: 'Long explanations activate the defensive brain. Single-word reminders respect intelligence and autonomy, giving them space to take responsibility without nagging.'
+    },
+    {
+        id: 90,
+        type: 'modern',
+        category: 'Respectful Communication',
+        ageRange: '3-12',
+        title: 'Offer Choices',
+        source: 'How to Talk So Kids Will Listen',
+        description: '"Do you want to do homework before or after dinner?" "Pajamas or teeth first?" Limited choices give autonomy within boundaries.',
+        reason: 'Choice activates the prefrontal cortex and satisfies the developmental need for autonomy. Limited options prevent overwhelm while reducing power struggles.'
+    },
+    {
+        id: 91,
+        type: 'modern',
+        category: 'Respectful Communication',
+        ageRange: '5-16',
+        title: 'Problem-Solve Together',
+        source: 'How to Talk So Kids Will Listen',
+        description: '1) Acknowledge feelings, 2) Define the problem, 3) Invite their ideas, 4) Write down all ideas without judgment, 5) Choose one to try.',
+        reason: 'Collaborative problem-solving builds executive function and teaches conflict resolution. Solutions they help create are solutions they\'ll follow.'
+    },
+
+    // === More Parent Self-Care ===
+    {
+        id: 92,
+        type: 'modern',
+        category: 'Parent Self-Care',
+        ageRange: 'All Ages',
+        title: 'The Sacred Pause',
+        source: 'Parenting from the Inside Out',
+        description: 'When triggered, silently ask yourself: "Is this about my child, or is this about my own childhood?" Name your trigger before responding.',
+        reason: 'Our strongest reactions are often about our unresolved past, not our child\'s present behavior. Naming the trigger creates space between stimulus and response.'
+    },
+    {
+        id: 93,
+        type: 'wisdom',
+        category: 'Parent Self-Care',
+        ageRange: 'All Ages',
+        title: 'The "Good Enough" Parent',
+        source: 'Simplicity Parenting',
+        description: 'Release perfectionism. Research shows kids need parents who are "good enough" - not perfect. Your repair after mistakes matters more than avoiding them.',
+        reason: 'Perfectionist parenting models anxiety and shame. "Good enough" parenting models resilience, self-compassion, and the reality that mistakes don\'t define us.'
+    },
+    {
+        id: 94,
+        type: 'modern',
+        category: 'Parent Self-Care',
+        ageRange: 'All Ages',
+        title: 'Fill Your Own Cup First',
+        source: 'Aha! Parenting',
+        description: 'Identify one small thing that fills you up (5-minute walk, coffee alone, favorite song). Do it daily before you run dry.',
+        reason: 'You cannot pour from an empty cup. Self-care isn\'t selfish - it\'s the oxygen mask principle. Regulated parents raise regulated children.'
+    },
+
+    // === More High-Conflict Strategies ===
+    {
+        id: 95,
+        type: 'modern',
+        category: 'High-Conflict Moments',
+        ageRange: '4-16',
+        title: 'Plan B: Empathy First',
+        source: 'The Explosive Child',
+        description: 'Three steps: 1) Empathy - "I noticed..." 2) Define the problem - "The thing is..." 3) Invitation - "Let\'s think about how we can work this out."',
+        reason: 'Traditional consequences don\'t work for inflexible kids. Plan B identifies lagging skills and teaches them collaboratively. Kids do well if they can.'
+    },
+    {
+        id: 96,
+        type: 'modern',
+        category: 'High-Conflict Moments',
+        ageRange: 'All Ages',
+        title: 'The Time-In (Not Time-Out)',
+        source: 'No-Drama Discipline',
+        description: 'Instead of isolation, offer connection. "You\'re having a hard time. Want to sit with me?" Co-regulate before you educate.',
+        reason: 'Time-outs isolate children when their brains need connection most. Time-ins provide co-regulation, which builds the neural pathways for self-regulation.'
+    },
+    {
+        id: 97,
+        type: 'modern',
+        category: 'High-Conflict Moments',
+        ageRange: '3-12',
+        title: 'Consequences vs. Punishment',
+        source: 'Positive Discipline',
+        description: 'Ask: "Is this related, respectful, reasonable, and revealed in advance?" If not, it\'s punishment, not a consequence.',
+        reason: 'Punishments trigger resentment and revenge. Natural and logical consequences teach responsibility while preserving connection and dignity.'
+    },
+
+    // === More Emotional Intelligence ===
+    {
+        id: 98,
+        type: 'modern',
+        category: 'Emotional Intelligence',
+        ageRange: '3-12',
+        title: 'Emotion Coaching in Action',
+        source: 'Raising An Emotionally Intelligent Child',
+        description: 'Child melts down: 1) Name it: "You\'re so frustrated!" 2) Validate it: "It\'s hard when..." 3) Limit behavior: "No hitting" 4) Problem-solve: "What can we do?"',
+        reason: 'Emotion coaching builds emotional intelligence, which predicts success in relationships, school, and life better than IQ. The formula: feelings are valid, behavior has limits.'
+    },
+    {
+        id: 99,
+        type: 'wisdom',
+        category: 'Emotional Intelligence',
+        ageRange: '4-12',
+        title: 'The Feelings Wheel',
+        source: 'Aha! Parenting',
+        description: 'Print a feelings wheel with basic emotions in the center (mad, sad, scared, glad) and more nuanced emotions in outer rings. Help them pinpoint the exact feeling.',
+        reason: 'Emotional granularity - the ability to distinguish between similar emotions - is linked to better emotional regulation and mental health. "Disappointed" feels different than "betrayed."'
+    },
+    {
+        id: 100,
+        type: 'modern',
+        category: 'Emotional Intelligence',
+        ageRange: '5-16',
+        title: 'Name the Thinking Error',
+        source: 'Cognitive Behavioral Therapy',
+        description: 'Teach thinking traps: All-or-Nothing ("I always fail"), Catastrophizing ("This is the worst"), Mind Reading ("They hate me"). Name them together.',
+        reason: 'Metacognition - thinking about thinking - gives children power over their thoughts. Naming cognitive distortions creates distance from them and builds resilience.'
+    },
+
+    // === Teens & Adolescents (13-18) ===
+    {
+        id: 101,
+        type: 'modern',
+        category: 'Teen Communication',
+        ageRange: '13-18',
+        title: 'The Side-by-Side Talk',
+        source: 'Aha! Parenting',
+        description: 'Don\'t force eye contact. Talk during car rides, walks, or while doing dishes together. Teens open up when there\'s an "escape route."',
+        reason: 'Direct eye contact feels confrontational to teens. Side-by-side activities lower defenses and create natural conversation flow without intensity.'
+    },
+    {
+        id: 102,
+        type: 'wisdom',
+        category: 'Teen Communication',
+        ageRange: '13-18',
+        title: 'Ask, Don\'t Tell',
+        source: 'How to Talk So Teens Will Listen',
+        description: 'Instead of "You should study more," try "How do you feel about how the semester is going?" Invite reflection instead of imposing solutions.',
+        reason: 'Teens\' developmental task is individuation. Unsolicited advice triggers resistance. Questions engage their prefrontal cortex and respect their emerging autonomy.'
+    },
+    {
+        id: 103,
+        type: 'modern',
+        category: 'Teen Independence',
+        ageRange: '13-18',
+        title: 'The Gradual Release',
+        source: 'Positive Discipline for Teenagers',
+        description: 'Pick one area to gradually release control: Later curfew with check-ins, manage own laundry, control own screen time. Build trust incrementally.',
+        reason: 'Teens need practice with freedom before they leave home. Gradual release with natural consequences builds executive function and decision-making skills.'
+    },
+    {
+        id: 104,
+        type: 'modern',
+        category: 'Teen Independence',
+        ageRange: '12-18',
+        title: 'Mistakes Are Data',
+        source: 'Growth Mindset Research',
+        description: 'When they fail: "What did you learn?" not "I told you so." Normalize failure as the price of trying. Share your own mistakes.',
+        reason: 'Teen brain development requires risk-taking and learning from consequences. Shame about mistakes creates either paralysis or secrecy. Curiosity creates growth.'
+    },
+    {
+        id: 105,
+        type: 'wisdom',
+        category: 'Teen Connection',
+        ageRange: '13-18',
+        title: 'The 10-Minute Check-In',
+        source: 'Aha! Parenting',
+        description: 'Knock on their door nightly. "Got 10 minutes?" Sit on the edge of their bed. Ask open questions. Listen more than you talk.',
+        reason: 'Even when teens seem to push away, they need connection. Consistent, low-pressure check-ins maintain the relationship during the turbulent years.'
+    },
+    {
+        id: 106,
+        type: 'modern',
+        category: 'Teen Brain',
+        ageRange: '12-18',
+        title: 'The Teen Brain Reality Check',
+        source: 'The Teenage Brain (Jensen)',
+        description: 'Remember: Their prefrontal cortex won\'t finish developing until age 25. Poor decisions aren\'t defiance - they\'re neurodevelopment. Guide, don\'t punish.',
+        reason: 'The teen brain is under construction. The emotional center (limbic system) matures before the rational center (prefrontal cortex). Understanding this changes everything.'
+    },
+    {
+        id: 107,
+        type: 'modern',
+        category: 'Teen Mental Health',
+        ageRange: '13-18',
+        title: 'The Anxiety Check',
+        source: 'Aha! Parenting',
+        description: 'Notice changes in sleep, appetite, grades, or social life. Ask directly: "Have you been feeling anxious or down?" Normalize mental health conversations.',
+        reason: 'Teen suicide is the 2nd leading cause of death for ages 10-24. Early intervention is critical. Teens need permission to talk about mental health without shame.'
+    },
+    {
+        id: 108,
+        type: 'wisdom',
+        category: 'Teen Boundaries',
+        ageRange: '13-18',
+        title: 'The Non-Negotiables',
+        source: 'Positive Discipline for Teenagers',
+        description: 'Identify your true bottom lines (safety, respect, illegal activity). Everything else is negotiable. Choose your battles wisely.',
+        reason: 'Power struggles over everything push teens away. Clear boundaries on essentials + flexibility on preferences = maintained connection + safety.'
+    },
+
+    // === More Sibling Strategies ===
+    {
+        id: 109,
+        type: 'modern',
+        category: 'Siblings',
+        ageRange: '3-12',
+        title: 'Each One Unique',
+        source: 'How to Talk So Kids Will Listen',
+        description: 'Instead of "I love you both the same," try "I love you each uniquely." Acknowledge their different needs, not identical treatment.',
+        reason: 'Fair doesn\'t mean equal. Children need to feel uniquely seen, not identically treated. "Equal" distribution of attention breeds competition.'
+    },
+    {
+        id: 110,
+        type: 'wisdom',
+        category: 'Siblings',
+        ageRange: '4-14',
+        title: 'Stay Out of It',
+        source: 'Siblings Without Rivalry',
+        description: 'Unless blood or broken bones: "You two have a problem. I trust you to work it out." Walk away. Let them practice conflict resolution.',
+        reason: 'When we referee, kids learn to manipulate us instead of solving problems. Staying neutral forces them to develop negotiation skills.'
+    },
+    {
+        id: 111,
+        type: 'modern',
+        category: 'Siblings',
+        ageRange: '2-10',
+        title: 'Acknowledge the Feeling',
+        source: 'How to Talk So Kids Will Listen',
+        description: 'Older child upset about new baby: "You wish she\'d go back to the hospital, huh?" Name the taboo feeling without judgment.',
+        reason: 'Pretending jealousy doesn\'t exist intensifies it. Acknowledging dark feelings makes them less powerful and builds trust that all feelings are acceptable.'
+    },
+
+    // === More Screen Time Strategies ===
+    {
+        id: 112,
+        type: 'modern',
+        category: 'Screen Time',
+        ageRange: '8-16',
+        title: 'The Media Literacy Conversation',
+        source: 'Common Sense Media',
+        description: 'Ask: "What are they trying to sell you? Who made this? Why?" Teach them to question what they consume, not just how much.',
+        reason: 'Digital literacy is the new literacy. Critical thinking about media, advertising, and algorithms protects them from manipulation and builds discernment.'
+    },
+    {
+        id: 113,
+        type: 'wisdom',
+        category: 'Screen Time',
+        ageRange: '10-18',
+        title: 'The Phone-Free Bedroom',
+        source: 'The Teen Brain',
+        description: 'All phones charge in a common area overnight. No exceptions. Sleep deprivation + social media = mental health crisis.',
+        reason: 'Blue light disrupts melatonin. Late-night social media increases anxiety and depression. Teens physically can\'t resist the ping - they need external limits.'
+    },
+
+    // === Limit Setting & Boundaries ===
+    {
+        id: 114,
+        type: 'modern',
+        category: 'Limit Setting',
+        ageRange: '2-10',
+        title: 'Kind AND Firm',
+        source: 'Positive Discipline',
+        description: 'Set limits with warmth: "I know you want to stay (kind), AND it\'s bedtime now (firm)." Both/and, not either/or.',
+        reason: 'Kindness without firmness is permissiveness. Firmness without kindness is authoritarianism. Both together build secure attachment and healthy boundaries.'
+    },
+    {
+        id: 115,
+        type: 'modern',
+        category: 'Limit Setting',
+        ageRange: '3-16',
+        title: 'The Broken Record',
+        source: 'How to Talk So Kids Will Listen',
+        description: 'They push. You repeat calmly: "I know. The answer is no." Don\'t engage in the debate. Calm repetition shows you mean it.',
+        reason: 'Children test limits to see if you mean them. Calm consistency builds security. Debating signals the limit is negotiable.'
+    },
+    {
+        id: 116,
+        type: 'wisdom',
+        category: 'Limit Setting',
+        ageRange: '4-14',
+        title: 'Follow Through, Not Threats',
+        source: 'Positive Discipline',
+        description: 'Instead of "If you don\'t clean up, no dessert!" try: State expectation once, then follow through with natural consequence without anger.',
+        reason: 'Repeated warnings teach children to ignore you. Action teaches more than words. Calm follow-through builds respect and responsibility.'
+    },
+
+    // === Morning & Bedtime Routines ===
+    {
+        id: 117,
+        type: 'modern',
+        category: 'Routines',
+        ageRange: '3-10',
+        title: 'The Picture Chart',
+        source: 'Positive Discipline',
+        description: 'Take photos of each morning step: brush teeth, get dressed, pack bag. Let the chart be the boss, not you.',
+        reason: 'Visual routines build independence and reduce nagging. When the chart is "in charge," it\'s not a power struggle between parent and child.'
+    },
+    {
+        id: 118,
+        type: 'wisdom',
+        category: 'Routines',
+        ageRange: '2-12',
+        title: 'The Bedtime Wind-Down',
+        source: 'Simplicity Parenting',
+        description: 'Start 90 minutes before sleep: Dim lights, warm bath, quiet activities. Predictable sequence signals the nervous system it\'s time to rest.',
+        reason: 'Cortisol takes 90 minutes to clear. Screen time, rough play, or stress right before bed guarantees bedtime battles. Slow wind-down = smooth sleep.'
+    },
+
+    // === Resilience & Growth Mindset ===
+    {
+        id: 119,
+        type: 'modern',
+        category: 'Resilience',
+        ageRange: '5-16',
+        title: 'Praise the Process, Not the Person',
+        source: 'Growth Mindset (Dweck)',
+        description: 'Not "You\'re so smart!" but "I saw you work really hard on that." Effort, strategy, and persistence are what matter.',
+        reason: '"Smart" praise creates fixed mindset and fear of failure. Process praise builds growth mindset and resilience. Effort is controllable; ability feels fixed.'
+    },
+    {
+        id: 120,
+        type: 'wisdom',
+        category: 'Resilience',
+        ageRange: '6-16',
+        title: 'Normalize Struggle',
+        source: 'Growth Mindset',
+        description: '"This is hard for you right now" not "This is hard for you." Add "right now" or "yet." Struggle is temporary, not identity.',
+        reason: 'Fixed mindset says struggle = inadequacy. Growth mindset says struggle = learning. Language shapes whether challenges feel like threats or opportunities.'
     }
 ];
 

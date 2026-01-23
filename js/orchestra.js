@@ -373,7 +373,7 @@ function playComposition(audioContext, compositionId, startTime = 0) {
 /**
  * Current active composition (for slow wake timer)
  */
-let currentComposition = "vivaldiSpring"; // Default to Vivaldi Spring
+let currentComposition = "chopinNocturne"; // Default to Chopin Nocturne
 
 /**
  * Set which composition to use for wake timer

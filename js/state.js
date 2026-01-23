@@ -43,6 +43,7 @@ const defaultState = {
         duration: 10,
         sound: 'birds',
         melodyStart: 0.85, // Melody begins at 85% (last 15%)
+        composition: 'chopinNocturne', // Default classical composition
         isActive: false
     }
 };

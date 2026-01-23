@@ -389,8 +389,12 @@ function setWakeComposition(compositionId) {
 
 /**
  * Get current wake composition ID
+ * Reads from state.slowWake.composition with fallback to chopinNocturne
  */
 function getWakeComposition() {
+    if (typeof state !== 'undefined' && state.slowWake && state.slowWake.composition) {
+        return state.slowWake.composition;
+    }
     return currentComposition;
 }
 

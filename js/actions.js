@@ -492,6 +492,12 @@ const actions = {
         saveState();
         render('tools');
     },
+    setSlowWakeComposition: (composition) => {
+        if (!state.slowWake) state.slowWake = {};
+        state.slowWake.composition = composition;
+        saveState();
+        render('tools');
+    },
     startSlowWake: () => {
         if (!state.slowWake) {
             state.slowWake = { duration: 10, sound: 'birds' };

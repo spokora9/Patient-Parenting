@@ -43,6 +43,32 @@ const SCALE_432 = {
  * Each composition can have a 'recording' property for real audio files
  */
 const COMPOSITIONS = {
+    // Vivaldi - Four Seasons
+    "vivaldiSpring": {
+        name: "Vivaldi - Four Seasons (Spring)",
+        composer: "Antonio Vivaldi",
+        recording: {
+            file: "/audio/classical/vivaldi-spring.mp3",
+            duration: 120,
+            fadeIn: 5,
+            fadeOut: 8,
+            volume: 0.4
+        }
+    },
+
+    // Chopin - Nocturne
+    "chopinNocturne": {
+        name: "Chopin Nocturne in E flat major, Op. 9 No. 2",
+        composer: "Frédéric Chopin",
+        recording: {
+            file: "/audio/classical/chopin-nocturne.mp3",
+            duration: 120,
+            fadeIn: 6,
+            fadeOut: 10,
+            volume: 0.35
+        }
+    },
+
     // Mozart Piano Concerto No. 23 in A major, K. 488 - 2nd movement "Adagio"
     "mozartAdagio": {
         name: "Mozart Piano Concerto 23 - Adagio",
@@ -347,7 +373,7 @@ function playComposition(audioContext, compositionId, startTime = 0) {
 /**
  * Current active composition (for slow wake timer)
  */
-let currentComposition = "pastoralDawn"; // Default to Pastoral Dawn
+let currentComposition = "vivaldiSpring"; // Default to Vivaldi Spring
 
 /**
  * Set which composition to use for wake timer

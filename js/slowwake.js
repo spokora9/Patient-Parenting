@@ -175,7 +175,7 @@ function generateMorningBirdsSamples(audioContext, intensity) {
     if (hasRobin && hasGull) {
         // Play robin continuously (loops automatically)
         if (!robinSourceNode) {
-            robinSourceNode = birdSamplePlayer.playLooped('robin', 0, 0.3 + intensity * 0.3, slowWakeGainNode);
+            robinSourceNode = birdSamplePlayer.playLooped('robin', 0, 0.5 + intensity * 0.4, slowWakeGainNode);
 
             if (robinSourceNode && robinSourceNode.buffer) {
                 const robinDuration = robinSourceNode.buffer.duration;
@@ -184,7 +184,7 @@ function generateMorningBirdsSamples(audioContext, intensity) {
                 // Start gull after first robin loop completes
                 setTimeout(() => {
                     if (!gullStarted && slowWakeGainNode) {
-                        gullSourceNode = birdSamplePlayer.playLooped('gull', 0, 0.25 + intensity * 0.25, slowWakeGainNode);
+                        gullSourceNode = birdSamplePlayer.playLooped('gull', 0, 0.45 + intensity * 0.4, slowWakeGainNode);
                         gullStarted = true;
                         console.log('[Birds] Gull joined - both now looping');
                     }
@@ -220,7 +220,7 @@ function generateMorningBirdsSamples(audioContext, intensity) {
 
             // Stagger bird calls naturally
             const delay = Math.random() * 5;
-            const volume = 0.15 + (intensity * 0.4);
+            const volume = 0.3 + (intensity * 0.5);
 
             birdSamplePlayer.play(selectedBird, delay, volume, slowWakeGainNode);
         }

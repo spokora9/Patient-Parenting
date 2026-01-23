@@ -313,6 +313,27 @@ const actions = {
         audio.playTone('tap');
         render('settings');
     },
+    toggleDesignatedAge: (age) => {
+        if (!state.designatedAges) state.designatedAges = [];
+
+        const index = state.designatedAges.indexOf(age);
+        if (index > -1) {
+            // Remove age
+            state.designatedAges.splice(index, 1);
+        } else {
+            // Add age
+            state.designatedAges.push(age);
+            state.designatedAges.sort((a, b) => a - b); // Keep sorted
+        }
+
+        // Reset daily cards when designated ages change
+        storage.save('daily_cards', null);
+        state.currentSparkIndex = 0;
+
+        saveState();
+        audio.playTone('tap');
+        render('settings');
+    },
     updateNotes: (noteType, value) => {
         if (!state.notes) state.notes = {};
         state.notes[noteType] = value;

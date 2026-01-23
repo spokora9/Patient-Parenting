@@ -39,6 +39,7 @@ const defaultState = {
         ageRange: null,
         keyword: ''
     },
+    designatedAges: [], // User's children's ages - cards outside these ranges won't show
     slowWake: {
         duration: 10,
         sound: 'birds',

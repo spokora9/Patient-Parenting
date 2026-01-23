@@ -90,7 +90,8 @@ const views = {
                          id="spark-card-${index}"
                          data-index="${index}"
                          style="z-index: ${cards.length - index}; transform: scale(${1 - (index - currentIndex) * 0.05}); ${index > currentIndex ? 'pointer-events: none; opacity: 0;' : index < currentIndex ? 'display: none;' : ''}">
-                        <span class="tag ${card.type}">${card.type === 'modern' ? 'Modern Knowledge' : 'Old Wisdom'} • ${card.category}</span>
+                        <span class="tag ${card.type}">${card.type === 'modern' ? 'Modern Knowledge' : 'Old Wisdom'} • ${card.category}${card.ageRange ? ` • ${card.ageRange} yrs` : ''}</span>
+                        ${card.source ? `<div style="font-size: 11px; color: var(--text-sub); margin-top: 4px; font-style: italic;">Source: ${card.source}</div>` : ''}
                         <h3>${card.title}</h3>
                         <p style="margin-bottom: 16px;">${card.description}</p>
                         ${card.reason ? `
@@ -723,6 +724,38 @@ const views = {
                     </button>
                 </div>
             </div>
+        </div>
+
+        <div class="card">
+            <h3>✨ Spark Card Filters</h3>
+            <p style="color: var(--text-sub); margin-bottom: 20px; font-size: 14px;">
+                Set your children's ages to see only age-appropriate cards. Leave empty to see all cards.
+            </p>
+
+            <label style="font-size: 15px; font-weight: 600; display: block; margin-bottom: 12px;">My Children's Ages:</label>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+                ${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(age => {
+                    const isSelected = (state.designatedAges || []).includes(age);
+                    return `
+                        <button onclick="actions.toggleDesignatedAge(${age})"
+                                style="padding: 10px 16px; border: 2px solid ${isSelected ? 'var(--accent-play)' : '#dfe6e9'}; background: ${isSelected ? 'rgba(116, 185, 255, 0.1)' : 'white'}; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--text-main);">
+                            ${age} yr
+                        </button>
+                    `;
+                }).join('')}
+            </div>
+
+            <p style="font-size: 12px; color: var(--text-sub); margin: 12px 0 0 0;">
+                💡 Tip: Select multiple ages if you have children of different ages. Cards tagged "All Ages" will always appear.
+            </p>
+
+            ${(state.designatedAges || []).length > 0 ? `
+                <div style="margin-top: 16px; padding: 12px; background: rgba(116, 185, 255, 0.1); border-radius: 8px; border-left: 4px solid var(--accent-play);">
+                    <p style="margin: 0; font-size: 13px; color: var(--text-main);">
+                        <strong>Currently showing cards for: ${(state.designatedAges || []).sort((a, b) => a - b).join(', ')} years old</strong>
+                    </p>
+                </div>
+            ` : ''}
         </div>
 
         <div style="text-align: center; margin-top: 20px;">

@@ -43,12 +43,12 @@ const SCALE_432 = {
  * Each composition can have a 'recording' property for real audio files
  */
 const COMPOSITIONS = {
-    // Vivaldi - Four Seasons
+    // Vivaldi - Four Seasons (Spring)
     "vivaldiSpring": {
-        name: "Vivaldi - Four Seasons (Spring)",
+        name: "Vivaldi - Spring",
         composer: "Antonio Vivaldi",
         recording: {
-            file: "/audio/classical/vivaldi-spring.mp3",
+            file: "/audio/classical/Vivaldi Violin Concerto in E major, RV 269 'Spring'.mp3",
             duration: 120,
             fadeIn: 5,
             fadeOut: 8,
@@ -61,7 +61,7 @@ const COMPOSITIONS = {
         name: "Chopin Nocturne in E flat major, Op. 9 No. 2",
         composer: "Frédéric Chopin",
         recording: {
-            file: "/audio/classical/chopin-nocturne.mp3",
+            file: "/audio/classical/Chopin Nocturne in E flat major, Op. 9 no. 2.mp3",
             duration: 120,
             fadeIn: 6,
             fadeOut: 10,

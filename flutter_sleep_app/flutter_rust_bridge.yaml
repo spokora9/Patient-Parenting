@@ -1,0 +1,11 @@
+# Flutter Rust Bridge Configuration
+rust_input: rust/src/lib.rs
+dart_output: lib/bridge_generated.dart
+c_output: ios/Runner/bridge_generated.h
+
+# Enable modern features
+rust_crate_dir: rust
+full_dep: true
+
+# Logging
+verbose: true

@@ -1193,6 +1193,494 @@ const activityLibrary = [
         source: 'Growth Mindset',
         description: '"This is hard for you right now" not "This is hard for you." Add "right now" or "yet." Struggle is temporary, not identity.',
         reason: 'Fixed mindset says struggle = inadequacy. Growth mindset says struggle = learning. Language shapes whether challenges feel like threats or opportunities.'
+    },
+    {
+        id: 121,
+        type: 'modern',
+        category: 'Resilience',
+        ageRange: '7-16',
+        title: 'The Failure Resume',
+        source: 'Growth Mindset',
+        description: 'Keep a journal of failures and what they taught. Famous failures: Einstein flunked math, Disney was fired, J.K. Rowling was rejected 12 times.',
+        reason: 'Reframing failure as part of success reduces fear of trying. Seeing failure as data rather than identity builds resilience and willingness to take healthy risks.'
+    },
+
+    // === Homework & School ===
+    {
+        id: 122,
+        type: 'modern',
+        category: 'Homework & School',
+        ageRange: '6-14',
+        title: 'The Two-Minute Start',
+        source: 'Executive Function Research',
+        description: '"Just do 2 minutes." Starting is hardest. After 2 minutes, they can stop or continue. Usually they continue.',
+        reason: 'Task initiation is an executive function skill. Lowering the activation energy reduces avoidance. Momentum builds naturally once started.'
+    },
+    {
+        id: 123,
+        type: 'modern',
+        category: 'Homework & School',
+        ageRange: '8-18',
+        title: 'The Pomodoro Technique',
+        source: 'Focus Research',
+        description: '25 minutes focused work, 5-minute break. After 4 cycles, take a longer break. Timer makes it concrete.',
+        reason: 'Sustained attention fatigues. Scheduled breaks prevent burnout and improve retention. Concrete time limits reduce resistance to starting.'
+    },
+    {
+        id: 124,
+        type: 'wisdom',
+        category: 'Homework & School',
+        ageRange: '5-12',
+        title: 'Let Natural Consequences Teach',
+        source: 'Positive Discipline',
+        description: 'They forgot their homework? Don\'t rescue. Let them experience the consequence. Empathy, not "I told you so."',
+        reason: 'Rescuing prevents learning. Natural consequences build responsibility better than lectures. Empathy + experience = growth.'
+    },
+
+    // === Friendship & Social Skills ===
+    {
+        id: 125,
+        type: 'modern',
+        category: 'Social Skills',
+        ageRange: '5-12',
+        title: 'The Friendship Framework',
+        source: 'Social Thinking Curriculum',
+        description: 'Teach: Whole body listening, reading social cues, flexible thinking, problem-solving together. Practice through role-play.',
+        reason: 'Social skills aren\'t innate - they\'re learned. Explicit teaching + practice builds social competence for kids who struggle with implicit learning.'
+    },
+    {
+        id: 126,
+        type: 'wisdom',
+        category: 'Social Skills',
+        ageRange: '6-14',
+        title: 'Host, Don\'t Just Attend',
+        source: 'Connection Building',
+        description: 'Having friends over (even one) builds social confidence. Being the host gives control and reduces anxiety.',
+        reason: 'Home-turf advantage reduces social anxiety. Hosting builds confidence and allows children to practice hospitality and social orchestration.'
+    },
+    {
+        id: 127,
+        type: 'modern',
+        category: 'Social Skills',
+        ageRange: '8-16',
+        title: 'The Friend Drama Detox',
+        source: 'Aha! Parenting',
+        description: 'They\'re upset about friend conflict. Listen fully, validate feelings, then ask: "What do YOU want to do?" Don\'t fix it for them.',
+        reason: 'Parent-mediated friend conflicts undermine social development. Listening + empowering them to solve it builds social problem-solving skills.'
+    },
+
+    // === Anger Management ===
+    {
+        id: 128,
+        type: 'modern',
+        category: 'Anger Management',
+        ageRange: '4-12',
+        title: 'The Anger Ladder',
+        source: 'Aha! Parenting',
+        description: 'Create a visual ladder: 1 (calm) to 10 (rage). Teach interventions at each level. At 3, take deep breaths. At 5, take a break.',
+        reason: 'Early intervention prevents escalation. Teaching self-monitoring and level-appropriate tools builds emotional regulation and agency.'
+    },
+    {
+        id: 129,
+        type: 'wisdom',
+        category: 'Anger Management',
+        ageRange: '3-10',
+        title: 'The Anger Volcano',
+        source: 'Visual Metaphors',
+        description: 'Draw a volcano. "What makes the lava bubble up? What helps cool it down?" Make it concrete and externalized.',
+        reason: 'Externalizing anger through metaphor creates distance and control. Visual representation helps young children understand and manage big feelings.'
+    },
+    {
+        id: 130,
+        type: 'modern',
+        category: 'Anger Management',
+        ageRange: '5-16',
+        title: 'Name the Need Behind the Anger',
+        source: 'Nonviolent Communication',
+        description: 'Anger is a secondary emotion. Ask: "What do you need? Fairness? To be heard? Control?" Address the need, not just the anger.',
+        reason: 'Anger signals unmet needs. Teaching need identification and expression gives children agency and builds emotional literacy beyond surface emotions.'
+    },
+
+    // === Teaching Empathy ===
+    {
+        id: 131,
+        type: 'modern',
+        category: 'Teaching Empathy',
+        ageRange: '4-10',
+        title: 'The Perspective-Taking Game',
+        source: 'Theory of Mind Research',
+        description: 'Read stories or watch shows, pause and ask: "How do you think they feel? Why?" "What do you think they\'re thinking?"',
+        reason: 'Perspective-taking builds theory of mind - understanding others have different thoughts/feelings. This is the foundation of empathy and moral reasoning.'
+    },
+    {
+        id: 132,
+        type: 'wisdom',
+        category: 'Teaching Empathy',
+        ageRange: '3-12',
+        title: 'The Repair Action',
+        source: 'Restorative Justice',
+        description: 'They hurt someone? Not "Say sorry." Ask: "What can you do to help them feel better?" Action beats words.',
+        reason: 'Forced apologies teach compliance, not empathy. Choosing repair actions teaches genuine care and the impact of behavior on others.'
+    },
+    {
+        id: 133,
+        type: 'modern',
+        category: 'Teaching Empathy',
+        ageRange: '5-16',
+        title: 'Model Empathy Out Loud',
+        source: 'Aha! Parenting',
+        description: 'Narrate your empathy: "That driver looks stressed. I wonder if they\'re having a hard day?" Make your thinking visible.',
+        reason: 'Children learn empathy through modeling more than teaching. Verbalizing your empathic thinking shows them the internal process of caring.'
+    },
+
+    // === Body Autonomy & Consent ===
+    {
+        id: 134,
+        type: 'modern',
+        category: 'Body Autonomy',
+        ageRange: '2-10',
+        title: 'No Forced Affection',
+        source: 'Consent Education',
+        description: 'Don\'t force hugs/kisses with relatives. "You can wave, high-five, or hug - your choice." Their body, their rules.',
+        reason: 'Forced affection teaches children their body isn\'t theirs to control. Respecting their no builds body autonomy and prevents predator grooming.'
+    },
+    {
+        id: 135,
+        type: 'modern',
+        category: 'Body Autonomy',
+        ageRange: '3-12',
+        title: 'Teach "My Body, My Rules"',
+        source: 'Safety Education',
+        description: '"Your body belongs to you. No one should touch your private parts. If someone does, it\'s not your fault - tell me."',
+        reason: 'Clear, shame-free body safety education empowers children to recognize and report abuse. Knowledge is protection.'
+    },
+    {
+        id: 136,
+        type: 'wisdom',
+        category: 'Body Autonomy',
+        ageRange: '8-16',
+        title: 'Respect Their "No"',
+        source: 'Consent Culture',
+        description: 'They say no to tickling/roughhousing? Stop immediately. "Okay, I hear your no." Model consent in everyday moments.',
+        reason: 'Teaching that "no" will be respected builds boundaries and consent understanding. Daily practice prepares them for peer/dating consent.'
+    },
+
+    // === Neurodivergent & Special Needs Support ===
+    {
+        id: 137,
+        type: 'modern',
+        category: 'Neurodivergent Support',
+        ageRange: '3-16',
+        title: 'Presume Competence',
+        source: 'Neurodiversity Movement',
+        description: 'Assume they understand even if they can\'t respond typically. Speak to them, not about them. Intelligence ≠ communication ability.',
+        reason: 'Presuming competence shapes expectations and opportunities. Many nonspeaking individuals have typical or above-average cognition but need alternative communication.'
+    },
+    {
+        id: 138,
+        type: 'modern',
+        category: 'Neurodivergent Support',
+        ageRange: '4-18',
+        title: 'Accommodate, Don\'t Punish',
+        source: 'The Explosive Child',
+        description: 'Meltdowns aren\'t manipulation - they\'re skill deficits. Provide sensory tools, predictability, reduced demands during stress.',
+        reason: 'Behavioral challenges signal lagging skills, not bad behavior. Accommodations address root causes; punishment escalates dysregulation.'
+    },
+    {
+        id: 139,
+        type: 'wisdom',
+        category: 'Neurodivergent Support',
+        ageRange: '5-16',
+        title: 'Create a Sensory Diet',
+        source: 'Occupational Therapy',
+        description: 'Regular sensory input throughout the day: jumping, carrying heavy items, fidgets, quiet time. Prevention beats meltdowns.',
+        reason: 'Sensory needs are real physiological needs. Meeting them proactively organizes the nervous system and prevents dysregulation.'
+    },
+
+    // === Divorce & Family Changes ===
+    {
+        id: 140,
+        type: 'modern',
+        category: 'Divorce Support',
+        ageRange: '3-16',
+        title: 'Don\'t Make Them Choose',
+        source: 'Family Therapy',
+        description: '"You don\'t have to pick sides. You can love us both." Never badmouth the other parent. Their love isn\'t betrayal.',
+        reason: 'Children in loyalty binds experience toxic stress and identity confusion. Permission to love both parents protects mental health.'
+    },
+    {
+        id: 141,
+        type: 'wisdom',
+        category: 'Divorce Support',
+        ageRange: '4-12',
+        title: 'The Two-Home Story',
+        source: 'Narrative Therapy',
+        description: 'Create a photo book of both homes: "Your red room at Dad\'s, your blue room at Mom\'s. You belong in both."',
+        reason: 'Concrete visual of both homes as equally theirs reduces displacement anxiety. Belonging in multiple places builds security.'
+    },
+
+    // === Digital Citizenship (Teens) ===
+    {
+        id: 142,
+        type: 'modern',
+        category: 'Digital Citizenship',
+        ageRange: '10-18',
+        title: 'The Permanence Talk',
+        source: 'Digital Literacy',
+        description: '"Screenshot exists forever. Would you want your grandma/future boss to see this?" Digital footprint is permanent.',
+        reason: 'Prefrontal cortex development means teens struggle with long-term consequences. Concrete examples make abstract permanence real.'
+    },
+    {
+        id: 143,
+        type: 'modern',
+        category: 'Digital Citizenship',
+        ageRange: '12-18',
+        title: 'The Online Disinhibition Effect',
+        source: 'Cyberpsychology',
+        description: 'Explain: People say things online they\'d never say in person. Don\'t take anonymous cruelty personally - it\'s about them.',
+        reason: 'Understanding online disinhibition builds resilience against cyberbullying and reduces personalization of online attacks.'
+    },
+
+    // === Peer Pressure ===
+    {
+        id: 144,
+        type: 'modern',
+        category: 'Peer Pressure',
+        ageRange: '10-18',
+        title: 'The Blame-The-Parent Exit',
+        source: 'Aha! Parenting',
+        description: 'Give them an out: "Text me \'X\' and I\'ll call with a fake emergency to get you out." Be their excuse.',
+        reason: 'Adolescent brain prioritizes peer acceptance. Giving a face-saving exit allows them to make safe choices without social cost.'
+    },
+    {
+        id: 145,
+        type: 'wisdom',
+        category: 'Peer Pressure',
+        ageRange: '8-16',
+        title: 'Practice the "No" Script',
+        source: 'Assertiveness Training',
+        description: 'Role-play responses: "Nah, I\'m good." "Not my thing." "I\'ve got practice." Rehearsed scripts work under pressure.',
+        reason: 'Pressure situations trigger fight/flight. Pre-planned scripts bypass the frozen brain and provide automatic responses.'
+    },
+
+    // === Academic Pressure & Perfectionism ===
+    {
+        id: 146,
+        type: 'modern',
+        category: 'Academic Pressure',
+        ageRange: '8-18',
+        title: 'B\'s Are Beautiful',
+        source: 'Mental Health Advocacy',
+        description: 'Normalize not being perfect. Share your own average grades/failures. "You don\'t have to be the best, just give your best."',
+        reason: 'Perfectionism is linked to anxiety, depression, and suicide in teens. Accepting "good enough" reduces toxic pressure and increases wellbeing.'
+    },
+    {
+        id: 147,
+        type: 'modern',
+        category: 'Academic Pressure',
+        ageRange: '10-18',
+        title: 'One Thing at a Time',
+        source: 'Executive Function',
+        description: 'Overwhelmed by AP classes + sports + clubs? Help them drop ONE thing. Being excellent at less beats mediocre at everything.',
+        reason: 'Overscheduling fragments attention and prevents mastery. Depth in fewer areas builds genuine competence and reduces burnout.'
+    },
+
+    // === Teaching Gratitude ===
+    {
+        id: 148,
+        type: 'wisdom',
+        category: 'Gratitude',
+        ageRange: '5-16',
+        title: 'The Gratitude Visit',
+        source: 'Positive Psychology',
+        description: 'Write a thank-you letter to someone who impacted their life. Deliver it in person. Witness the joy.',
+        reason: 'Expressing gratitude to others (vs just listing blessings) creates connection and meaning. Witnessing impact builds empathy.'
+    },
+    {
+        id: 149,
+        type: 'modern',
+        category: 'Gratitude',
+        ageRange: '3-12',
+        title: 'The Gratitude Jar',
+        source: 'Gratitude Research',
+        description: 'Each week, write one good thing on paper, add to jar. On hard days, read past entries. Evidence of goodness.',
+        reason: 'Negativity bias means we forget good things. Physical evidence of blessings counters depression and builds resilient thinking.'
+    },
+
+    // === Grief & Loss ===
+    {
+        id: 150,
+        type: 'modern',
+        category: 'Grief & Loss',
+        ageRange: '3-16',
+        title: 'Tell the Truth',
+        source: 'Child Bereavement',
+        description: 'Don\'t say "sleeping" or "passed away." Say "died." Use clear language. Answer questions honestly at their level.',
+        reason: 'Euphemisms create confusion and magical thinking. Clear language respects their intelligence and prevents distorted grief.'
+    },
+    {
+        id: 151,
+        type: 'wisdom',
+        category: 'Grief & Loss',
+        ageRange: '4-16',
+        title: 'Memory Box',
+        source: 'Grief Counseling',
+        description: 'Create a box of memories: photos, letters, objects. "They died, but love doesn\'t die. We can remember them forever."',
+        reason: 'Continuing bonds with the deceased is healthy grief. Memory rituals honor loss while allowing life to continue.'
+    },
+
+    // === Executive Function Building ===
+    {
+        id: 152,
+        type: 'modern',
+        category: 'Executive Function',
+        ageRange: '6-14',
+        title: 'The Planning Conversation',
+        source: 'Executive Function Coaching',
+        description: 'Before tasks: "What do you need? What\'s your first step? How long will it take? What might be hard?" Externalize planning.',
+        reason: 'Executive function develops slowly. Verbalizing plans activates prefrontal cortex and builds the planning process into habit.'
+    },
+    {
+        id: 153,
+        type: 'modern',
+        category: 'Executive Function',
+        ageRange: '7-16',
+        title: 'Chunk the Task',
+        source: 'Learning Science',
+        description: 'Big project? Break it into tiny pieces. Not "write essay" but "choose topic," then "find 3 sources," then "write intro."',
+        reason: 'Working memory limits mean large tasks overwhelm. Chunking reduces cognitive load and makes abstract tasks concrete.'
+    },
+
+    // === Money & Financial Literacy ===
+    {
+        id: 154,
+        type: 'modern',
+        category: 'Money Skills',
+        ageRange: '8-16',
+        title: 'The Want vs. Need Filter',
+        source: 'Financial Literacy',
+        description: 'Before purchases: "Is this a want or a need?" Teach the difference. Needs first, then wants with their own money.',
+        reason: 'Delaying gratification and distinguishing wants from needs builds executive function and prevents entitlement.'
+    },
+    {
+        id: 155,
+        type: 'modern',
+        category: 'Money Skills',
+        ageRange: '10-18',
+        title: 'The First Job',
+        source: 'Independence Building',
+        description: 'Support (don\'t force) getting a job. Babysitting, lawn mowing, tutoring. Earning money teaches value of work.',
+        reason: 'Earning money builds work ethic, time management, and appreciation for family resources. Real-world experience beats lectures.'
+    },
+
+    // === Environmental Awareness ===
+    {
+        id: 156,
+        type: 'wisdom',
+        category: 'Environmental Care',
+        ageRange: '4-16',
+        title: 'The Garden Project',
+        source: 'Nature Connection',
+        description: 'Grow something together. Vegetables, flowers, herbs. Tend it daily. Witness life cycles.',
+        reason: 'Caring for living things builds responsibility, patience, and environmental awareness. Watching growth teaches cause and effect.'
+    },
+    {
+        id: 157,
+        type: 'modern',
+        category: 'Environmental Care',
+        ageRange: '6-16',
+        title: 'The Trash Audit',
+        source: 'Environmental Education',
+        description: 'For one week, keep all trash in a bag. See how much waste you create. Brainstorm reduction strategies together.',
+        reason: 'Making consumption visible creates awareness. Child-led solutions build agency and environmental responsibility.'
+    },
+
+    // === Community & Contribution ===
+    {
+        id: 158,
+        type: 'modern',
+        category: 'Community Service',
+        ageRange: '5-16',
+        title: 'Choose Their Cause',
+        source: 'Positive Psychology',
+        description: 'Let them pick: animals, environment, hungry people? Volunteer together for THEIR cause. Agency builds commitment.',
+        reason: 'Contribution to something bigger builds purpose and meaning. Self-chosen causes engage intrinsic motivation.'
+    },
+    {
+        id: 159,
+        type: 'wisdom',
+        category: 'Community Service',
+        ageRange: '8-18',
+        title: 'The Regular Ritual',
+        source: 'Character Development',
+        description: 'Monthly food bank, weekly dog walking, annual toy drive. Make service a regular part of life, not one-time.',
+        reason: 'Consistent service builds it into identity. Regular exposure to others\' struggles builds empathy and gratitude.'
+    },
+
+    // === Independence Building Across Ages ===
+    {
+        id: 160,
+        type: 'modern',
+        category: 'Independence',
+        ageRange: '6-10',
+        title: 'The Skill Ladder',
+        source: 'Montessori Method',
+        description: 'Each year, teach one new life skill: 6=make bed, 7=shower alone, 8=simple breakfast, 9=laundry, 10=basic cooking.',
+        reason: 'Systematic skill-building prevents learned helplessness. Competence builds confidence and prepares for eventual independence.'
+    },
+    {
+        id: 161,
+        type: 'modern',
+        category: 'Independence',
+        ageRange: '10-16',
+        title: 'The Safety Net Release',
+        source: 'Gradual Release Model',
+        description: 'Let them fail small now (forgotten lunch, missed bus) so they don\'t fail big later (college, job). Small consequences teach.',
+        reason: 'Overprotection prevents resilience. Age-appropriate failure builds problem-solving and creates safety through experience.'
+    },
+
+    // === More Teen Mental Health ===
+    {
+        id: 162,
+        type: 'modern',
+        category: 'Teen Mental Health',
+        ageRange: '13-18',
+        title: 'Normalize Therapy',
+        source: 'Mental Health Advocacy',
+        description: '"Everyone needs support sometimes. Therapy is like a personal trainer for your brain." Remove stigma.',
+        reason: 'Teen mental health crisis is real. Normalizing help-seeking saves lives. Early intervention prevents crisis.'
+    },
+    {
+        id: 163,
+        type: 'modern',
+        category: 'Teen Mental Health',
+        ageRange: '13-18',
+        title: 'The Depression Check',
+        source: 'Suicide Prevention',
+        description: 'Notice withdrawal, irritability, sleep changes, giving away possessions. Ask directly: "Are you thinking of hurting yourself?"',
+        reason: 'Asking about suicide doesn\'t plant the idea - it saves lives. Direct questions give permission to ask for help.'
+    },
+
+    // === Cultural Identity & Diversity ===
+    {
+        id: 164,
+        type: 'modern',
+        category: 'Cultural Identity',
+        ageRange: '3-16',
+        title: 'Mirror Books & Windows',
+        source: 'Diverse Literature',
+        description: 'Provide books where they see themselves (mirrors) and books about different cultures/identities (windows).',
+        reason: 'Children need to see themselves represented to build positive identity. Windows build empathy and prepare for diverse world.'
+    },
+    {
+        id: 165,
+        type: 'wisdom',
+        category: 'Cultural Identity',
+        ageRange: '5-16',
+        title: 'Talk About Difference',
+        source: 'Anti-Bias Education',
+        description: 'Don\'t shush questions about race/disability/family structure. Answer honestly. Silence teaches shame, conversation teaches respect.',
+        reason: 'Color-blindness doesn\'t work. Naming and discussing differences with respect builds inclusion and reduces prejudice.'
     }
 ];
 

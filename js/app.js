@@ -73,6 +73,54 @@ function checkReminders() {
     }
 }
 
+// Check for daily spark notification
+function checkSparkNotification() {
+    // Initialize if not exists
+    if (!state.sparkNotifications) {
+        state.sparkNotifications = { enabled: false, time: '09:00', lastNotified: null };
+    }
+
+    // Return if notifications are disabled
+    if (!state.sparkNotifications.enabled) return;
+
+    const now = new Date();
+    const today = now.toDateString();
+
+    // Check if we already notified today
+    if (state.sparkNotifications.lastNotified === today) return;
+
+    // Parse the notification time
+    const [hours, minutes] = state.sparkNotifications.time.split(':').map(Number);
+    const notificationTime = new Date();
+    notificationTime.setHours(hours, minutes, 0, 0);
+
+    // Check if current time is past notification time (within 5 minutes window)
+    const timeDiff = now - notificationTime;
+    if (timeDiff >= 0 && timeDiff <= 5 * 60 * 1000) {
+        // Send notification
+        if ('Notification' in window && Notification.permission === 'granted') {
+            const notification = new Notification('✨ Your Daily Spark Cards Are Ready!', {
+                body: '3 new parenting tips and activities await. Tap to explore!',
+                icon: '/manifest.json',
+                badge: '/manifest.json',
+                tag: 'daily-spark-cards',
+                requireInteraction: false
+            });
+
+            // Track engagement: navigate to spark cards when clicked
+            notification.onclick = () => {
+                window.focus();
+                router.navigate('spark');
+                notification.close();
+            };
+
+            // Mark as notified today
+            state.sparkNotifications.lastNotified = today;
+            saveState();
+        }
+    }
+}
+
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
     // Auto-reset daily quests if it's a new day
@@ -84,6 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for due reminders every minute
     checkReminders();
     setInterval(checkReminders, 60 * 1000);
+
+    // Check for daily spark notification every minute
+    checkSparkNotification();
+    setInterval(checkSparkNotification, 60 * 1000);
 
     // Render initial view
     render('spark');

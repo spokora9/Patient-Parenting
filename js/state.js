@@ -46,6 +46,11 @@ const defaultState = {
         melodyStart: 0.85, // Melody begins at 85% (last 15%)
         composition: 'chopinNocturne', // Default classical composition
         isActive: false
+    },
+    sparkNotifications: {
+        enabled: false,
+        time: '09:00', // Default notification time (9 AM)
+        lastNotified: null // Track last notification date
     }
 };
 

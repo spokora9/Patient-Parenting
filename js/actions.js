@@ -550,6 +550,39 @@ const actions = {
         stopSlowWakeExperience();
 
         render('tools');
+    },
+    toggleSparkNotifications: async () => {
+        // Initialize if not exists
+        if (!state.sparkNotifications) {
+            state.sparkNotifications = { enabled: false, time: '09:00', lastNotified: null };
+        }
+
+        // Toggle the setting
+        state.sparkNotifications.enabled = !state.sparkNotifications.enabled;
+
+        // Request notification permission if enabling
+        if (state.sparkNotifications.enabled) {
+            if ('Notification' in window) {
+                const permission = await Notification.requestPermission();
+                if (permission !== 'granted') {
+                    state.sparkNotifications.enabled = false;
+                    alert('Please enable notifications in your browser settings to receive Spark Card reminders.');
+                }
+            } else {
+                state.sparkNotifications.enabled = false;
+                alert('Notifications are not supported in this browser.');
+            }
+        }
+
+        saveState();
+        render('settings');
+    },
+    updateSparkNotificationTime: (time) => {
+        if (!state.sparkNotifications) {
+            state.sparkNotifications = { enabled: false, time: '09:00', lastNotified: null };
+        }
+        state.sparkNotifications.time = time;
+        saveState();
     }
 };
 

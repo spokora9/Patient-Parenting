@@ -727,6 +727,39 @@ const views = {
         </div>
 
         <div class="card">
+            <h3>🔔 Daily Spark Notifications</h3>
+            <p style="color: var(--text-sub); margin-bottom: 20px; font-size: 14px;">
+                Get a daily reminder to check your 3 new Spark Cards with parenting tips and activities.
+            </p>
+
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p style="margin: 0; font-weight: 600; font-size: 15px;">Enable Daily Notifications</p>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: var(--text-sub);">Remind me about new Spark Cards</p>
+                    </div>
+                    <button onclick="actions.toggleSparkNotifications()"
+                            style="width: 60px; height: 34px; border-radius: 17px; border: none; background: ${state.sparkNotifications.enabled ? 'var(--accent-earth)' : '#dfe6e9'}; cursor: pointer; position: relative; transition: all 0.3s;">
+                        <div style="width: 26px; height: 26px; border-radius: 50%; background: white; position: absolute; top: 4px; left: ${state.sparkNotifications.enabled ? '30px' : '4px'}; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            ${state.sparkNotifications.enabled ? `
+                <div style="margin-top: 16px;">
+                    <label style="font-size: 15px; font-weight: 600; display: block; margin-bottom: 12px;">Notification Time:</label>
+                    <input type="time" value="${state.sparkNotifications.time}"
+                           onchange="actions.updateSparkNotificationTime(this.value)"
+                           style="width: 100%; padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 15px;"/>
+                    <p style="font-size: 12px; color: var(--text-sub); margin: 8px 0 0 0;">
+                        💡 You'll receive a notification at this time each day with your 3 new Spark Cards
+                    </p>
+                </div>
+            ` : ''}
+        </div>
+
+        <div class="card">
             <h3>✨ Spark Card Filters</h3>
             <p style="color: var(--text-sub); margin-bottom: 20px; font-size: 14px;">
                 Set your children's ages to see only age-appropriate cards. Leave empty to see all cards.

@@ -1681,6 +1681,572 @@ const activityLibrary = [
         source: 'Anti-Bias Education',
         description: 'Don\'t shush questions about race/disability/family structure. Answer honestly. Silence teaches shame, conversation teaches respect.',
         reason: 'Color-blindness doesn\'t work. Naming and discussing differences with respect builds inclusion and reduces prejudice.'
+    },
+    // TEEN-SPECIFIC CONTENT (13-16 years)
+    {
+        id: 166,
+        type: 'modern',
+        category: 'Teen Connection',
+        ageRange: '13-16',
+        title: 'The Car Conversation',
+        source: 'Untangled',
+        description: 'Don\'t face them during tough talks. Drive together or walk side by side. Less eye contact = more honesty.',
+        reason: 'Teens\' amygdala is hypersensitive to perceived judgment. Side-by-side positioning reduces threat response, allowing the prefrontal cortex to engage. This is why teens often open up during car rides.'
+    },
+    {
+        id: 167,
+        type: 'modern',
+        category: 'Teen Development',
+        ageRange: '13-16',
+        title: 'Knock First, Always',
+        source: 'The Yes Brain',
+        description: 'Even if the door is open. Wait for "come in." Their room is their autonomy laboratory.',
+        reason: 'Adolescent brain development requires practicing control over their environment. Respecting privacy builds the neural pathways for self-regulation and reduces cortisol from boundary violations.'
+    },
+    {
+        id: 168,
+        type: 'modern',
+        category: 'Teen Emotional Regulation',
+        ageRange: '13-16',
+        title: 'Name the Pattern, Not the Person',
+        description: 'Say "I notice you seem more irritable after gaming" not "You\'re addicted." Observe behavior, don\'t label identity.',
+        reason: 'Teen identity is fragile and under construction. Labels activate defensive neural pathways. Pattern observation engages metacognition without triggering shame.'
+    },
+    {
+        id: 169,
+        type: 'wisdom',
+        category: 'Teen Connection',
+        ageRange: '13-16',
+        title: 'The Midnight Kitchen Check',
+        description: 'If they\'re night owls, be available at their peak hours. Make late-night snacks together without interrogation.',
+        reason: 'Adolescent circadian rhythms naturally shift 2-3 hours later (delayed sleep phase). Meeting them at their biological peak, without agenda, builds connection when their guard is down.'
+    },
+    {
+        id: 170,
+        type: 'modern',
+        category: 'Teen Independence',
+        ageRange: '13-16',
+        title: 'Problem-Solving Questions',
+        source: 'How to Talk So Teens Will Listen',
+        description: 'Instead of solving, ask: "What are your options?" "What\'s your plan?" "How can I support that?" Let them lead.',
+        reason: 'The prefrontal cortex (executive function) develops through practice, not instruction. Asking questions activates their problem-solving networks; giving answers keeps them dependent.'
+    },
+    {
+        id: 171,
+        type: 'modern',
+        category: 'Teen Conflict',
+        ageRange: '13-16',
+        title: 'The 24-Hour Rule',
+        description: 'For non-urgent conflicts, say "I need to think about this. Let\'s talk tomorrow." Model emotional regulation.',
+        reason: 'Teen conflicts trigger both your and their amygdala. The 24-hour delay allows prefrontal cortex to re-engage, models impulse control, and prevents reactive parenting that damages trust.'
+    },
+    {
+        id: 172,
+        type: 'modern',
+        category: 'Teen Social Skills',
+        ageRange: '13-16',
+        title: 'Debrief Social Events',
+        description: 'After parties/gatherings, ask: "What did you notice about people?" not "Did you have fun?" Teach social observation.',
+        reason: 'Teen social brain is hyperactive but unsophisticated. Reflective questions build theory of mind, emotional intelligence, and social pattern recognition—key skills for navigating peer dynamics.'
+    },
+    {
+        id: 173,
+        type: 'modern',
+        category: 'Teen Mental Health',
+        ageRange: '13-16',
+        title: 'Normalize Professional Help',
+        source: 'The Teenage Brain',
+        description: 'Say "Everyone needs support sometimes. Even I see a therapist." Remove stigma by modeling.',
+        reason: 'Teen suicide rates are rising. Normalizing mental health care reduces shame, builds help-seeking behavior, and teaches that emotional wellness requires maintenance like physical health.'
+    },
+    // CONFLICT RESOLUTION
+    {
+        id: 174,
+        type: 'modern',
+        category: 'Conflict Resolution',
+        ageRange: '4-12',
+        title: 'The Feelings Wheel',
+        source: 'Peaceful Parent, Happy Kids',
+        description: 'When siblings fight, give each a turn with the "feelings wheel." They spin to name their emotion before talking.',
+        reason: 'Naming emotions activates the prefrontal cortex and calms the amygdala (affect labeling). Children can\'t resolve conflict until they move from reactive brainstem to thinking brain.'
+    },
+    {
+        id: 175,
+        type: 'modern',
+        category: 'Conflict Resolution',
+        ageRange: '5-14',
+        title: 'The "Both Things" Statement',
+        description: 'Teach them: "I\'m mad at you AND I still love you." "I want that toy AND I can wait my turn." Both can be true.',
+        reason: 'Binary thinking (all-good or all-bad) is a sign of immature emotional regulation. "Both/and" thinking builds dialectical reasoning and emotional complexity—essential for healthy relationships.'
+    },
+    {
+        id: 176,
+        type: 'modern',
+        category: 'Sibling Conflict',
+        ageRange: '3-10',
+        title: 'The Problem-Solving Table',
+        description: 'Create a special spot for conflicts. Both kids state the problem, brainstorm solutions, vote. You\'re the facilitator, not judge.',
+        reason: 'When parents solve conflicts, kids learn helplessness. When kids solve conflicts with support, they build executive function, negotiation skills, and self-efficacy.'
+    },
+    {
+        id: 177,
+        type: 'modern',
+        category: 'Conflict Resolution',
+        ageRange: '6-16',
+        title: 'The Repair Ritual',
+        source: 'Sibling Rivalry',
+        description: 'After conflicts, require repair not apology. "What can you do to make this better?" Action > words.',
+        reason: 'Forced apologies teach dishonesty. Repair actions build empathy, responsibility, and genuine remorse. The act of repairing activates prosocial neural pathways.'
+    },
+    {
+        id: 178,
+        type: 'wisdom',
+        category: 'Conflict Resolution',
+        ageRange: '4-12',
+        title: 'The Mediator, Not Rescuer',
+        description: 'Say "Sounds like you both have a problem. How will you solve it?" then step back. Don\'t solve for them.',
+        reason: 'Rescuing prevents the development of conflict resolution skills. Children need practice navigating disagreement to build resilience and social competence.'
+    },
+    {
+        id: 179,
+        type: 'modern',
+        category: 'Emotional Regulation',
+        ageRange: '5-12',
+        title: 'The Calm Corner',
+        description: 'Create a designated space with sensory tools (stress ball, putty, breathing cards). It\'s not timeout—it\'s regulation.',
+        reason: 'Time-outs increase shame and isolation. A calm corner teaches self-regulation as a skill. Sensory tools activate the parasympathetic nervous system, returning the brain to baseline.'
+    },
+    // SCREEN TIME MANAGEMENT
+    {
+        id: 180,
+        type: 'modern',
+        category: 'Screen Time',
+        ageRange: '5-16',
+        title: 'The Screen Time Menu',
+        source: 'Screenwise',
+        description: 'Create a weekly "menu" together. They choose from options you provide. Autonomy within boundaries.',
+        reason: 'Rigid rules trigger rebellion. Collaborative decision-making activates prefrontal cortex and builds executive function. Kids who have input are more likely to follow limits.'
+    },
+    {
+        id: 181,
+        type: 'modern',
+        category: 'Screen Time',
+        ageRange: '6-14',
+        title: 'The Tech-Free Zones',
+        description: 'No screens at: meals, first hour after school, last hour before bed. Create connection windows.',
+        reason: 'Screens during transitions prevent emotional regulation. Post-school is prime dysregulation time; screens delay processing. Blue light before bed suppresses melatonin by 50%, disrupting sleep architecture.'
+    },
+    {
+        id: 182,
+        type: 'modern',
+        category: 'Screen Time',
+        ageRange: '8-16',
+        title: 'Co-View, Don\'t Spy',
+        source: 'The Art of Screen Time',
+        description: 'Watch their shows with them. Play their games. Ask genuine questions. Build media literacy together.',
+        reason: 'Monitoring without relationship builds resentment. Co-viewing activates social learning pathways, builds critical thinking about media, and maintains connection in their digital world.'
+    },
+    {
+        id: 183,
+        type: 'modern',
+        category: 'Screen Time',
+        ageRange: '10-16',
+        title: 'Model Your Phone Use',
+        description: 'Say out loud: "I\'m putting my phone away to be present with you." Make your choices visible.',
+        reason: 'Mirror neurons mean kids copy what you do, not what you say. Narrating your intentional tech choices builds their metacognition about digital habits.'
+    },
+    {
+        id: 184,
+        type: 'modern',
+        category: 'Screen Time',
+        ageRange: '7-16',
+        title: 'The Dopamine Conversation',
+        description: 'Teach them how apps are designed to be addictive. Explain dopamine, notifications, infinite scroll. Knowledge is power.',
+        reason: 'Understanding the neuroscience of tech addiction activates executive function (top-down control) rather than relying on willpower. Metacognition about cravings reduces their power.'
+    },
+    {
+        id: 185,
+        type: 'modern',
+        category: 'Screen Time',
+        ageRange: '5-14',
+        title: 'The Transition Timer',
+        description: 'Give 10-min, 5-min, 2-min warnings before screen time ends. Sudden stops trigger meltdowns.',
+        reason: 'Screen time activates the brain\'s reward system. Abrupt endings cause dopamine crash and fight-or-flight response. Gradual transitions allow the prefrontal cortex to prepare for the shift.'
+    },
+    // EMOTIONAL INTELLIGENCE
+    {
+        id: 186,
+        type: 'modern',
+        category: 'Emotional Intelligence',
+        ageRange: '3-8',
+        title: 'Emotion Detective',
+        description: 'Watch TV with sound off. Guess emotions from faces and body language. Make it a game.',
+        reason: 'Reading facial expressions and body language activates the social brain (superior temporal sulcus). This builds theory of mind and empathy—foundations of emotional intelligence.'
+    },
+    {
+        id: 187,
+        type: 'modern',
+        category: 'Emotional Intelligence',
+        ageRange: '5-12',
+        title: 'The Feelings Forecast',
+        source: 'Raising an Emotionally Intelligent Child',
+        description: 'At breakfast, ask: "What emotion might you feel today? How will you handle it?" Prepare, don\'t react.',
+        reason: 'Anticipating emotions activates the prefrontal cortex and builds emotion regulation scripts. Pre-planning coping strategies creates neural pathways that activate during stress.'
+    },
+    {
+        id: 188,
+        type: 'modern',
+        category: 'Emotional Intelligence',
+        ageRange: '4-10',
+        title: 'Name Your Own Feelings',
+        description: 'Say "I\'m feeling frustrated right now. I need 5 minutes to calm down." Model what you want to see.',
+        reason: 'Children learn emotional literacy through observation. When parents name and regulate their own emotions, kids develop richer emotion vocabulary and regulation strategies.'
+    },
+    {
+        id: 189,
+        type: 'modern',
+        category: 'Emotional Intelligence',
+        ageRange: '6-14',
+        title: 'The Intensity Scale',
+        description: 'Teach 1-10 scale for emotions. "That sounds like a level 7 frustration. What helps you get to a 4?"',
+        reason: 'Quantifying emotions builds interoception (awareness of internal states) and activates the prefrontal cortex. Scaling reduces overwhelm by making big feelings more manageable.'
+    },
+    {
+        id: 190,
+        type: 'modern',
+        category: 'Emotional Intelligence',
+        ageRange: '5-16',
+        title: 'Perspective-Taking Practice',
+        description: 'When discussing conflicts, ask: "What do you think they were feeling? What were they trying to get?"',
+        reason: 'Theory of mind (understanding others\' mental states) is the foundation of empathy. Actively practicing perspective-taking strengthens neural networks in the medial prefrontal cortex.'
+    },
+    {
+        id: 191,
+        type: 'modern',
+        category: 'Emotional Intelligence',
+        ageRange: '4-12',
+        title: 'Emotion Charades',
+        description: 'Act out emotions without words. Guess together. Make it playful.',
+        reason: 'Body awareness (proprioception) and emotional awareness are linked. Acting out emotions builds the mind-body connection essential for recognizing and regulating feelings.'
+    },
+    // EXECUTIVE FUNCTION BUILDING
+    {
+        id: 192,
+        type: 'modern',
+        category: 'Executive Function',
+        ageRange: '5-12',
+        title: 'The Visual Schedule',
+        source: 'Smart but Scattered',
+        description: 'Use pictures or words to show the order of routines. Let them check off each step. Make it visible.',
+        reason: 'The prefrontal cortex (executive function center) isn\'t fully developed until age 25. External scaffolding (visual schedules) reduces working memory load and builds planning skills.'
+    },
+    {
+        id: 193,
+        type: 'modern',
+        category: 'Executive Function',
+        ageRange: '6-14',
+        title: 'The When-Then Routine',
+        description: 'Replace "if-then" (rewards) with "when-then" (sequence). "When shoes are on, then we leave." State facts, not threats.',
+        reason: 'When-then statements build temporal sequencing (a key executive function) without the power struggle of conditional rewards. Facts are less likely to trigger defiance than commands.'
+    },
+    {
+        id: 194,
+        type: 'modern',
+        category: 'Executive Function',
+        ageRange: '7-16',
+        title: 'Backwards Planning',
+        description: 'For big tasks, start at the end: "The project is due Friday. What needs to happen Thursday? Wednesday?" Build the map together.',
+        reason: 'Backwards planning activates the prefrontal cortex and builds temporal reasoning. Breaking tasks into steps reduces overwhelm and teaches the foundational skill of project management.'
+    },
+    {
+        id: 195,
+        type: 'modern',
+        category: 'Executive Function',
+        ageRange: '5-12',
+        title: 'The Launch Pad',
+        description: 'Designate a spot by the door for backpack, shoes, jacket. Same place, every time. Reduce decisions.',
+        reason: 'Executive function is a limited resource. Routinizing simple tasks (always the same spot) preserves cognitive energy for learning. Consistency builds automatic habits.'
+    },
+    {
+        id: 196,
+        type: 'modern',
+        category: 'Executive Function',
+        ageRange: '8-16',
+        title: 'Teach Task Initiation',
+        source: 'Executive Skills in Children',
+        description: 'For homework resistance, say: "Let\'s just do 5 minutes together." Start small. Initiation is the hardest part.',
+        reason: 'Task initiation activates the anterior cingulate cortex, which struggles to shift from rest to work. Starting small reduces activation energy and builds momentum.'
+    },
+    {
+        id: 197,
+        type: 'modern',
+        category: 'Executive Function',
+        ageRange: '6-14',
+        title: 'The Timer Trick',
+        description: 'Use timers for transitions, tasks, and breaks. Visual time (sand timer) is better than abstract time for kids.',
+        reason: 'Children have poor time perception due to underdeveloped prefrontal cortex. Visual timers make abstract time concrete, reducing anxiety and improving task completion.'
+    },
+    // SOCIAL SKILLS & FRIENDSHIP
+    {
+        id: 198,
+        type: 'modern',
+        category: 'Social Skills',
+        ageRange: '5-12',
+        title: 'Friendship Autopsy',
+        source: 'The Unwritten Rules of Friendship',
+        description: 'After playdates, debrief: "What went well? What was tricky? What would you do differently?" Build social awareness.',
+        reason: 'Social skills require explicit teaching and reflection. Metacognition about social interactions builds the neural pathways for reading social cues and adjusting behavior.'
+    },
+    {
+        id: 199,
+        type: 'modern',
+        category: 'Social Skills',
+        ageRange: '6-14',
+        title: 'The Conversation Volley',
+        description: 'Teach: "Ask a question, they answer, you share, then ask again." Friendship is like tennis—back and forth.',
+        reason: 'Reciprocal conversation is not intuitive for kids. Teaching the structure of conversation (question-answer-share) builds social competence and prevents one-sided interactions.'
+    },
+    {
+        id: 200,
+        type: 'modern',
+        category: 'Social Skills',
+        ageRange: '7-16',
+        title: 'Teach Flexible Thinking',
+        description: 'When plans change, say: "Plan A didn\'t work. What\'s Plan B?" Model adaptability as a skill, not failure.',
+        reason: 'Cognitive flexibility (adapting to change) is controlled by the prefrontal cortex. Kids who can\'t shift gears struggle socially. Teaching Plan B thinking builds resilience and reduces rigidity.'
+    },
+    {
+        id: 201,
+        type: 'modern',
+        category: 'Social Skills',
+        ageRange: '5-12',
+        title: 'The Apology Formula',
+        description: 'Teach: "I\'m sorry for [action]. I understand it hurt you because [impact]. Next time I\'ll [repair]."',
+        reason: 'Meaningful apologies require perspective-taking and executive function. The formula builds empathy (understanding impact) and accountability (planning repair).'
+    },
+    {
+        id: 202,
+        type: 'modern',
+        category: 'Social Skills',
+        ageRange: '8-16',
+        title: 'Sportsmanship Rituals',
+        description: 'After games (win or lose): shake hands, name one thing the opponent did well. Practice grace.',
+        reason: 'Sportsmanship is executive function under stress—controlling impulses when emotions are high. Rituals create neural pathways for gracious behavior in competitive situations.'
+    },
+    {
+        id: 203,
+        type: 'modern',
+        category: 'Social Skills',
+        ageRange: '6-14',
+        title: 'Body Space Awareness',
+        description: 'Teach personal space with hula hoops. Everyone gets a hoop—that\'s your bubble. Respect others\' bubbles.',
+        reason: 'Some kids struggle with proprioception and don\'t sense when they\'re too close. Visual/physical boundaries build spatial awareness and social appropriateness.'
+    },
+    // SELF-REGULATION & INDEPENDENCE
+    {
+        id: 204,
+        type: 'modern',
+        category: 'Self-Regulation',
+        ageRange: '4-10',
+        title: 'The Breathing Buddy',
+        description: 'Give them a stuffed animal to place on their belly. Watch it rise and fall. Make breathing visible.',
+        reason: 'Deep breathing activates the vagus nerve, switching from sympathetic (stress) to parasympathetic (calm) nervous system. Visual feedback helps kids learn interoception.'
+    },
+    {
+        id: 205,
+        type: 'modern',
+        category: 'Self-Regulation',
+        ageRange: '5-12',
+        title: 'The Glitter Jar',
+        source: 'Mindful Games',
+        description: 'Shake a jar of glitter water. Watch it settle. "This is your brain when upset. See how it calms down?"',
+        reason: 'Visual metaphors help kids understand abstract concepts. Watching the glitter settle externalizes the calming process and teaches that emotions are temporary.'
+    },
+    {
+        id: 206,
+        type: 'modern',
+        category: 'Self-Regulation',
+        ageRange: '6-14',
+        title: 'Energy Check-Ins',
+        description: 'Teach: "Do you need to move your body or rest it?" Help them read their own signals.',
+        reason: 'Interoception (sensing internal states) is learned. Regular check-ins build the neural pathways for recognizing whether they need vestibular input or rest.'
+    },
+    {
+        id: 207,
+        type: 'modern',
+        category: 'Independence',
+        ageRange: '3-8',
+        title: 'The "I Can" Chart',
+        description: 'List tasks they can do independently (pour cereal, turn on light). Add new skills. Celebrate capability.',
+        reason: 'Self-efficacy builds through mastery experiences. Visual reminders of competence activate the reward system and motivate new skill acquisition.'
+    },
+    {
+        id: 208,
+        type: 'wisdom',
+        category: 'Independence',
+        ageRange: '5-12',
+        title: 'Let Them Struggle (Safely)',
+        source: 'The Gift of Failure',
+        description: 'Watch them wrestle with a zipper, puzzle, or problem. Don\'t rescue. Say "You\'re working hard on that."',
+        reason: 'Productive struggle builds neural connections. Rescuing signals "I don\'t think you can do it," which undermines self-efficacy. Struggle + eventual success = growth mindset.'
+    },
+    {
+        id: 209,
+        type: 'modern',
+        category: 'Independence',
+        ageRange: '6-14',
+        title: 'Morning Responsibility Transfer',
+        description: 'Give them an alarm clock. Their job to wake up, get dressed, eat. Natural consequences if they\'re late.',
+        reason: 'Responsibility without stakes doesn\'t build competence. Natural consequences (being late) activate learning better than parent nagging. Intrinsic motivation > external control.'
+    },
+    {
+        id: 210,
+        type: 'modern',
+        category: 'Self-Regulation',
+        ageRange: '7-16',
+        title: 'The Pause Button',
+        description: 'Teach: When upset, imagine hitting "pause" on your body. Freeze for 5 seconds. Then choose your action.',
+        reason: 'The 5-second pause allows the prefrontal cortex to catch up to the amygdala. This brief delay activates executive function and prevents impulsive reactions.'
+    },
+    // ADDITIONAL HIGH-VALUE CARDS
+    {
+        id: 211,
+        type: 'modern',
+        category: 'Anxiety',
+        ageRange: '6-14',
+        title: 'The Worry Time',
+        source: 'What to Do When You Worry Too Much',
+        description: 'Set 15 minutes daily for worry. When worries come up, say "Save it for worry time." Contain it.',
+        reason: 'Containing worry to scheduled time prevents it from colonizing the whole day. This teaches the brain that not all thoughts require immediate attention.'
+    },
+    {
+        id: 212,
+        type: 'modern',
+        category: 'Anxiety',
+        ageRange: '5-12',
+        title: 'Name the Anxiety Monster',
+        description: 'Give anxiety a silly name (Mr. Worry Wart). Externalize it. "Sounds like Mr. Worry Wart is visiting again."',
+        reason: 'Externalizing anxiety (narrative therapy) creates psychological distance. The child and parent become a team fighting the monster, not the child fighting themself.'
+    },
+    {
+        id: 213,
+        type: 'modern',
+        category: 'Growth Mindset',
+        ageRange: '5-16',
+        title: 'Add "Yet" to Everything',
+        source: 'Mindset',
+        description: 'When they say "I can\'t do this," add "yet." "You can\'t do it yet." Reframe failure as progress.',
+        reason: 'The word "yet" activates growth mindset neural pathways. It reframes challenges as temporary and malleable rather than fixed, promoting persistence.'
+    },
+    {
+        id: 214,
+        type: 'modern',
+        category: 'Resilience',
+        ageRange: '6-14',
+        title: 'Mistake of the Week',
+        description: 'At dinner, everyone shares their biggest mistake and what they learned. Normalize failure.',
+        reason: 'Shame thrives in secrecy. Public mistake-sharing reduces fear of failure, builds psychological safety, and teaches that mistakes are data, not identity.'
+    },
+    {
+        id: 215,
+        type: 'modern',
+        category: 'Screen Time',
+        ageRange: '8-16',
+        title: 'The Phone Basket',
+        description: 'Everyone (parents too) puts phones in a basket during dinner/family time. Model the behavior you want.',
+        reason: 'Mere presence of phones reduces conversation quality by 30%. Physical removal signals prioritization of connection and teaches digital boundaries.'
+    },
+    {
+        id: 216,
+        type: 'modern',
+        category: 'Emotional Regulation',
+        ageRange: '4-10',
+        title: 'The Volcano Metaphor',
+        description: 'Teach: "Your anger is like a volcano. Can you feel the lava rising? What helps it cool down?"',
+        reason: 'Metaphors make abstract emotions concrete. Naming physical sensations (heat, pressure) builds interoception and creates a window for intervention before eruption.'
+    },
+    {
+        id: 217,
+        type: 'modern',
+        category: 'Connection',
+        ageRange: 'All Ages',
+        title: 'The 10-Minute Special Time',
+        source: 'Peaceful Parent, Happy Kids',
+        description: 'Set a timer. Their choice of activity. No multitasking. Full presence. Daily.',
+        reason: 'Consistent one-on-one time fills the attachment tank, reducing attention-seeking behavior. Predictability activates the brain\'s reward system and builds secure attachment.'
+    },
+    {
+        id: 218,
+        type: 'modern',
+        category: 'Sleep',
+        ageRange: '3-12',
+        title: 'The Calm-Down Ladder',
+        description: 'Create a visual ladder: bath → pajamas → stories → songs → lights out. Predictable steps = calm nervous system.',
+        reason: 'Bedtime routines trigger melatonin release through classical conditioning. Consistency signals safety to the amygdala, allowing the transition to sleep.'
+    },
+    {
+        id: 219,
+        type: 'modern',
+        category: 'Gratitude',
+        ageRange: '4-16',
+        title: 'Rose, Bud, Thorn',
+        description: 'At dinner: Rose (highlight), Bud (tomorrow hope), Thorn (challenge). Balanced perspective.',
+        reason: 'Gratitude practices increase serotonin and dopamine. Including thorns validates struggle without dwelling in negativity. Balance builds resilience.'
+    },
+    {
+        id: 220,
+        type: 'modern',
+        category: 'Executive Function',
+        ageRange: '6-14',
+        title: 'The Two-Minute Rule',
+        description: 'If a task takes under 2 minutes (hang coat, put dish in sink), do it now. Build immediate action habit.',
+        reason: 'Task initiation is executive function. The 2-minute rule reduces decision fatigue and prevents task accumulation that leads to overwhelm.'
+    },
+    {
+        id: 221,
+        type: 'modern',
+        category: 'Creativity',
+        ageRange: '4-12',
+        title: 'Boredom is a Feature',
+        description: 'When they say "I\'m bored," respond: "Wonderful! Boredom is where creativity starts." Don\'t rescue.',
+        reason: 'Boredom activates the default mode network, which is essential for creativity, imagination, and problem-solving. Constant stimulation prevents this neural development.'
+    },
+    {
+        id: 222,
+        type: 'modern',
+        category: 'Teen Mental Health',
+        ageRange: '12-16',
+        title: 'Suicide Prevention Check',
+        source: 'American Foundation for Suicide Prevention',
+        description: 'Ask directly: "Are you thinking about hurting yourself?" Asking doesn\'t plant the idea—it saves lives.',
+        reason: 'Teens contemplating suicide feel relief when asked directly. It opens dialogue, reduces isolation, and allows intervention. Silence and avoidance increase risk.'
+    },
+    {
+        id: 223,
+        type: 'modern',
+        category: 'Body Autonomy',
+        ageRange: '2-12',
+        title: 'They Choose Affection',
+        description: 'Never force hugs/kisses, even with relatives. "You can wave, high-five, or hug—your choice."',
+        reason: 'Forcing physical affection teaches kids their body is not their own. Autonomy over touch builds consent understanding and reduces vulnerability to abuse.'
+    },
+    {
+        id: 224,
+        type: 'modern',
+        category: 'Financial Literacy',
+        ageRange: '6-16',
+        title: 'The Three Jars',
+        description: 'Allowance divided: Save, Spend, Give. Let them manage all three. Make money visible.',
+        reason: 'Financial literacy requires practice with real consequences. Dividing money builds delayed gratification (prefrontal cortex) and generosity (prosocial behavior).'
+    },
+    {
+        id: 225,
+        type: 'modern',
+        category: 'Identity Development',
+        ageRange: '8-16',
+        title: 'The "Tell Me More" Approach',
+        description: 'When they share something about themselves (identity, interest, belief), respond: "Tell me more." Curiosity > judgment.',
+        reason: 'Adolescent identity formation requires exploration. Curiosity signals acceptance and safety, allowing authentic self-discovery. Judgment shuts down sharing and drives secrecy.'
     }
 ];
 

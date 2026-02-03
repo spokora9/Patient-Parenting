@@ -140,12 +140,27 @@ const actions = {
         const xp = prompt('XP Value:', '10');
         if (!xp) return;
 
+        // Ask who this quest is for
+        const playerNames = state.players.filter(p => p.id !== 4).map(p => p.name).join(', ');
+        const assignChoice = prompt(`Assign to:\n- Enter "team" for everyone\n- Or enter player name: ${playerNames}`, 'team');
+        if (!assignChoice) return;
+
+        let assignedTo = 'team';
+        if (assignChoice.toLowerCase() !== 'team') {
+            const player = state.players.find(p => p.name.toLowerCase() === assignChoice.toLowerCase());
+            if (player) {
+                assignedTo = player.id;
+            }
+        }
+
         const quest = {
             id: 'q' + Date.now(),
             title: title.trim(),
             xp: parseInt(xp) || 10,
             recurring: true,
-            completed: false
+            completed: false,
+            assignedTo: assignedTo,
+            subtasks: []
         };
 
         state.customQuests.push(quest);
@@ -161,6 +176,14 @@ const actions = {
         const newXP = Math.min(state.teamXP + quest.xp, state.teamGoal);
         state.teamXP = newXP;
 
+        // Award individual XP if quest is assigned to specific player
+        if (quest.assignedTo !== 'team' && typeof quest.assignedTo === 'number') {
+            const player = state.players.find(p => p.id === quest.assignedTo);
+            if (player) {
+                player.xp = (player.xp || 0) + quest.xp;
+            }
+        }
+
         // Check if goal reached
         const goalReached = oldXP < state.teamGoal && newXP >= state.teamGoal;
 
@@ -169,7 +192,7 @@ const actions = {
         state.completedQuests.push({
             questId: quest.id,
             timestamp: Date.now(),
-            playerId: state.activePlayerId
+            playerId: quest.assignedTo === 'team' ? state.activePlayerId : quest.assignedTo
         });
 
         // Audio Reward
@@ -189,6 +212,45 @@ const actions = {
     deleteQuest: (questId) => {
         if (confirm('Delete this quest?')) {
             state.customQuests = state.customQuests.filter(q => q.id !== questId);
+            saveState();
+            render('quest');
+        }
+    },
+    addSubtask: (questId) => {
+        const quest = state.customQuests.find(q => q.id === questId);
+        if (!quest) return;
+
+        const subtaskTitle = prompt('Subtask:', '');
+        if (!subtaskTitle) return;
+
+        if (!quest.subtasks) {
+            quest.subtasks = [];
+        }
+
+        quest.subtasks.push({
+            id: 'st' + Date.now(),
+            title: subtaskTitle.trim(),
+            completed: false
+        });
+
+        saveState();
+        audio.playTone('success');
+        render('quest');
+    },
+    toggleSubtask: (questId, subtaskId) => {
+        const quest = state.customQuests.find(q => q.id === questId);
+        if (!quest || !quest.subtasks) return;
+
+        const subtask = quest.subtasks.find(st => st.id === subtaskId);
+        if (!subtask) return;
+
+        subtask.completed = !subtask.completed;
+
+        // Check if all subtasks are complete - if so, complete the quest
+        const allComplete = quest.subtasks.every(st => st.completed);
+        if (allComplete && quest.subtasks.length > 0) {
+            actions.completeQuest(questId);
+        } else {
             saveState();
             render('quest');
         }
@@ -229,6 +291,9 @@ const actions = {
         const cost = prompt('XP Cost:', '50');
         if (!cost) return;
 
+        const typeChoice = prompt('Reward Type:\n- Enter "team" for family reward\n- Enter "personal" for individual reward', 'personal');
+        const type = typeChoice && typeChoice.toLowerCase() === 'team' ? 'team' : 'personal';
+
         const iconOptions = ['🎬', '📱', '🍕', '🎮', '🍦', '🎨', '⚽', '🎵', '📚', '🚴'];
         const icon = iconOptions[Math.floor(Math.random() * iconOptions.length)];
 
@@ -237,7 +302,8 @@ const actions = {
             title: title.trim(),
             cost: parseInt(cost) || 50,
             redeemed: false,
-            icon: icon
+            icon: icon,
+            type: type
         };
 
         state.rewards.push(reward);
@@ -249,17 +315,40 @@ const actions = {
         const reward = state.rewards.find(r => r.id === rewardId);
         if (!reward || reward.redeemed) return;
 
-        if (state.teamXP < reward.cost) {
+        const rewardType = reward.type || 'team';
+        let hasEnoughXP = false;
+        let confirmMessage = '';
+
+        if (rewardType === 'team') {
+            hasEnoughXP = state.teamXP >= reward.cost;
+            confirmMessage = `Redeem "${reward.title}" for ${reward.cost} Team XP?`;
+        } else {
+            // Personal reward - check active player's XP
+            const player = state.players.find(p => p.id === state.activePlayerId);
+            hasEnoughXP = player && (player.xp || 0) >= reward.cost;
+            confirmMessage = `Redeem "${reward.title}" for ${reward.cost} of ${player?.name || 'your'}'s personal XP?`;
+        }
+
+        if (!hasEnoughXP) {
             alert('Not enough XP!');
             return;
         }
 
-        if (confirm(`Redeem "${reward.title}" for ${reward.cost} XP?`)) {
-            state.teamXP -= reward.cost;
+        if (confirm(confirmMessage)) {
+            if (rewardType === 'team') {
+                state.teamXP -= reward.cost;
+            } else {
+                const player = state.players.find(p => p.id === state.activePlayerId);
+                if (player) {
+                    player.xp = (player.xp || 0) - reward.cost;
+                }
+            }
+
             reward.redeemed = true;
             state.redeemedRewards.push({
                 ...reward,
-                redeemedAt: Date.now()
+                redeemedAt: Date.now(),
+                redeemedBy: state.activePlayerId
             });
 
             saveState();

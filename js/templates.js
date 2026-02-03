@@ -93,7 +93,9 @@ function applyTemplate(templateId) {
         xp: q.xp,
         recurring: true,
         completed: false,
-        template: templateId
+        template: templateId,
+        assignedTo: 'team',
+        subtasks: []
     }));
 
     state.customQuests.push(...newQuests);

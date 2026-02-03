@@ -111,13 +111,19 @@ const views = {
             </div>
         `;
     },
-    quest: () => `
+    quest: () => {
+        const activePlayer = state.players.find(p => p.id === state.activePlayerId);
+        const myQuests = state.customQuests.filter(q => !q.completed && (q.assignedTo === 'team' || q.assignedTo === state.activePlayerId));
+        const otherQuests = state.customQuests.filter(q => !q.completed && q.assignedTo !== 'team' && q.assignedTo !== state.activePlayerId);
+
+        return `
         <div class="player-selector">
             ${state.players.filter(p => p.id !== 4).map(p => `
                 <div class="player-avatar ${p.id === state.activePlayerId ? 'active' : ''}"
                      onclick="actions.selectPlayer(${p.id})"
                      style="background: ${p.color}; border-color: ${p.id === state.activePlayerId ? 'var(--accent-earth)' : 'transparent'};">
                     <span style="font-size: 24px;">${p.avatar}</span>
+                    ${p.xp > 0 ? `<div style="position: absolute; bottom: -4px; right: -4px; background: var(--accent-earth); color: white; border-radius: 12px; padding: 2px 6px; font-size: 10px; font-weight: 700;">${p.xp}</div>` : ''}
                 </div>
             `).join('')}
             <div class="player-avatar" onclick="router.navigate('settings')" style="background: #f1f2f6;">
@@ -125,9 +131,21 @@ const views = {
             </div>
         </div>
 
+        ${activePlayer ? `
+            <div class="card" style="background: linear-gradient(135deg, ${activePlayer.color}44 0%, ${activePlayer.color}22 100%); border-left: 4px solid ${activePlayer.color}; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p style="margin: 0; font-size: 14px; color: var(--text-sub); font-weight: 600;">${activePlayer.name}'s Personal XP</p>
+                        <h2 style="margin: 4px 0 0 0; font-size: 32px; font-weight: 700;">${activePlayer.xp || 0}</h2>
+                    </div>
+                    <div style="font-size: 48px;">${activePlayer.avatar}</div>
+                </div>
+            </div>
+        ` : ''}
+
         <div class="quest-progress-container">
             <div class="progress-label">
-                <span>Family Goal: Movie Night</span>
+                <span>🏆 Family Team Goal</span>
                 <span id="xp-display">${state.teamXP} / ${state.teamGoal} XP</span>
             </div>
             <div class="progress-track">
@@ -136,7 +154,7 @@ const views = {
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 12px; gap: 8px;">
-            <h3 style="margin: 0;">Daily Quests</h3>
+            <h3 style="margin: 0;">📝 ${activePlayer ? activePlayer.name + "'s " : ''}Quests</h3>
             <div style="display: flex; gap: 8px;">
                 <button onclick="router.navigate('templates')"
                         style="padding: 8px 12px; background: var(--accent-play); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
@@ -149,24 +167,89 @@ const views = {
             </div>
         </div>
 
-        ${state.customQuests.filter(q => !q.completed).map(quest => `
-            <div class="quest-item" style="position: relative;">
-                <div onclick="actions.completeQuest('${quest.id}')" style="flex: 1; display: flex; align-items: center; cursor: pointer;">
-                    <span>${quest.title}</span>
-                    <span style="margin-left: auto; margin-right: 12px; color: var(--accent-play); font-weight: 600; font-size: 13px;">+${quest.xp} XP</span>
-                    <div class="btn-check ${quest.completed ? 'checked' : ''}"></div>
+        ${myQuests.map(quest => {
+            const assignedPlayer = quest.assignedTo === 'team' ? null : state.players.find(p => p.id === quest.assignedTo);
+            const hasSubtasks = quest.subtasks && quest.subtasks.length > 0;
+
+            return `
+            <div class="quest-item" style="position: relative; ${hasSubtasks ? 'padding-bottom: 12px;' : ''}">
+                <div ${hasSubtasks ? '' : `onclick="actions.completeQuest('${quest.id}')"`} style="flex: 1; display: flex; align-items: center; ${hasSubtasks ? '' : 'cursor: pointer;'}">
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-weight: 600;">${quest.title}</span>
+                            ${assignedPlayer ? `
+                                <span style="background: ${assignedPlayer.color}33; color: ${assignedPlayer.color}; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">
+                                    ${assignedPlayer.avatar} ${assignedPlayer.name}
+                                </span>
+                            ` : `
+                                <span style="background: var(--accent-play)33; color: var(--accent-play); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">
+                                    👥 Team
+                                </span>
+                            `}
+                        </div>
+                        ${hasSubtasks ? `
+                            <div style="margin-top: 8px; padding-left: 12px; border-left: 2px solid #dfe6e9;">
+                                ${quest.subtasks.map(subtask => `
+                                    <div style="display: flex; align-items: center; gap: 8px; padding: 4px 0;">
+                                        <input type="checkbox" ${subtask.completed ? 'checked' : ''}
+                                               onchange="actions.toggleSubtask('${quest.id}', '${subtask.id}')"
+                                               style="cursor: pointer;">
+                                        <span style="font-size: 13px; ${subtask.completed ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${subtask.title}</span>
+                                    </div>
+                                `).join('')}
+                                <button onclick="actions.addSubtask('${quest.id}')"
+                                        style="margin-top: 4px; padding: 4px 8px; background: transparent; border: 1px dashed var(--accent-play); color: var(--accent-play); border-radius: 6px; font-size: 11px; cursor: pointer;">
+                                    + Add Subtask
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                    <span style="margin-left: 12px; margin-right: 12px; color: var(--accent-play); font-weight: 600; font-size: 13px;">+${quest.xp} XP</span>
+                    ${!hasSubtasks ? `<div class="btn-check ${quest.completed ? 'checked' : ''}"></div>` : ''}
                 </div>
                 <button onclick="actions.deleteQuest('${quest.id}')"
-                        style="position: absolute; right: -8px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px; opacity: 0.7;">
+                        style="position: absolute; right: -8px; top: 12px; width: 28px; height: 28px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 16px; opacity: 0.7;">
                     ×
                 </button>
+                ${!hasSubtasks ? `
+                    <button onclick="actions.addSubtask('${quest.id}')"
+                            style="position: absolute; right: 28px; top: 12px; padding: 4px 8px; background: var(--accent-play); color: white; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; opacity: 0.8;">
+                        + Subtasks
+                    </button>
+                ` : ''}
             </div>
-        `).join('')}
+        `}).join('')}
 
-        ${state.customQuests.filter(q => !q.completed).length === 0 ? `
+        ${myQuests.length === 0 ? `
             <div style="text-align: center; padding: 40px 20px; color: var(--text-sub);">
                 <p style="margin: 0;">No quests yet! Add your first quest above.</p>
             </div>
+        ` : ''}
+
+        ${otherQuests.length > 0 ? `
+            <details style="margin-top: 20px;">
+                <summary style="cursor: pointer; font-weight: 600; color: var(--text-sub); padding: 12px; background: #f9f9f9; border-radius: 8px;">
+                    📋 Other Family Members' Quests (${otherQuests.length})
+                </summary>
+                <div style="margin-top: 12px;">
+                    ${otherQuests.map(quest => {
+                        const assignedPlayer = state.players.find(p => p.id === quest.assignedTo);
+                        return `
+                            <div style="padding: 12px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; opacity: 0.7;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-weight: 600;">${quest.title}</span>
+                                    ${assignedPlayer ? `
+                                        <span style="background: ${assignedPlayer.color}33; color: ${assignedPlayer.color}; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">
+                                            ${assignedPlayer.avatar} ${assignedPlayer.name}
+                                        </span>
+                                    ` : ''}
+                                    <span style="margin-left: auto; color: var(--accent-play); font-weight: 600; font-size: 13px;">+${quest.xp} XP</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </details>
         ` : ''}
 
         <div style="display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap;">
@@ -179,50 +262,112 @@ const views = {
                 🔄 Reset Daily
             </button>
         </div>
-    `,
-    rewards: () => `
-        <div class="card" style="background: linear-gradient(135deg, var(--accent-play) 0%, var(--success) 100%); color: white; margin-bottom: 20px;">
-            <div style="text-align: center;">
-                <h2 style="margin: 0 0 8px 0; font-size: 48px;">💰</h2>
-                <p style="margin: 0; font-size: 16px; opacity: 0.9;">Available XP</p>
-                <h1 style="margin: 8px 0 0 0; font-size: 48px; font-weight: 700;">${state.teamXP}</h1>
-            </div>
-        </div>
+    `;
+    },
+    rewards: () => {
+        const activePlayer = state.players.find(p => p.id === state.activePlayerId);
+        const teamRewards = state.rewards.filter(r => !r.redeemed && (r.type === 'team' || !r.type));
+        const personalRewards = state.rewards.filter(r => !r.redeemed && r.type === 'personal');
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 12px;">
-            <h3 style="margin: 0;">Available Rewards</h3>
-            <button onclick="actions.showAddRewardModal()"
-                    style="padding: 8px 16px; background: var(--accent-earth); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
-                + Add Reward
-            </button>
-        </div>
-
-        ${state.rewards.filter(r => !r.redeemed).map(reward => `
-            <div class="card" style="border: 2px solid ${state.teamXP >= reward.cost ? 'var(--success)' : '#dfe6e9'};">
-                <div style="display: flex; align-items: center; gap: 16px;">
-                    <div style="font-size: 40px;">${reward.icon}</div>
-                    <div style="flex: 1;">
-                        <h3 style="margin: 0 0 4px 0;">${reward.title}</h3>
-                        <p style="margin: 0; color: var(--accent-play); font-weight: 600; font-size: 16px;">
-                            ${reward.cost} XP
-                        </p>
-                    </div>
-                    <button onclick="actions.redeemReward('${reward.id}')"
-                            style="padding: 10px 20px; background: ${state.teamXP >= reward.cost ? 'var(--success)' : '#dfe6e9'}; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: ${state.teamXP >= reward.cost ? 'pointer' : 'not-allowed'}; font-size: 14px;"
-                            ${state.teamXP < reward.cost ? 'disabled' : ''}>
-                        Redeem
-                    </button>
-                    <button onclick="actions.deleteReward('${reward.id}')"
-                            style="width: 32px; height: 32px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 18px;">
-                        ×
-                    </button>
+        return `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+            <div class="card" style="background: linear-gradient(135deg, var(--accent-play) 0%, var(--success) 100%); color: white;">
+                <div style="text-align: center;">
+                    <h2 style="margin: 0 0 8px 0; font-size: 36px;">👥</h2>
+                    <p style="margin: 0; font-size: 14px; opacity: 0.9;">Team XP</p>
+                    <h1 style="margin: 8px 0 0 0; font-size: 36px; font-weight: 700;">${state.teamXP}</h1>
                 </div>
             </div>
-        `).join('')}
+            ${activePlayer ? `
+                <div class="card" style="background: linear-gradient(135deg, ${activePlayer.color}ee 0%, ${activePlayer.color}99 100%); color: white;">
+                    <div style="text-align: center;">
+                        <h2 style="margin: 0 0 8px 0; font-size: 36px;">${activePlayer.avatar}</h2>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">${activePlayer.name}'s XP</p>
+                        <h1 style="margin: 8px 0 0 0; font-size: 36px; font-weight: 700;">${activePlayer.xp || 0}</h1>
+                    </div>
+                </div>
+            ` : ''}
+        </div>
+
+        ${personalRewards.length > 0 ? `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 12px;">
+                <h3 style="margin: 0;">${activePlayer ? activePlayer.avatar : '👤'} Personal Rewards</h3>
+                <button onclick="actions.showAddRewardModal()"
+                        style="padding: 8px 16px; background: var(--accent-earth); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                    + Add Reward
+                </button>
+            </div>
+
+            ${personalRewards.map(reward => {
+                const canAfford = activePlayer && (activePlayer.xp || 0) >= reward.cost;
+                return `
+                <div class="card" style="border: 2px solid ${canAfford ? 'var(--success)' : '#dfe6e9'};">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div style="font-size: 40px;">${reward.icon}</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 4px 0;">${reward.title}</h3>
+                            <p style="margin: 0; color: var(--accent-play); font-weight: 600; font-size: 16px;">
+                                ${reward.cost} Personal XP
+                            </p>
+                        </div>
+                        <button onclick="actions.redeemReward('${reward.id}')"
+                                style="padding: 10px 20px; background: ${canAfford ? 'var(--success)' : '#dfe6e9'}; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: ${canAfford ? 'pointer' : 'not-allowed'}; font-size: 14px;"
+                                ${!canAfford ? 'disabled' : ''}>
+                            Redeem
+                        </button>
+                        <button onclick="actions.deleteReward('${reward.id}')"
+                                style="width: 32px; height: 32px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 18px;">
+                            ×
+                        </button>
+                    </div>
+                </div>
+            `}).join('')}
+        ` : ''}
+
+        ${teamRewards.length > 0 ? `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 12px;">
+                <h3 style="margin: 0;">👥 Team Rewards</h3>
+                ${personalRewards.length === 0 ? `
+                    <button onclick="actions.showAddRewardModal()"
+                            style="padding: 8px 16px; background: var(--accent-earth); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                        + Add Reward
+                    </button>
+                ` : ''}
+            </div>
+
+            ${teamRewards.map(reward => {
+                const canAfford = state.teamXP >= reward.cost;
+                return `
+                <div class="card" style="border: 2px solid ${canAfford ? 'var(--success)' : '#dfe6e9'};">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div style="font-size: 40px;">${reward.icon}</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 4px 0;">${reward.title}</h3>
+                            <p style="margin: 0; color: var(--accent-play); font-weight: 600; font-size: 16px;">
+                                ${reward.cost} Team XP
+                            </p>
+                        </div>
+                        <button onclick="actions.redeemReward('${reward.id}')"
+                                style="padding: 10px 20px; background: ${canAfford ? 'var(--success)' : '#dfe6e9'}; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: ${canAfford ? 'pointer' : 'not-allowed'}; font-size: 14px;"
+                                ${!canAfford ? 'disabled' : ''}>
+                            Redeem
+                        </button>
+                        <button onclick="actions.deleteReward('${reward.id}')"
+                                style="width: 32px; height: 32px; border-radius: 50%; border: none; background: #ff7675; color: white; cursor: pointer; font-size: 18px;">
+                            ×
+                        </button>
+                    </div>
+                </div>
+            `}).join('')}
+        ` : ''}
 
         ${state.rewards.filter(r => !r.redeemed).length === 0 ? `
             <div style="text-align: center; padding: 40px 20px; color: var(--text-sub);">
                 <p style="margin: 0;">No rewards yet! Add your first reward above.</p>
+                <button onclick="actions.showAddRewardModal()"
+                        style="margin-top: 16px; padding: 12px 24px; background: var(--accent-earth); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 15px;">
+                    + Add First Reward
+                </button>
             </div>
         ` : ''}
 
@@ -249,7 +394,8 @@ const views = {
                 ← Back to Quests
             </button>
         </div>
-    `,
+    `;
+    },
     tools: () => `
         <div class="card" style="border-left: 4px solid #ffa502;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
